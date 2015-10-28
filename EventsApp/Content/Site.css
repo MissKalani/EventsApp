@@ -20,3 +20,8 @@
 #map{
     height:500px;
 }
+
+#index-panel {
+    border-color: #fff;
+    margin-top: 15px;
+}

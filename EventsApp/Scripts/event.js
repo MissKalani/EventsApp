@@ -1,48 +1,93 @@
 ﻿var map;
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
-        center: { lat: -34.397, lng: 150.644 },
+        center: { lat: 59.690815, lng: 15.215400 },
         zoom: 8
     });
 }
 
-function Event() {
-    this.brief = "";
-    this.detailed = "";
-    this.address = "";
-}
 
-function addEvent(listElement, mapElement, event) {
+$(window).load(function () {
+    function Event() {
+        this.brief = "";
+        this.detailed = "";
+        this.address = "";
+        this.position = new google.maps.LatLng(0, 0);
+    }
 
-}
+    function ListItem() {
+        this.containerElement = null;
+        this.briefElement = null;
+        this.detailedElement = null;
+    }
 
-function addEventListItem(listElement, brief, detailed) {
-    var item = document.createElement('div');
-    var briefItem = document.createElement('div');
-    var detailedItem = document.createElement('div');
+    function addEvent(listElement, event) {
+        var marker = new google.maps.Marker({
+            position: event.position,
+            map: map,
+            title: event.brief
+        });
 
-    listElement.appendChild(item);
-    item.appendChild(briefItem);
-    item.appendChild(detailedItem);
+        var item = addEventListItem(listElement, event);
 
-    briefItem.innerHTML = brief;
-    detailedItem.innerHTML = detailed;
+        // Setup event listeners.
+        marker.addListener('click', function () {
+            toggleListItem(item);
+            map.setCenter(event.position);
+            map.setZoom(8);
+        });
 
-    detailedItem.setAttribute('style', 'display: none');
-    
-    briefItem.addEventListener('click', function (e) {
-        var isOpen = detailedItem.style.display === 'block';
+        item.briefElement.addEventListener('click', function (e) {
+            toggleListItem(item);
+            if (isListItemOpen(item)) {
+                map.setCenter(event.position);
+                map.setZoom(8);
+            }
+        });
+    }
+
+    function isListItemOpen(item) {
+        return item.detailedElement.style.display === 'block';
+    }
+
+    function toggleListItem(item) {
+        var isOpen = isListItemOpen(item);
         if (isOpen) {
-            detailedItem.style.display = 'none';
+            item.detailedElement.style.display = 'none';
         } else {
-            detailedItem.style.display = 'block';
+            item.detailedElement.style.display = 'block';
         }
-    });
-}
+    }
 
-event = new Event();
-event.brief = "Hej";
-event.detailed = "Test";
+    function addEventListItem(listElement, event) {
+        var item = new ListItem();
 
-addEventListItem(document.getElementById('eventList'), 'Konstig utställning hos Harry', 'Harry bjuder på konstig konst.');
-addEventListItem(document.getElementById('eventList'), 'Viktors Bar Mitzva', 'Mazel tow!');
+        item.containerElement = document.createElement('div');
+        item.briefElement = document.createElement('div');
+        item.detailedElement = document.createElement('div');
+
+        listElement.appendChild(item.containerElement);
+        item.containerElement.appendChild(item.briefElement);
+        item.containerElement.appendChild(item.detailedElement);
+
+        item.briefElement.innerHTML = event.brief;
+        item.detailedElement.innerHTML = event.detailed;
+
+        item.detailedElement.setAttribute('style', 'display: none');
+
+        return item;
+    }
+
+    var event1 = new Event();
+    event1.brief = "Konstig utställning hos Harry";
+    event1.detailed = "Harry bjuder på konstig konst.";
+    event1.position = new google.maps.LatLng(60.0320092, 15.5318782);
+
+    var event2 = new Event();
+    event2.brief = "Viktors Bar Mitzva";
+    event2.detailed = "Mazel tow!";
+    event2.position = new google.maps.LatLng(61.0320092, 16.5318782);
+
+    addEvent(document.getElementById('eventList'), event1);
+    addEvent(document.getElementById('eventList'), event2);
+})

@@ -3,32 +3,25 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-
-<div class="panel panel-default">
+<div id="index-panel" class="panel panel-default">
+    <div class="panel-heading">
+        <h2>Something going on?</h2>
+        @Html.ActionLink("Create Event", "Create", "Event", new { }, new { @class="btn btn-primary btn-lg" });   
+    </div>
     <div class="panel-body">
         <div class="row">
             <div id="eventList" class="col-md-3">
-                <!--
-                <div>
-                    <div class="event-list-brief" onclick="showEventDetails()">Konstig utställning hos Harry</div>
-                    <div class="event-list-detailed" onclick="hideEventDetails()" style="display:none">Harry bjuder på konstig konst.</div>
-                </div>
-                <div>
-                    <div class="event-list-brief">Viktors Bar Mitzva</div>
-                    <div class="event-list-detailed" style="display:none">Mazel tow!</div>
-                </div>
-                -->
-                <!--
-                <ul>
-                    <li>Konstig utställning hos Harry</li>
-                    <li>Viktors Bar Mitzva</li>
-                    <li>Lars Loppmarknad</li>
-                    <li>Matmarknad hos Laurene</li>
-                </ul>
-                -->
+
             </div>
             <div id="mapView" class="col-md-9">
+                @if (EventsApp.Controllers.AuthController.IsAuthenticated)
+                {
+                    <div class="btn-group btn-group-lg">
+                        <button type="button" class="btn btn-default">Hosted</button>
+                        <button type="button" class="btn btn-default">Invited</button>
+                        <button type="button" class="btn btn-default">Public</button>
+                    </div>
+                }
                 <div id="map">
 
                 </div>
