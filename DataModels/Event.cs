@@ -12,6 +12,7 @@ namespace EventsApp.DataModels
         public float Longitude { get; set; }
         public DateTime StartTime { get; set; }
         // TODO: Add optional ticket information.
-        // TODO: Add foreign key to user.
+        public string AppUserId { get; set; }
+        public AppUser AppUser { get; set; }
     }
 }

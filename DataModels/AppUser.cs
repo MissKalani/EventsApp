@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataModels
+namespace EventsApp.DataModels
 {
     public class AppUser : IdentityUser
     {
-
+        public List<Event> Events { get; set; }
     }
 }
