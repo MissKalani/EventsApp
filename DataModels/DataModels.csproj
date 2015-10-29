@@ -81,6 +81,10 @@
     <Compile Include="EventContext.cs" />
     <Compile Include="IEventRepository.cs" />
     <Compile Include="AppUser.cs" />
+    <Compile Include="Migrations\201510291427569_Initial.cs" />
+    <Compile Include="Migrations\201510291427569_Initial.Designer.cs">
+      <DependentUpon>201510291427569_Initial.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -92,6 +96,11 @@
       <Project>{e2d7eed3-48b6-47ce-803a-ff749052bad3}</Project>
       <Name>EventsApp</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201510291427569_Initial.resx">
+      <DependentUpon>201510291427569_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

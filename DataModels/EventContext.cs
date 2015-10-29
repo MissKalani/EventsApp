@@ -12,6 +12,12 @@ namespace EventsApp.DataModels
     {
         public DbSet<Event> Events { get; set; }
 
+        public EventContext()
+            : base("EventContext")
+        {
+
+        }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Event>().Property(t => t.Latitude).IsRequired();
