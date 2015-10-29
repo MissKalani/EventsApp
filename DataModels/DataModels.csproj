@@ -81,10 +81,10 @@
     <Compile Include="EventContext.cs" />
     <Compile Include="IEventRepository.cs" />
     <Compile Include="AppUser.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
