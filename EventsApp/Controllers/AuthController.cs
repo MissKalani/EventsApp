@@ -1,5 +1,5 @@
 ﻿using EventsApp.DataModels;
-using EventsApp.Models;
+using EventsApp.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Threading.Tasks;

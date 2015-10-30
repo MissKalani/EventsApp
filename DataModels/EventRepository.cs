@@ -10,6 +10,11 @@ namespace EventsApp.DataModels
     {
         private EventContext context;
 
+        public EventRepository()
+        {
+            context = new EventContext();
+        }
+
         public EventRepository(EventContext context)
         {
             this.context = context;

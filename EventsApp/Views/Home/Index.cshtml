@@ -28,5 +28,23 @@
             </div>
         </div>
     </div>
-
 </div>
+
+@section Scripts {
+  <script>
+    $(window).load(function () {
+      var event1 = new Event();
+      event1.brief = "Konstig utställning hos Harry";
+      event1.detailed = "Harry bjuder på konstig konst.";
+      event1.position = new google.maps.LatLng(60.0320092, 15.5318782);
+
+      var event2 = new Event();
+      event2.brief = "Viktors Bar Mitzva";
+      event2.detailed = "Mazel tow!";
+      event2.position = new google.maps.LatLng(61.0320092, 16.5318782);
+
+      addEvent(document.getElementById('eventList'), event1);
+      addEvent(document.getElementById('eventList'), event2);
+    });
+  </script>
+}
