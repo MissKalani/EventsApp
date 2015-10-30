@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace EventsApp.DataModels
 {
-    public interface IEventRepository
+    public interface IEventRepository : IRepository<Event>
     {
-        
+        /// <summary>
+        /// Get all public events.
+        /// </summary>
+        List<Event> GetAllPublicEvents();
     }
 }
