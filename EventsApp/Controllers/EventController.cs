@@ -36,6 +36,7 @@ namespace EventsApp.Controllers
                 e.Longitude = model.Longitude;
                 e.StartTime = model.StartTime;
                 e.ModificationState = ModificationState.Added;
+                // TODO: Associate with a user.
 
                 repository.Attach(e);
                 repository.Save();

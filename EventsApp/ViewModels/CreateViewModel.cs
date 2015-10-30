@@ -26,7 +26,9 @@ namespace EventsApp.ViewModels
         public float Longitude { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please specify when your event starts.")]
-        [DataType(DataType.DateTime)]
+        [DataType(DataType.Date, ErrorMessage = "Must be a valid date (yyyy-MM-dd).")]
+        [Display(Name = "Event Date")]
+        [DisplayFormat(DataFormatString = "{0}:yyyy-MM-dd")]
         public DateTime StartTime { get; set; }
     }
 }
