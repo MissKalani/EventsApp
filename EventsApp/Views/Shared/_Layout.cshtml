@@ -6,13 +6,6 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/bundles/css/style")
     @Scripts.Render("~/bundles/js/modernizr")
-
-  <!--
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="~/Context/datepicker.min.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
-    <script src="~/Scripts/modernizr-2.6.2.js"></script>
-    -->
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -25,35 +18,9 @@
                 </button>
                 @Html.ActionLink("Event App", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav"></ul>
-                @if (!EventsApp.Controllers.AuthController.IsAuthenticated)
-                {
-                    using (Html.BeginForm("LogIn", "Auth", new { }, FormMethod.Post, new { @class = "navbar-form navbar-left" }))
-                    {
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Username" />
-                        </div>
-                        <div class="form-group">
-                            <input type="password" class="form-control" placeholder="Password" />
-                        </div>
-                        <button type="submit" class="btn btn-primary">Log In!</button>
-                        @Html.ActionLink("Register", "Register", "Auth", new { }, new { @class = "btn btn-primary" })
-                    }
-                }
-                else
-                {
-                    @Html.ActionLink("Logout", "LogOut", "Auth", new { }, new { @class = "btn btn-primary navbar-btn" })
-                }
-
-                <!--  <form class="navbar-form navbar-left">
-
-
-                  </form>-->
-            </div>
+            @Html.Partial("_LogInPartial")
         </div>
     </div>
-
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -67,17 +34,6 @@
     @Scripts.Render("~/bundles/js/bootstrap-datepicker")
     @Scripts.Render("~/bundles/js/event")
     @RenderSection("Scripts")
-  <!--
-    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
-    <script src="~/Scripts/bootstrap-datepicker.min.js"></script>
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD41720sN_6eizUy9C-_xg9l7CdNrb7iiE&callback=initMap">
-    </script>
-    <script src="~/Scripts/event.js"></script>
-    -->
+
 </body>
-
-
-
 </html>

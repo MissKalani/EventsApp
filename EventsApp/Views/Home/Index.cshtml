@@ -14,7 +14,7 @@
 
             </div>
             <div id="mapView" class="col-md-9">
-                @if (EventsApp.Controllers.AuthController.IsAuthenticated)
+                @if (Context.User.Identity.IsAuthenticated)
                 {
                     <div class="btn-group btn-group-lg">
                         <button type="button" class="btn btn-default">Hosted</button>

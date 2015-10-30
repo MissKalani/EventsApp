@@ -290,6 +290,8 @@
     <Content Include="Views\Auth\Register.cshtml" />
     <Content Include="Views\Auth\LogIn.cshtml" />
     <Content Include="Views\Event\Create.cshtml" />
+    <Content Include="Views\Shared\_LogInPartial.cshtml" />
+    <Content Include="Views\Auth\Manage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
