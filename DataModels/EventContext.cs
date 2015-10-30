@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace EventsApp.DataModels
@@ -30,5 +25,7 @@ namespace EventsApp.DataModels
 
             base.OnModelCreating(modelBuilder);
         }
+
+        //public System.Data.Entity.DbSet<EventsApp.DataModels.AppUser> AppUsers { get; set; }
     }
 }

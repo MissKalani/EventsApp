@@ -14,4 +14,5 @@ namespace EventsApp.DataModels
         public List<Event> Events { get; set; }
         public ModificationState ModificationState { get; set; }
     }
+
 }
