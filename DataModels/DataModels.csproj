@@ -77,10 +77,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContextStateHelper.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="EventContext.cs" />
+    <Compile Include="EventRepository.cs" />
     <Compile Include="IEventRepository.cs" />
     <Compile Include="AppUser.cs" />
+    <Compile Include="IModificationState.cs" />
+    <Compile Include="IRepository.cs" />
     <Compile Include="Migrations\201510291427569_Initial.cs" />
     <Compile Include="Migrations\201510291427569_Initial.Designer.cs">
       <DependentUpon>201510291427569_Initial.cs</DependentUpon>

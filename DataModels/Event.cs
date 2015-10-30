@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
 
 namespace EventsApp.DataModels
 {
-    public class Event
+    public class Event : IModificationState
     {
         public int Id { get; set; }
         public string Brief { get; set; }
@@ -14,5 +16,6 @@ namespace EventsApp.DataModels
         // TODO: Add optional ticket information.
         public string AppUserId { get; set; }
         public AppUser AppUser { get; set; }
+        public ModificationState ModificationState { get; set; }
     }
 }

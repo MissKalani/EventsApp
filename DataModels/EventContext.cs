@@ -18,7 +18,9 @@ namespace EventsApp.DataModels
             modelBuilder.Entity<Event>().Property(t => t.Latitude).IsRequired();
             modelBuilder.Entity<Event>().Property(t => t.Longitude).IsRequired();
             modelBuilder.Entity<Event>().Property(t => t.StartTime).HasColumnType("datetime2");
+            modelBuilder.Entity<Event>().Ignore(t => t.ModificationState);
 
+            modelBuilder.Entity<AppUser>().Ignore(t => t.ModificationState);
             modelBuilder.Entity<AppUser>().HasMany(t => t.Events).WithRequired(t => t.AppUser).HasForeignKey(t => t.AppUserId);
 
             base.OnModelCreating(modelBuilder);
