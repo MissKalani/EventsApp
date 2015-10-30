@@ -8,6 +8,8 @@ namespace EventsApp.Controllers
 {
     public class EventController : Controller
     {
+       [Authorize]
+
         // GET: Event
         public ActionResult Create()
         {

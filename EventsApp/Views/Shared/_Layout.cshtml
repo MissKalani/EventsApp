@@ -19,7 +19,9 @@
                 </button>
                 @Html.ActionLink("Event App", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-            <div class="navbar-collapse collapse">
+            @Html.Partial("_LogInPartial")
+
+            @*<div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav"></ul>
                 @if (!EventsApp.Controllers.AuthController.IsAuthenticated)
                 {
@@ -38,13 +40,9 @@
                 else
                 {
                     @Html.ActionLink("Logout", "LogOut", "Auth", new { }, new { @class = "btn btn-primary navbar-btn" })
-                }
+                }*@
+            @*</div>*@
 
-                <!--  <form class="navbar-form navbar-left">
-
-
-                  </form>-->
-            </div>
         </div>
     </div>
 
