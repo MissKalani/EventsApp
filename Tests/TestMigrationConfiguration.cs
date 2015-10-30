@@ -15,7 +15,7 @@ namespace Tests
         {
             AutomaticMigrationsEnabled = false;
             MigrationsAssembly = Assembly.GetAssembly(typeof(EventContext));
-            MigrationsNamespace = "EventsApp.DataModels.Migrations";
+            MigrationsNamespace = "DataModels.Migrations";
         }
     }
 }
