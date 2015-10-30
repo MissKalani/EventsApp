@@ -17,7 +17,7 @@ namespace EventsApp.DataModels
 
         public void Attach(Event entity)
         {
-            context.Events.Attach(entity);
+            context.Events.Add(entity);
             ContextStateHelper.ApplyStateChanges(context);
         }
 
