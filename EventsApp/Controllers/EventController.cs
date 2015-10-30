@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 
 namespace EventsApp.Controllers
 {
@@ -18,11 +19,13 @@ namespace EventsApp.Controllers
         }
 
         // GET: Event
+        [Authorize]
         public ActionResult Create()
         {
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public ActionResult Create(CreateViewModel model)
         {
@@ -36,7 +39,7 @@ namespace EventsApp.Controllers
                 e.Longitude = model.Longitude;
                 e.StartTime = model.StartTime;
                 e.ModificationState = ModificationState.Added;
-                // TODO: Associate with a user.
+                e.AppUserId = User.Identity.GetUserId();
 
                 repository.Attach(e);
                 repository.Save();
