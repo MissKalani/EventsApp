@@ -15,14 +15,9 @@ namespace EventsApp.Controllers
         //public static bool IsAuthenticated = false;
 
         // GET: Auth
-        public AuthController()
-            :this(new UserManager<AppUser>(new UserStore<AppUser>(new EventContext())))
-        {         
-        }
-
-        public AuthController(UserManager<AppUser> userManager)
+        public AuthController()           
         {
-            UserManager = userManager;
+            UserManager = new UserManager<AppUser>(new UserStore<AppUser>(new EventContext()));
         }
 
         public UserManager<AppUser> UserManager { get; private set; }
