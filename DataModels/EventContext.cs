@@ -6,6 +6,8 @@ namespace EventsApp.DataModels
     public class EventContext : IdentityDbContext<AppUser>
     {
         public DbSet<Event> Events { get; set; }
+        public DbSet<Invite> Invites { get; set; }
+        public DbSet<InviteLink> InviteLinks { get; set; }
 
         public EventContext()
             : base("EventContext")

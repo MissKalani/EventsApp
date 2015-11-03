@@ -4,6 +4,12 @@ using System.Data.Entity;
 
 namespace EventsApp.DataModels
 {
+    public enum EventVisibility
+    {
+        Public,
+        Private
+    }
+
     public class Event : IModificationState
     {
         public int Id { get; set; }
@@ -13,6 +19,7 @@ namespace EventsApp.DataModels
         public float Latitude { get; set; }
         public float Longitude { get; set; }
         public DateTime StartTime { get; set; }
+        public EventVisibility Visibility { get; set; }
         // TODO: Add optional ticket information.
         public string AppUserId { get; set; }
         public AppUser AppUser { get; set; }
