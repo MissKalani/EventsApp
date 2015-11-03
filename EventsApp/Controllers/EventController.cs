@@ -39,7 +39,7 @@ namespace EventsApp.Controllers
                 e.Longitude = model.Longitude;
                 e.StartTime = model.StartTime;
                 e.ModificationState = ModificationState.Added;
-                e.AppUserId = User.Identity.GetUserId();
+                e.OwnerId = User.Identity.GetUserId();
 
                 repository.Attach(e);
                 repository.Save();

@@ -12,10 +12,14 @@ namespace EventsApp.DataModels
         Accepted
     }
 
-    public class Invite
+    public class Invite : IModificationState
     {
         public int EventId { get; set; }
         public string AppUserId { get; set; }
         public InviteStatus Status { get; set; }
+        public ModificationState ModificationState { get; set; }
+
+        public Event Event { get; set; }
+        public AppUser AppUser { get; set; }
     }
 }

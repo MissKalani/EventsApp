@@ -23,7 +23,17 @@ namespace EventsApp.DataModels
             modelBuilder.Entity<Event>().Ignore(t => t.ModificationState);
 
             modelBuilder.Entity<AppUser>().Ignore(t => t.ModificationState);
-            modelBuilder.Entity<AppUser>().HasMany(t => t.Events).WithRequired(t => t.AppUser).HasForeignKey(t => t.AppUserId);
+            modelBuilder.Entity<AppUser>().HasMany(t => t.Events).WithRequired(t => t.AppUser).HasForeignKey(t => t.OwnerId);
+
+            modelBuilder.Entity<Invite>().HasKey(t => new { t.EventId, t.AppUserId });
+            modelBuilder.Entity<Invite>().Property(t => t.Status).IsRequired();
+            modelBuilder.Entity<Invite>().Ignore(t => t.ModificationState);
+            modelBuilder.Entity<Invite>().HasRequired(t => t.Event).WithMany().WillCascadeOnDelete(false);
+            modelBuilder.Entity<Invite>().HasRequired(t => t.AppUser).WithMany().WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<InviteLink>().HasKey(t => t.LinkGUID);
+            modelBuilder.Entity<InviteLink>().Ignore(t => t.ModificationState);
+            modelBuilder.Entity<InviteLink>().HasRequired(t => t.Event).WithMany().WillCascadeOnDelete(false);
 
             base.OnModelCreating(modelBuilder);
         }

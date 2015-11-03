@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace EventsApp.DataModels
 {
-    public class InviteLink
+    public class InviteLink : IModificationState
     {
         public string LinkGUID { get; set; }
         public int EventId { get; set; }
+        public ModificationState ModificationState { get; set; }
+
+        public Event Event { get; set; }
     }
 }

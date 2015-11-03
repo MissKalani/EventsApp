@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 
@@ -21,7 +22,7 @@ namespace EventsApp.DataModels
         public DateTime StartTime { get; set; }
         public EventVisibility Visibility { get; set; }
         // TODO: Add optional ticket information.
-        public string AppUserId { get; set; }
+        public string OwnerId { get; set; }
         public AppUser AppUser { get; set; }
         public ModificationState ModificationState { get; set; }
     }
