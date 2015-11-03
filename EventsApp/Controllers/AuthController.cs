@@ -48,7 +48,8 @@ namespace EventsApp.Controllers
                     ModelState.AddModelError("", "Invalid username or password.");
                 }
             }
-            return View(model);
+            //return View(model);
+            return View();
         }
 
         [HttpPost]
@@ -85,7 +86,8 @@ namespace EventsApp.Controllers
                     AddErrors(result);
                 }
             }
-            return View(model);
+            //return View(model);
+            return View();
         }
 
         private async Task SignInAsync(AppUser user, bool isPersistent)

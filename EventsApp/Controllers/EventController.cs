@@ -44,8 +44,8 @@ namespace EventsApp.Controllers
                 repository.Attach(e);
                 repository.Save();
 
-                // TODO: Redirect wherever is proper.
-                return View("Index", "Home");
+                // TODO: Redirect to event management page?
+                return RedirectToAction("Index", "Home");
             }
 
             return View();
