@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Index";
 }
 
@@ -34,13 +33,44 @@
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD41720sN_6eizUy9C-_xg9l7CdNrb7iiE&callback=initMap"></script>
 
   <script>
-    var map;
     function initMap() {
-      map = new google.maps.Map(document.getElementById('map'), {
+      var map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 59.690815, lng: 15.215400 },
         zoom: 8
       });
 
+      $.ajax({
+        url: '@Url.Action("Visible", "Event")',
+        method: "POST",
+        success: fetchEventSuccess,
+        error: fetchEventError
+      }).done(function (data) {
+        
+      });
+
+      function fetchEventSuccess(data, status) {
+        console.log("Successfully fetched event data");
+        console.log(data);
+
+        for (var i = 0; i < data.length; i++) {
+          var eventData = data[i];
+          console.log(eventData);
+
+          var event = new Event();
+          event.brief = eventData.Brief;
+          event.detailed = eventData.Detailed;
+          event.position = new google.maps.LatLng(eventData.Latitude, eventData.Longitude);
+          event.address = eventData.Address;
+
+          addEvent(document.getElementById('eventList'), map, event);
+        }
+      }
+
+      function fetchEventError(xhr, status, exception) {
+        console.log("Failed to fetch event data. Error: " + exception + ", Status: " + status);
+      }
+
+      /*
       var event1 = new Event();
       event1.brief = "Konstig utställning hos Harry";
       event1.detailed = "Harry bjuder på konstig konst.";
@@ -53,6 +83,7 @@
 
       addEvent(document.getElementById('eventList'), map, event1);
       addEvent(document.getElementById('eventList'), map, event2);
+      */
     }
   </script>
 }

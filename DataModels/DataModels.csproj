@@ -87,6 +87,7 @@
     <Compile Include="Invite.cs" />
     <Compile Include="InviteLink.cs" />
     <Compile Include="IRepository.cs" />
+    <Compile Include="IUserRepository.cs" />
     <Compile Include="Migrations\201510291427569_Initial.cs" />
     <Compile Include="Migrations\201510291427569_Initial.Designer.cs">
       <DependentUpon>201510291427569_Initial.cs</DependentUpon>
@@ -97,6 +98,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
