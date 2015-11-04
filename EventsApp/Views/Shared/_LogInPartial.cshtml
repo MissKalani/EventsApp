@@ -1,35 +1,17 @@
-﻿@model EventsApp.ViewModels.LoginViewModel
-@using Microsoft.AspNet.Identity
-@if (Request.IsAuthenticated)
+﻿
+@model EventsApp.ViewModels.LoginViewModel
+@using (Html.BeginForm("LogIn", "Auth", new { }, FormMethod.Post, new { @class = "navbar-form navbar-left" }))
 {
-    using (Html.BeginForm("LogOut", "Auth", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-        @Html.AntiForgeryToken()
-
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Manage", "Auth", routeValues: null, htmlAttributes: new { title = "Manage" })
-            </li>
-            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-        </ul>
-    }
-}
-else
-{
-    <div class="navbar-collapse collapse">
-        @using (Html.BeginForm("LogIn", "Auth", new { }, FormMethod.Post, new { @class = "navbar-form navbar-left" }))
-        {
-            @Html.AntiForgeryToken()
-            <div class="form-group">
-                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
-            </div>
-            <div class="form-group">
-               @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-            </div>
-
-            <button type="submit" class="btn btn-primary" value="LogIn">Log In!</button>
-            @Html.ActionLink("Register", "Register", "Auth", new { }, new { @class = "btn btn-primary" })
-        }
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
     </div>
+        <div class="form-group">
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        </div>
+
+        <button type="submit" class="btn btn-primary" value="LogIn">Log In!</button>
+            @Html.ActionLink("Register", "Register", "Auth", new { }, new { @class = "btn btn-primary" })
 }
+
 

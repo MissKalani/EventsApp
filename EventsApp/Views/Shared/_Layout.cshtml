@@ -18,7 +18,16 @@
                 </button>
                 @Html.ActionLink("Event App", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-            @Html.Partial("_LogInPartial")
+            <div class="navbar-collapse collapse">
+                @if (Context.User.Identity.IsAuthenticated)
+                {
+                    @Html.Partial("_LogOutPartial")
+                }
+                else
+                {
+                    @Html.Partial("_LogInPartial")
+                }
+            </div>
         </div>
     </div>
     <div class="container body-content">
@@ -33,7 +42,7 @@
     @Scripts.Render("~/bundles/js/bootstrap")
     @Scripts.Render("~/bundles/js/bootstrap-datepicker")
     @Scripts.Render("~/bundles/js/event")
-    @RenderSection("Scripts")
+    @RenderSection("Scripts", required: false)
 
 </body>
 </html>

@@ -1,13 +1,16 @@
 ﻿using EventsApp.DataModels;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Web;
 
 namespace EventsApp.ViewModels
 {
-    public class CreateViewModel
+    public class ManageEventViewModel
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "A brief description of the event is required.")]
-        [Display(Name ="Brief Description")]
+        [Display(Name = "Brief Description")]
         public string Brief { get; set; }
 
         [Display(Name = "Detailed Description")]
@@ -15,9 +18,9 @@ namespace EventsApp.ViewModels
         public string Detailed { get; set; }
 
         public string Address { get; set; }
-        
+
         [Required]
-        public EventVisibility Visibility { get; set; }     
+        public EventVisibility Visibility { get; set; }
 
         [Required]
         public float Latitude { get; set; }
@@ -30,5 +33,6 @@ namespace EventsApp.ViewModels
         [Display(Name = "Event Date")]
         [DisplayFormat(DataFormatString = "{0}:yyyy-MM-dd")]
         public DateTime StartTime { get; set; }
+
     }
 }

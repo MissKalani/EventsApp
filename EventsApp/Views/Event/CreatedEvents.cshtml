@@ -1,0 +1,36 @@
+﻿@model IEnumerable<EventsApp.DataModels.Event>
+
+@{
+    ViewBag.Title = "Created Events";
+}
+<br />
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>@ViewBag.Title</h3>
+    </div>
+    <div class="panel-body">
+    </div>
+    <table class="table">
+        <tr>
+            <th>Brief</th>
+            <th colspan="2">Event Date</th>
+        </tr>
+        @foreach (var m in Model)
+        {
+            <tr> 
+                <td>
+                    @m.Brief
+                </td>
+                <td>
+                    @m.StartTime
+                </td>
+                <td>
+                    @Html.ActionLink("Manage", "ManageEvent")
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+@section Scripts{}
+

@@ -1,0 +1,22 @@
+﻿@model EventsApp.ViewModels.ManageEventViewModel
+@{
+    ViewBag.Title = "ManageEvent";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>ManageEvent</h2>
+<div id="create-panel" class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                @using (Html.BeginForm("ManageEvent", "Event", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.ValidationSummary("", new {@class = "text-danger" })
+
+                    @Html.DisplayFor(t => t.Brief)
+
+                }
+            </div>
+        </div>
+    </div>
+</div>

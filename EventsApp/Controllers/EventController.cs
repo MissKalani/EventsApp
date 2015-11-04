@@ -35,7 +35,8 @@ namespace EventsApp.Controllers
             {
                 Event e = new Event();
                 e.Brief = model.Brief;
-                e.Detailed = model.Detailed;
+                e.Detailed = model.Detailed;               
+                e.Visibility = model.Visibility;
                 e.Address = model.Address;
                 e.Latitude = model.Latitude;
                 e.Longitude = model.Longitude;
@@ -47,7 +48,7 @@ namespace EventsApp.Controllers
                 eventRepository.Save();
 
                 // TODO: Redirect to event management page?
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Manage", "Event");
             }
 
             return View();
@@ -77,5 +78,32 @@ namespace EventsApp.Controllers
 
             return Json(events);
         }
+
+
+        [Authorize]
+        public ActionResult CreatedEvents()
+        {
+            var user = userRepository.GetUserById(User.Identity.GetUserId());
+            var events = new List<Event>();
+            events = eventRepository.GetAllCreatedEvents(user).ToList(); 
+            return View(events);
+        }
+
+
+        [Authorize]
+        public ActionResult ManageEvent()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult ManageEvent(ManageEventViewModel model)
+        {
+            
+            
+            return View();
+        }
     }
+   
 }
