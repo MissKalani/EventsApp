@@ -28,8 +28,21 @@ namespace EventsApp.DataModels
 
         public List<Event> GetAllPublicEvents()
         {
-            // TODO: Ensure that the events returned actually ARE public!
-            return context.Events.ToList();
+            return context.Events.Where(t => t.Visibility == EventVisibility.Public).ToList();
+        }
+
+        public List<Event> GetAllInvitedEvents(AppUser user)
+        {
+            var query = from e in context.Events
+                        join i in context.Invites on e.Id equals i.EventId
+                        where i.AppUserId == user.Id
+                        select e;
+            return query.ToList();
+        }
+        
+        public List<Event> GetAllCreatedEvents(AppUser user)
+        {
+            return context.Events.Where(t => t.OwnerId == user.Id).ToList();
         }
 
         public void Save()
