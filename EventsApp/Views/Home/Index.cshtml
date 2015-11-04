@@ -15,10 +15,11 @@
             <div id="mapView" class="col-md-9">
                 @if (Context.User.Identity.IsAuthenticated)
                 {
-                    <div class="btn-group btn-group-lg">
-                        <button type="button" class="btn btn-default">Hosted</button>
-                        <button type="button" class="btn btn-default">Invited</button>
-                        <button type="button" class="btn btn-default">Public</button>
+                    <div id="filterButtons" class="btn-group btn-group-lg">
+                        <button id="filterButtonHosted" type="button" class="btn btn-default">Hosted</button>
+                        <button id="filterButtonInvited" type="button" class="btn btn-default">Invited</button>
+                        <button id="filterButtonPublic" type="button" class="btn btn-default">Public</button>
+                        <button id="filterButtonAll" type="button" class="btn btn-default active">All</button> 
                     </div>
                 }
                 <div id="map">
@@ -44,10 +45,9 @@
         method: "POST",
         success: fetchEventSuccess,
         error: fetchEventError
-      }).done(function (data) {
-        
       });
 
+      var eventManager = new EventManager.Manager(document.getElementById('eventList'), map);
       function fetchEventSuccess(data, status) {
         console.log("Successfully fetched event data");
         console.log(data);
@@ -56,19 +56,38 @@
           var eventData = data[i];
           console.log(eventData);
 
-          var event = new Event();
+          var event = new EventManager.Event();
           event.brief = eventData.Brief;
           event.detailed = eventData.Detailed;
           event.position = new google.maps.LatLng(eventData.Latitude, eventData.Longitude);
           event.address = eventData.Address;
+          event.userEventRelation = eventData.Relation;
 
-          addEvent(document.getElementById('eventList'), map, event);
+          eventManager.addEvent(event);
         }
       }
 
       function fetchEventError(xhr, status, exception) {
         console.log("Failed to fetch event data. Error: " + exception + ", Status: " + status);
       }
+
+      $("#filterButtons .btn").click(function () {
+        var id = $(this).attr("id");
+        console.log(id);
+
+        $("#filterButtons .active").removeClass("active");
+        $(this).addClass("active");
+
+        if (id == "filterButtonHosted") {
+          eventManager.showHosted();
+        } else if (id == "filterButtonInvited") {
+          eventManager.showInvited();
+        } else if (id == "filterButtonPublic") {
+          eventManager.showPublic();
+        } else if (id == "filterButtonAll") {
+          eventManager.showAll();
+        }
+      });
 
       /*
       var event1 = new Event();

@@ -60,8 +60,45 @@ namespace EventsApp.Controllers
         [HttpPost]
         public ActionResult Visible()
         {
+            List<ViewEvent> events = new List<ViewEvent>();
+            var publicEvents = eventRepository.GetAllPublicEvents();
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = userRepository.GetUserById(User.Identity.GetUserId());
+                var hostedEvents = eventRepository.GetAllCreatedEvents(user);
+                var invitedEvents = eventRepository.GetAllInvitedEvents(user);
+
+                // Prioritize in order (hosted, invited, public) for setting a user-event relation.
+                foreach (var e in hostedEvents)
+                {
+                    events.Add(new ViewEvent { Brief = e.Brief, Detailed = e.Detailed, Address = e.Address, Latitude = e.Latitude, Longitude = e.Longitude, StartTime = e.StartTime, Relation = EventUserRelation.Hosted });
+                    invitedEvents.Remove(e);
+                    publicEvents.Remove(e);
+                }
+
+                foreach (var e in invitedEvents)
+                {
+                    events.Add(new ViewEvent { Brief = e.Brief, Detailed = e.Detailed, Address = e.Address, Latitude = e.Latitude, Longitude = e.Longitude, StartTime = e.StartTime, Relation = EventUserRelation.Invited });
+                    publicEvents.Remove(e);
+                }
+            }
+            
+            foreach (var e in publicEvents)
+            {
+                events.Add(new ViewEvent { Brief = e.Brief, Detailed = e.Detailed, Address = e.Address, Latitude = e.Latitude, Longitude = e.Longitude, StartTime = e.StartTime, Relation = EventUserRelation.Public });
+            }
+
+            return Json(events);
+
+            /*
             // Add all public events to the list regardless whether the user is logged in or not.
-            List<Event> events = eventRepository.GetAllPublicEvents();
+            List<ViewEvent> events = new List<ViewEvent>();
+
+            var publicEvents = eventRepository.GetAllPublicEvents();
+            foreach (var e in publicEvents)
+            {
+                events.Add(new ViewEvent { Brief = e.Brief, Detailed = e.Detailed, Address = e.Address, Latitude = e.Latitude, Longitude = e.Longitude, StartTime = e.StartTime, Relation = EventUserRelation.Public });
+            }
 
             if (User.Identity.IsAuthenticated)
             {
@@ -69,13 +106,18 @@ namespace EventsApp.Controllers
 
                 // Add all events that the user created.
                 var hostedEvents = eventRepository.GetAllCreatedEvents(user);
-                events = events.Union(eventRepository.GetAllCreatedEvents(user)).ToList();
+                foreach (var e in hostedEvents)
+                {
+                    
+                }
+                
 
                 // Add all events that the user is invited to.
                 events = events.Union(eventRepository.GetAllInvitedEvents(user)).ToList();
             }
 
             return Json(events);
+            */
         }
     }
 }
