@@ -276,6 +276,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\CreateViewModel.cs" />
+    <Compile Include="ViewModels\ManageEventViewModel.cs" />
     <Compile Include="ViewModels\ViewEvent.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -293,6 +294,9 @@
     <Content Include="Views\Event\Create.cshtml" />
     <Content Include="Views\Shared\_LogInPartial.cshtml" />
     <Content Include="Views\Auth\Manage.cshtml" />
+    <Content Include="Views\Shared\_LogOutPartial.cshtml" />
+    <Content Include="Views\Event\CreatedEvents.cshtml" />
+    <Content Include="Views\Event\ManageEvent.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
