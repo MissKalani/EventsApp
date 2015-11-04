@@ -5,12 +5,7 @@
 <div id="index-panel" class="panel panel-default">
     <div class="panel-heading">
         <h2>Something going on?</h2>
-        @Html.ActionLink("Create Event", "Create", "Event", new { }, new { @class = "btn btn-primary btn-lg" })
-        @if (Context.User.Identity.IsAuthenticated)
-        {
-            @Html.ActionLink("Show Hosted Events", "CreatedEvents", "Event", new { }, new { @class = "btn btn-default" })
-        }
-
+        @Html.ActionLink("Create Event", "Create", "Event", new { }, new { @class="btn btn-primary btn-lg" })
     </div>
     <div class="panel-body">
         <div class="row">
@@ -20,10 +15,11 @@
             <div id="mapView" class="col-md-9">
                 @if (Context.User.Identity.IsAuthenticated)
                 {
-                    <div class="btn-group btn-group-lg">
-                        <button type="button" class="btn btn-default">Hosted</button>
-                        <button type="button" class="btn btn-default">Invited</button>
-                        <button type="button" class="btn btn-default">Public</button>
+                    <div id="filterButtons" class="btn-group btn-group-lg">
+                        <button id="filterButtonHosted" type="button" class="btn btn-default">Hosted</button>
+                        <button id="filterButtonInvited" type="button" class="btn btn-default">Invited</button>
+                        <button id="filterButtonPublic" type="button" class="btn btn-default">Public</button>
+                        <button id="filterButtonAll" type="button" class="btn btn-default active">All</button> 
                     </div>
                 }
                 <div id="map">
@@ -35,60 +31,78 @@
 </div>
 
 @section Scripts {
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD41720sN_6eizUy9C-_xg9l7CdNrb7iiE&callback=initMap"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD41720sN_6eizUy9C-_xg9l7CdNrb7iiE&callback=initMap"></script>
 
-    <script>
-        function initMap() {
-            var map = new google.maps.Map(document.getElementById('map'), {
-                center: { lat: 59.690815, lng: 15.215400 },
-                zoom: 8
-            });
+  <script>
+    function initMap() {
+      var map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: 59.690815, lng: 15.215400 },
+        zoom: 8
+      });
 
-            $.ajax({
-                url: '@Url.Action("Visible", "Event")',
-                method: "POST",
-                success: fetchEventSuccess,
-                error: fetchEventError
-            }).done(function (data) {
+      $.ajax({
+        url: '@Url.Action("Visible", "Event")',
+        method: "POST",
+        success: fetchEventSuccess,
+        error: fetchEventError
+      });
 
-            });
+      var eventManager = new EventManager.Manager(document.getElementById('eventList'), map);
+      function fetchEventSuccess(data, status) {
+        console.log("Successfully fetched event data");
+        console.log(data);
 
-            function fetchEventSuccess(data, status) {
-                console.log("Successfully fetched event data");
-                console.log(data);
+        for (var i = 0; i < data.length; i++) {
+          var eventData = data[i];
+          console.log(eventData);
 
-                for (var i = 0; i < data.length; i++) {
-                    var eventData = data[i];
-                    console.log(eventData);
+          var event = new EventManager.Event();
+          event.brief = eventData.Brief;
+          event.detailed = eventData.Detailed;
+          event.position = new google.maps.LatLng(eventData.Latitude, eventData.Longitude);
+          event.address = eventData.Address;
+          event.userEventRelation = eventData.Relation;
 
-                    var event = new Event();
-                    event.brief = eventData.Brief;
-                    event.detailed = eventData.Detailed;
-                    event.position = new google.maps.LatLng(eventData.Latitude, eventData.Longitude);
-                    event.address = eventData.Address;
-
-                    addEvent(document.getElementById('eventList'), map, event);
-                }
-            }
-
-            function fetchEventError(xhr, status, exception) {
-                console.log("Failed to fetch event data. Error: " + exception + ", Status: " + status);
-            }
-
-            /*
-            var event1 = new Event();
-            event1.brief = "Konstig utställning hos Harry";
-            event1.detailed = "Harry bjuder på konstig konst.";
-            event1.position = new google.maps.LatLng(60.0320092, 15.5318782);
-
-            var event2 = new Event();
-            event2.brief = "Viktors Bar Mitzva";
-            event2.detailed = "Mazel tow!";
-            event2.position = new google.maps.LatLng(61.0320092, 16.5318782);
-
-            addEvent(document.getElementById('eventList'), map, event1);
-            addEvent(document.getElementById('eventList'), map, event2);
-            */
+          eventManager.addEvent(event);
         }
-    </script>
+      }
+
+      function fetchEventError(xhr, status, exception) {
+        console.log("Failed to fetch event data. Error: " + exception + ", Status: " + status);
+      }
+
+      $("#filterButtons .btn").click(function () {
+        var id = $(this).attr("id");
+        console.log(id);
+
+        $("#filterButtons .active").removeClass("active");
+        $(this).addClass("active");
+
+        if (id == "filterButtonHosted") {
+          eventManager.showHosted();
+        } else if (id == "filterButtonInvited") {
+          eventManager.showInvited();
+        } else if (id == "filterButtonPublic") {
+          eventManager.showPublic();
+        } else if (id == "filterButtonAll") {
+          eventManager.showAll();
+        }
+      });
+
+      /*
+      var event1 = new Event();
+      event1.brief = "Konstig utställning hos Harry";
+      event1.detailed = "Harry bjuder på konstig konst.";
+      event1.position = new google.maps.LatLng(60.0320092, 15.5318782);
+
+      var event2 = new Event();
+      event2.brief = "Viktors Bar Mitzva";
+      event2.detailed = "Mazel tow!";
+      event2.position = new google.maps.LatLng(61.0320092, 16.5318782);
+
+      addEvent(document.getElementById('eventList'), map, event1);
+      addEvent(document.getElementById('eventList'), map, event2);
+      */
+    }
+  </script>
 }
