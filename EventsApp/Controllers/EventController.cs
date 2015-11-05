@@ -159,7 +159,7 @@ namespace EventsApp.Controllers
             eventUoW.Invites.Attach(invite);
 
             // Remove the invitation link (it is a one-time use after all).
-            eventUoW.InviteLinks.Remove(model.Link);
+            eventUoW.InviteLinks.Remove(link);
             eventUoW.Save();
 
             return RedirectToAction("Index", "Home");

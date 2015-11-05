@@ -156,7 +156,6 @@ namespace Tests
                 e1.Visibility = EventVisibility.Private;
                 e1.ModificationState = ModificationState.Added;
                 e1.AppUser = user1;
-                //context.Events.Add(e1);
                 eventUoW.Events.Attach(e1);
 
                 Event e2 = new Event();
@@ -164,7 +163,6 @@ namespace Tests
                 e2.Visibility = EventVisibility.Private;
                 e2.ModificationState = ModificationState.Added;
                 e2.AppUser = user2;
-                //context.Events.Add(e2);
                 eventUoW.Events.Attach(e2);
 
                 Event e3 = new Event();
@@ -172,19 +170,15 @@ namespace Tests
                 e3.Visibility = EventVisibility.Public;
                 e3.ModificationState = ModificationState.Added;
                 e3.AppUser = user1;
-                //context.Events.Add(e3);
                 eventUoW.Events.Attach(e3);
-
-                //eventUoW.Save();
 
                 Invite i = new Invite();
                 i.AppUser = user2;
                 i.Event = e1;
-                //context.Invites.Add(i);
+                i.ModificationState = ModificationState.Added;
                 eventUoW.Invites.Attach(i);
 
                 eventUoW.Save();
-                //context.SaveChanges();
             }
 
             using (var context = new EventContext())

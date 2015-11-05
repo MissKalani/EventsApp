@@ -29,8 +29,17 @@ namespace EventsApp.DataModels
         {
             foreach (var entry in context.ChangeTracker.Entries<IModificationState>())
             {
-                IModificationState state = entry.Entity;
-                entry.State = GetEntityStateFromModificationState(state.ModificationState);
+                IModificationState entity = entry.Entity;
+                entry.State = GetEntityStateFromModificationState(entity.ModificationState);
+            }
+        }
+
+        public static void ResetModificationState(DbContext context)
+        {
+            foreach (var entry in context.ChangeTracker.Entries<IModificationState>())
+            {
+                IModificationState entity = entry.Entity;
+                entity.ModificationState = ModificationState.Unchanged;
             }
         }
     }

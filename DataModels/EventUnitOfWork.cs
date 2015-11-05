@@ -35,6 +35,7 @@ namespace EventsApp.DataModels
         public void Save()
         {
             context.SaveChanges();
+            ContextStateHelper.ResetModificationState(context);
         }
     }
 }
