@@ -90,35 +90,6 @@ namespace EventsApp.Controllers
             }
 
             return Json(events);
-
-            /*
-            // Add all public events to the list regardless whether the user is logged in or not.
-            List<ViewEvent> events = new List<ViewEvent>();
-
-            var publicEvents = eventRepository.GetAllPublicEvents();
-            foreach (var e in publicEvents)
-            {
-                events.Add(new ViewEvent { Brief = e.Brief, Detailed = e.Detailed, Address = e.Address, Latitude = e.Latitude, Longitude = e.Longitude, StartTime = e.StartTime, Relation = EventUserRelation.Public });
-            }
-
-            if (User.Identity.IsAuthenticated)
-            {
-                var user = userRepository.GetUserById(User.Identity.GetUserId());
-
-                // Add all events that the user created.
-                var hostedEvents = eventRepository.GetAllCreatedEvents(user);
-                foreach (var e in hostedEvents)
-                {
-                    
-                }
-                
-
-                // Add all events that the user is invited to.
-                events = events.Union(eventRepository.GetAllInvitedEvents(user)).ToList();
-            }
-
-            return Json(events);
-            */
         }
 
 
@@ -142,8 +113,6 @@ namespace EventsApp.Controllers
         [HttpPost]
         public ActionResult ManageEvent(ManageEventViewModel model)
         {
-            
-            
             return View();
         }
     }
