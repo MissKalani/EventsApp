@@ -4,7 +4,7 @@
 }
 
 <h2>ManageEvent</h2>
-<div id="create-panel" class="panel panel-default">
+<div id="manage-panel" class="panel panel-default">
     <div class="panel-body">
         <div class="row">
             <div class="col-md-12">
@@ -17,5 +17,41 @@
                 }
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <button id="linkButton" class="btn btn-success">Create Invitation Link</button>
+                <p>Send a one-use invitation link to a friend!</p>
+                <div id="linkPanel" class="panel panel-default" style="display:none">
+                    <div class="panel-body">
+                        <p id="linkPanelText"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $('#linkButton').click(function () {
+            // Generate a new link using AJAX.
+            $.ajax({
+                url: '@Url.Action("GenerateLink", "Event")',
+                data: { eventId: @Model.EventId },
+                method: "POST",
+                success: fetchLinkSuccess,
+                error: fetchLinkError
+            });
+
+            function fetchLinkSuccess(data, status) {
+                console.log(data);
+                $("#linkPanelText").text(data.link);
+                $("#linkPanel").show();
+            }
+            
+            function fetchLinkError(xhr, status, exception) {
+                console.log("Failed to fetch link");
+            }
+        });
+    </script>
+}

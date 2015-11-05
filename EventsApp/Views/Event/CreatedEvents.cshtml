@@ -25,7 +25,7 @@
                     @m.StartTime
                 </td>
                 <td>
-                    @Html.ActionLink("Manage", "ManageEvent")
+                    @Html.ActionLink("Manage", "ManageEvent", new { eventId = m.Id })
                 </td>
             </tr>
         }

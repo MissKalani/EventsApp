@@ -40,6 +40,8 @@ namespace EventsApp.App_Start
             // container.RegisterType<IProductRepository, ProductRepository>();
             container.RegisterType<IEventRepository, EventRepository>();
             container.RegisterType<IUserRepository, UserRepository>();
+            container.RegisterType<IInviteLinkRepository, InviteLinkRepository>();
+            container.RegisterType<IInviteRepository, InviteRepository>();
         }
     }
 }

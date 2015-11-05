@@ -9,6 +9,8 @@ namespace EventsApp.ViewModels
 {
     public class ManageEventViewModel
     {
+        public int EventId;
+
         [Required(AllowEmptyStrings = false, ErrorMessage = "A brief description of the event is required.")]
         [Display(Name = "Brief Description")]
         public string Brief { get; set; }

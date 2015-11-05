@@ -83,9 +83,13 @@
     <Compile Include="EventRepository.cs" />
     <Compile Include="IEventRepository.cs" />
     <Compile Include="AppUser.cs" />
+    <Compile Include="IInviteLinkRepository.cs" />
+    <Compile Include="IInviteRepository.cs" />
     <Compile Include="IModificationState.cs" />
     <Compile Include="Invite.cs" />
     <Compile Include="InviteLink.cs" />
+    <Compile Include="InviteLinkRepository.cs" />
+    <Compile Include="InviteRepository.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="IUserRepository.cs" />
     <Compile Include="Migrations\201510291427569_Initial.cs" />

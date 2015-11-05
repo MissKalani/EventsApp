@@ -1,0 +1,34 @@
+﻿@model EventsApp.ViewModels.ConfirmViewModel
+@{
+    ViewBag.Title = "Create";
+}
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                <p>You are invited to an event!</p>
+                <p><b>@Model.Link.Event.Brief</b></p>
+                <p>Hosted by</p>
+                <p><b>@Model.Link.Event.AppUser.UserName</b></p>
+                <p><b>@Model.Link.LinkGUID</b></p>
+                <div class="row">
+                    <div class="col-md-6">
+                        @using (Html.BeginForm("Accept", "Event", FormMethod.Post, new { role = "form", name = "accept" }))
+                        {
+                            @Html.HiddenFor(t => t.LinkGUID)
+                            <button type="submit" class="btn btn-success">I'll be there</button>
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        @using (Html.BeginForm("Reject", "Event", FormMethod.Post, new { role = "form", name = "reject" }))
+                        {
+                            @Html.HiddenFor(t => t.LinkGUID)
+                            <button type="submit" class="btn btn-danger">I'll pass</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

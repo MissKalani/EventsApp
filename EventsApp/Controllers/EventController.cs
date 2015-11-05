@@ -13,11 +13,15 @@ namespace EventsApp.Controllers
     {
         private IEventRepository eventRepository;
         private IUserRepository userRepository;
+        private IInviteLinkRepository linkRepository;
+        private IInviteRepository inviteRepository;
 
-        public EventController(IEventRepository eventRepository, IUserRepository userRepository)
+        public EventController(IEventRepository eventRepository, IUserRepository userRepository, IInviteLinkRepository linkRepository, IInviteRepository inviteRepository)
         {
             this.eventRepository = eventRepository;
             this.userRepository = userRepository;
+            this.linkRepository = linkRepository;
+            this.inviteRepository = inviteRepository;
         }
 
         // GET: Event
@@ -104,9 +108,9 @@ namespace EventsApp.Controllers
 
 
         [Authorize]
-        public ActionResult ManageEvent()
+        public ActionResult ManageEvent(int eventId)
         {
-            return View();
+            return View(new ManageEventViewModel { EventId = eventId });
         }
 
         [Authorize]
@@ -114,6 +118,65 @@ namespace EventsApp.Controllers
         public ActionResult ManageEvent(ManageEventViewModel model)
         {
             return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult GenerateLink(int eventId)
+        {
+            // Generate a new invitation link.
+            Guid code = Guid.NewGuid();
+            InviteLink invite = new InviteLink { EventId = eventId, LinkGUID = code.ToString(), ModificationState = ModificationState.Added };
+            linkRepository.Attach(invite);
+            linkRepository.Save();
+
+            // Create a link to this event.
+            UrlHelper url = new UrlHelper(HttpContext.Request.RequestContext);
+            string link = url.Action("ConfirmLink", "Event", new { code = code.ToString() }, url.RequestContext.HttpContext.Request.Url.Scheme);
+
+            return Json(new { link = link });
+        }
+
+        public ActionResult ConfirmLink(string code)
+        {
+            InviteLink invite = linkRepository.GetLinkGraphByCode(code);
+         
+            if (invite != null)
+            {
+                return View("Confirm", new ConfirmViewModel { Link = invite, LinkGUID = invite.LinkGUID });
+            }
+            else
+            {
+                return new HttpNotFoundResult();
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult Accept(ConfirmViewModel model)
+        {
+            // Get the invite link.
+            InviteLink link = linkRepository.GetLinkGraphByCode(model.LinkGUID);
+            if (link == null)
+                throw new InvalidOperationException();
+
+            // Create an invite.
+            Invite invite = new Invite { AppUserId = User.Identity.GetUserId(), Event = link.Event, Status = InviteStatus.Accepted, ModificationState = ModificationState.Added };
+            inviteRepository.Attach(invite);
+            inviteRepository.Save();
+
+            // Remove the invitation link (it is a one-time use after all).
+            linkRepository.Remove(model.Link);
+            linkRepository.Save();
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public ActionResult Reject(ConfirmViewModel model)
+        {
+            // TODO: Remove invite link.
+            return RedirectToAction("Index", "Home");
         }
     }
    
