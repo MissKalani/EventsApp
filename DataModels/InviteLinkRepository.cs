@@ -11,22 +11,15 @@ namespace EventsApp.DataModels
     {
         private EventContext context;
 
-        public InviteLinkRepository()
+        public InviteLinkRepository(EventContext context)
         {
-            context = new EventContext();
+            this.context = context;
         }
 
         public void Attach(InviteLink entity)
         {
             context.InviteLinks.Add(entity);
             ContextStateHelper.ApplyStateChanges(context);
-        }
-
-
-
-        public void Save()
-        {
-            context.SaveChanges();
         }
 
         public InviteLink GetLinkGraphByCode(string code)

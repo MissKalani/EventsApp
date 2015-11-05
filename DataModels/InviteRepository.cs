@@ -10,20 +10,15 @@ namespace EventsApp.DataModels
     {
         private EventContext context;
 
-        public InviteRepository()
+        public InviteRepository(EventContext context)
         {
-            context = new EventContext();
+            this.context = context;
         }
 
         public void Attach(Invite entity)
         {
             context.Invites.Add(entity);
             ContextStateHelper.ApplyStateChanges(context);
-        }
-
-        public void Save()
-        {
-            context.SaveChanges();
         }
     }
 }

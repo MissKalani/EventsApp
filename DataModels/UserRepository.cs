@@ -10,9 +10,9 @@ namespace EventsApp.DataModels
     {
         private EventContext context;
 
-        public UserRepository()
+        public UserRepository(EventContext context)
         {
-            context = new EventContext();
+            this.context = context;
         }
 
         public AppUser GetUserById(string userId)

@@ -11,17 +11,11 @@ namespace EventsApp.Controllers
 {
     public class EventController : Controller
     {
-        private IEventRepository eventRepository;
-        private IUserRepository userRepository;
-        private IInviteLinkRepository linkRepository;
-        private IInviteRepository inviteRepository;
+        private IEventUnitOfWork eventUoW;
 
-        public EventController(IEventRepository eventRepository, IUserRepository userRepository, IInviteLinkRepository linkRepository, IInviteRepository inviteRepository)
+        public EventController(IEventUnitOfWork eventUoW)
         {
-            this.eventRepository = eventRepository;
-            this.userRepository = userRepository;
-            this.linkRepository = linkRepository;
-            this.inviteRepository = inviteRepository;
+            this.eventUoW = eventUoW;
         }
 
         // GET: Event
@@ -48,8 +42,8 @@ namespace EventsApp.Controllers
                 e.ModificationState = ModificationState.Added;
                 e.OwnerId = User.Identity.GetUserId();
 
-                eventRepository.Attach(e);
-                eventRepository.Save();
+                eventUoW.Events.Attach(e);
+                eventUoW.Save();
 
                 // TODO: Redirect to event management page?
                 return RedirectToAction("Manage", "Event");
@@ -66,12 +60,12 @@ namespace EventsApp.Controllers
         public ActionResult Visible()
         {
             List<ViewEvent> events = new List<ViewEvent>();
-            var publicEvents = eventRepository.GetAllPublicEvents();
+            var publicEvents = eventUoW.Events.GetAllPublicEvents();
             if (User.Identity.IsAuthenticated)
             {
-                var user = userRepository.GetUserById(User.Identity.GetUserId());
-                var hostedEvents = eventRepository.GetAllCreatedEvents(user);
-                var invitedEvents = eventRepository.GetAllInvitedEvents(user);
+                var user = eventUoW.Users.GetUserById(User.Identity.GetUserId());
+                var hostedEvents = eventUoW.Events.GetAllCreatedEvents(user);
+                var invitedEvents = eventUoW.Events.GetAllInvitedEvents(user);
 
                 // Prioritize in order (hosted, invited, public) for setting a user-event relation.
                 foreach (var e in hostedEvents)
@@ -100,9 +94,9 @@ namespace EventsApp.Controllers
         [Authorize]
         public ActionResult CreatedEvents()
         {
-            var user = userRepository.GetUserById(User.Identity.GetUserId());
+            var user = eventUoW.Users.GetUserById(User.Identity.GetUserId());
             var events = new List<Event>();
-            events = eventRepository.GetAllCreatedEvents(user).ToList(); 
+            events = eventUoW.Events.GetAllCreatedEvents(user).ToList(); 
             return View(events);
         }
 
@@ -127,8 +121,8 @@ namespace EventsApp.Controllers
             // Generate a new invitation link.
             Guid code = Guid.NewGuid();
             InviteLink invite = new InviteLink { EventId = eventId, LinkGUID = code.ToString(), ModificationState = ModificationState.Added };
-            linkRepository.Attach(invite);
-            linkRepository.Save();
+            eventUoW.InviteLinks.Attach(invite);
+            eventUoW.Save();
 
             // Create a link to this event.
             UrlHelper url = new UrlHelper(HttpContext.Request.RequestContext);
@@ -139,7 +133,7 @@ namespace EventsApp.Controllers
 
         public ActionResult ConfirmLink(string code)
         {
-            InviteLink invite = linkRepository.GetLinkGraphByCode(code);
+            InviteLink invite = eventUoW.InviteLinks.GetLinkGraphByCode(code);
          
             if (invite != null)
             {
@@ -156,18 +150,17 @@ namespace EventsApp.Controllers
         public ActionResult Accept(ConfirmViewModel model)
         {
             // Get the invite link.
-            InviteLink link = linkRepository.GetLinkGraphByCode(model.LinkGUID);
+            InviteLink link = eventUoW.InviteLinks.GetLinkGraphByCode(model.LinkGUID);
             if (link == null)
                 throw new InvalidOperationException();
 
             // Create an invite.
             Invite invite = new Invite { AppUserId = User.Identity.GetUserId(), Event = link.Event, Status = InviteStatus.Accepted, ModificationState = ModificationState.Added };
-            inviteRepository.Attach(invite);
-            inviteRepository.Save();
+            eventUoW.Invites.Attach(invite);
 
             // Remove the invitation link (it is a one-time use after all).
-            linkRepository.Remove(model.Link);
-            linkRepository.Save();
+            eventUoW.InviteLinks.Remove(model.Link);
+            eventUoW.Save();
 
             return RedirectToAction("Index", "Home");
         }

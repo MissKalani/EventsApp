@@ -38,10 +38,7 @@ namespace EventsApp.App_Start
 
             // TODO: Register your types here
             // container.RegisterType<IProductRepository, ProductRepository>();
-            container.RegisterType<IEventRepository, EventRepository>();
-            container.RegisterType<IUserRepository, UserRepository>();
-            container.RegisterType<IInviteLinkRepository, InviteLinkRepository>();
-            container.RegisterType<IInviteRepository, InviteRepository>();
+            container.RegisterType<IEventUnitOfWork, EventUnitOfWork>();
         }
     }
 }

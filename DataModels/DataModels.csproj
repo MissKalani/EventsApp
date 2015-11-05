@@ -81,8 +81,10 @@
     <Compile Include="Event.cs" />
     <Compile Include="EventContext.cs" />
     <Compile Include="EventRepository.cs" />
+    <Compile Include="EventUnitOfWork.cs" />
     <Compile Include="IEventRepository.cs" />
     <Compile Include="AppUser.cs" />
+    <Compile Include="IEventUnitOfWork.cs" />
     <Compile Include="IInviteLinkRepository.cs" />
     <Compile Include="IInviteRepository.cs" />
     <Compile Include="IModificationState.cs" />

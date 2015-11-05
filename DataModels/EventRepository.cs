@@ -10,11 +10,6 @@ namespace EventsApp.DataModels
     {
         private EventContext context;
 
-        public EventRepository()
-        {
-            context = new EventContext();
-        }
-
         public EventRepository(EventContext context)
         {
             this.context = context;
@@ -43,11 +38,6 @@ namespace EventsApp.DataModels
         public List<Event> GetAllCreatedEvents(AppUser user)
         {
             return context.Events.Where(t => t.OwnerId == user.Id).ToList();
-        }
-
-        public void Save()
-        {
-            context.SaveChanges();
         }
     }
 }

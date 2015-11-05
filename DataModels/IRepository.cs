@@ -12,10 +12,5 @@ namespace EventsApp.DataModels
         /// Attach an entity graph. The modification state must be properly set for all nodes in the graph.
         /// </summary>
         void Attach(T entity);
-
-        /// <summary>
-        /// Save the changes to database.
-        /// </summary>
-        void Save();
     }
 }

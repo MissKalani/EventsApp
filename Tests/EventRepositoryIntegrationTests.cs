@@ -49,7 +49,7 @@ namespace Tests
         {
             using (var context = new EventContext())
             {
-                var repository = new EventRepository(context);
+                var eventUoW = new EventUnitOfWork(context);
                 var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
 
                 Event e = new Event();
@@ -58,8 +58,8 @@ namespace Tests
                 e.ModificationState = ModificationState.Added;
                 e.AppUser = context.Users.Single(t => t.UserName == "TestUser");
 
-                repository.Attach(e);
-                repository.Save();
+                eventUoW.Events.Attach(e);
+                eventUoW.Save();
             }
 
             using (var context = new EventContext())
@@ -75,7 +75,7 @@ namespace Tests
             Event e;
             using (var context = new EventContext())
             {
-                var repository = new EventRepository(context);
+                var eventUoW = new EventUnitOfWork(context);
 
                 e = new Event();
                 e.Brief = "Test";
@@ -83,8 +83,8 @@ namespace Tests
                 e.ModificationState = ModificationState.Added;
                 e.AppUser = context.Users.Single(t => t.UserName == "TestUser");
 
-                repository.Attach(e);
-                repository.Save();
+                eventUoW.Events.Attach(e);
+                eventUoW.Save();
             }
 
             e.Brief = "MyBrief";
@@ -93,9 +93,9 @@ namespace Tests
 
             using (var context = new EventContext())
             {
-                var repository = new EventRepository(context);
-                repository.Attach(e);
-                repository.Save();
+                var eventUoW = new EventUnitOfWork(context);
+                eventUoW.Events.Attach(e);
+                eventUoW.Save();
             }
 
             using (var context = new EventContext())
@@ -109,7 +109,7 @@ namespace Tests
         {
             using (var context = new EventContext())
             {
-                var repository = new EventRepository(context);
+                var eventUoW = new EventUnitOfWork(context);
                 var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
                 var user = context.Users.Single(t => t.UserName == "TestUser");
 
@@ -125,15 +125,16 @@ namespace Tests
                 pri.ModificationState = ModificationState.Added;
                 pri.AppUser = user;
 
-                repository.Attach(pub);
-                repository.Save();
+                eventUoW.Events.Attach(pub);
+                eventUoW.Events.Attach(pri);
+                eventUoW.Save();
             }
 
             using (var context = new EventContext())
             {
-                var repository = new EventRepository(context);
+                var eventUoW = new EventUnitOfWork(context);
 
-                List<Event> events = repository.GetAllPublicEvents();
+                List<Event> events = eventUoW.Events.GetAllPublicEvents();
 
                 events.Should().HaveCount(1);
                 events[0].Brief.Should().Be("Public");
@@ -145,7 +146,7 @@ namespace Tests
         {
             using (var context = new EventContext())
             {
-                var repository = new EventRepository(context);
+                var eventUoW = new EventUnitOfWork(context);
                 var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
                 var user1 = context.Users.Single(t => t.UserName == "TestUser");
                 var user2 = context.Users.Single(t => t.UserName == "TestUser2");
@@ -155,37 +156,44 @@ namespace Tests
                 e1.Visibility = EventVisibility.Private;
                 e1.ModificationState = ModificationState.Added;
                 e1.AppUser = user1;
+                //context.Events.Add(e1);
+                eventUoW.Events.Attach(e1);
 
                 Event e2 = new Event();
                 e2.Brief = "User 2 Event";
                 e2.Visibility = EventVisibility.Private;
                 e2.ModificationState = ModificationState.Added;
                 e2.AppUser = user2;
+                //context.Events.Add(e2);
+                eventUoW.Events.Attach(e2);
 
                 Event e3 = new Event();
                 e3.Brief = "User 1 Public Event";
                 e3.Visibility = EventVisibility.Public;
                 e3.ModificationState = ModificationState.Added;
                 e3.AppUser = user1;
+                //context.Events.Add(e3);
+                eventUoW.Events.Attach(e3);
+
+                //eventUoW.Save();
 
                 Invite i = new Invite();
                 i.AppUser = user2;
                 i.Event = e1;
+                //context.Invites.Add(i);
+                eventUoW.Invites.Attach(i);
 
-                repository.Attach(e1);
-                repository.Attach(e2);
-                repository.Attach(e3);
-                context.Invites.Add(i);
-                repository.Save();
+                eventUoW.Save();
+                //context.SaveChanges();
             }
 
             using (var context = new EventContext())
             {
-                var repository = new EventRepository(context);
+                var eventUoW = new EventUnitOfWork(context);
                 var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
                 var user2 = context.Users.Single(t => t.UserName == "TestUser2");
 
-                List<Event> events = repository.GetAllInvitedEvents(user2);
+                List<Event> events = eventUoW.Events.GetAllInvitedEvents(user2);
 
                 events.Should().HaveCount(1);
                 events[0].Brief.Should().Be("User 1 Event");
@@ -197,7 +205,7 @@ namespace Tests
         {
             using (var context = new EventContext())
             {
-                var repository = new EventRepository(context);
+                var eventUoW = new EventUnitOfWork(context);
                 var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
                 var user1 = context.Users.Single(t => t.UserName == "TestUser");
                 var user2 = context.Users.Single(t => t.UserName == "TestUser2");
@@ -214,18 +222,18 @@ namespace Tests
                 e2.ModificationState = ModificationState.Added;
                 e2.AppUser = user2;
 
-                repository.Attach(e1);
-                repository.Attach(e2);
-                repository.Save();
+                eventUoW.Events.Attach(e1);
+                eventUoW.Events.Attach(e2);
+                eventUoW.Save();
             }
 
             using (var context = new EventContext())
             {
-                var repository = new EventRepository(context);
+                var eventUoW = new EventUnitOfWork(context);
                 var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
                 var user1 = context.Users.Single(t => t.UserName == "TestUser");
 
-                List<Event> events = repository.GetAllCreatedEvents(user1);
+                List<Event> events = eventUoW.Events.GetAllCreatedEvents(user1);
 
                 events.Should().HaveCount(1);
                 events[0].Brief.Should().Be("User 1 Event");
