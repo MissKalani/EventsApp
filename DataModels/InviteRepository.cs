@@ -20,5 +20,10 @@ namespace EventsApp.DataModels
             context.Invites.Add(entity);
             ContextStateHelper.ApplyStateChanges(context);
         }
+
+        public bool IsInvited(Event e, AppUser user)
+        {
+            return context.Invites.Any(t => t.EventId == e.Id && t.AppUserId == user.Id);
+        }
     }
 }

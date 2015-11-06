@@ -298,6 +298,8 @@
     <Content Include="Views\Event\CreatedEvents.cshtml" />
     <Content Include="Views\Event\ManageEvent.cshtml" />
     <Content Include="Views\Event\Confirm.cshtml" />
+    <Content Include="Views\Event\ConfirmOwner.cshtml" />
+    <Content Include="Views\Event\ConfirmInvited.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 
 namespace EventsApp.ViewModels
 {
-    public class ConfirmViewModel
+    /// <summary>
+    /// Inheriting from LoginViewModel since this view model is used when logged out.
+    /// </summary>
+    public class ConfirmViewModel : LoginViewModel
     {
         /// <summary>
         /// Sent to the view when browsing to the confirm page via an invite link.

@@ -1,11 +1,10 @@
 ﻿using EventsApp.DataModels;
 using EventsApp.ViewModels;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
 
 namespace EventsApp.Controllers
 {
@@ -44,8 +43,7 @@ namespace EventsApp.Controllers
 
                 eventUoW.Events.Attach(e);
                 eventUoW.Save();
-
-                // TODO: Redirect to event management page?
+                
                 return RedirectToAction("Manage", "Event");
             }
 
@@ -137,6 +135,22 @@ namespace EventsApp.Controllers
          
             if (invite != null)
             {
+                if (!User.Identity.IsAuthenticated)
+                {
+                    return View("Confirm", new ConfirmViewModel { Link = invite, LinkGUID = invite.LinkGUID });
+                }
+
+                if (invite.Event.OwnerId == User.Identity.GetUserId())
+                {
+                    return View("ConfirmOwner", new ConfirmViewModel { Link = invite, LinkGUID = invite.LinkGUID });
+                }
+
+                AppUser user = eventUoW.Users.GetUserById(User.Identity.GetUserId());
+                if (eventUoW.Invites.IsInvited(invite.Event, user))
+                {
+                    return View("ConfirmInvited", new ConfirmViewModel { Link = invite, LinkGUID = invite.LinkGUID });
+                }
+
                 return View("Confirm", new ConfirmViewModel { Link = invite, LinkGUID = invite.LinkGUID });
             }
             else
@@ -168,7 +182,26 @@ namespace EventsApp.Controllers
         [HttpPost]
         public ActionResult Reject(ConfirmViewModel model)
         {
-            // TODO: Remove invite link.
+            // Remove invite link.
+            InviteLink link = eventUoW.InviteLinks.GetLinkGraphByCode(model.LinkGUID);
+            if (link == null)
+                throw new InvalidOperationException();
+            eventUoW.InviteLinks.Remove(link);
+            eventUoW.Save();
+            
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public ActionResult DeactivateLink(ConfirmViewModel model)
+        {
+            // Remove invite link.
+            InviteLink link = eventUoW.InviteLinks.GetLinkGraphByCode(model.LinkGUID);
+            if (link == null)
+                throw new InvalidOperationException();
+            eventUoW.InviteLinks.Remove(link);
+            eventUoW.Save();
+
             return RedirectToAction("Index", "Home");
         }
     }

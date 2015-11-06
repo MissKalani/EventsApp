@@ -11,14 +11,21 @@
                 <p><b>@Model.Link.Event.Brief</b></p>
                 <p>Hosted by</p>
                 <p><b>@Model.Link.Event.AppUser.UserName</b></p>
-                <p><b>@Model.Link.LinkGUID</b></p>
                 <div class="row">
                     <div class="col-md-6">
-                        @using (Html.BeginForm("Accept", "Event", FormMethod.Post, new { role = "form", name = "accept" }))
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        using (Html.BeginForm("Accept", "Event", FormMethod.Post, new { role = "form", name = "accept" }))
                         {
                             @Html.HiddenFor(t => t.LinkGUID)
                             <button type="submit" class="btn btn-success">I'll be there</button>
                         }
+                    }
+                    else
+                    {
+                        <p class="text-danger">You need to be logged in to accept.</p>
+                        <button class="btn btn-success disabled">I'll be there</button>
+                    }
                     </div>
                     <div class="col-md-6">
                         @using (Html.BeginForm("Reject", "Event", FormMethod.Post, new { role = "form", name = "reject" }))
