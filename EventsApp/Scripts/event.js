@@ -73,7 +73,7 @@ var EventManager = (function () {
     }
     
     EventManager.EventEntry.prototype.hide = function () {
-        this.marker.setVisible(true);
+        this.marker.setVisible(false);
         this.item.containerElement.setAttribute('style', 'display: none');
     }
 
@@ -96,17 +96,18 @@ var EventManager = (function () {
         entry.item = this.createEventListItem(event);
 
         // Setup event listeners.
+        var _this = this;
         entry.marker.addListener('click', function () {
             entry.item.showDetailed();
-            this.mapObject.setCenter(event.position);
-            this.mapObject.setZoom(8);
+            _this.mapObject.setCenter(event.position);
+            _this.mapObject.setZoom(8);
         });
 
         entry.item.briefElement.addEventListener('click', function (e) {
             entry.item.toggleDetailed();
             if (entry.item.isDetailShown()) {
-                this.mapObject.setCenter(event.position);
-                this.mapObject.setZoom(8);
+                _this.mapObject.setCenter(event.position);
+                _this.mapObject.setZoom(8);
             }
         });
 
