@@ -10,10 +10,18 @@
             <div class="col-md-12">
                 @using (Html.BeginForm("ManageEvent", "Event", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                 {
-                    @Html.ValidationSummary("", new {@class = "text-danger" })
-
-                    @Html.DisplayFor(t => t.Brief)
-
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(t => t.Brief, new { @class = "control-label" })
+                        @Html.EditorFor(t => t.Brief, new { @class = "form-control", placeholder = "Write a brief event description." })
+                        @Html.ValidationMessageFor(t => t.Brief, null, new { @class = "text-danger" })
+                    </div>
+                   
+                    <div id="map">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default">Update</button>
+                    </div>
                 }
             </div>
         </div>
@@ -48,7 +56,7 @@
                 $("#linkPanelText").text(data.link);
                 $("#linkPanel").show();
             }
-            
+
             function fetchLinkError(xhr, status, exception) {
                 console.log("Failed to fetch link");
             }

@@ -3,13 +3,17 @@ using EventsApp.ViewModels;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace EventsApp.Controllers
 {
     public class EventController : Controller
     {
+        private EventContext db = new EventContext();
         private IEventUnitOfWork eventUoW;
 
         public EventController(IEventUnitOfWork eventUoW)
@@ -32,7 +36,7 @@ namespace EventsApp.Controllers
             {
                 Event e = new Event();
                 e.Brief = model.Brief;
-                e.Detailed = model.Detailed;               
+                e.Detailed = model.Detailed;
                 e.Visibility = model.Visibility;
                 e.Address = model.Address;
                 e.Latitude = model.Latitude;
@@ -43,7 +47,7 @@ namespace EventsApp.Controllers
 
                 eventUoW.Events.Attach(e);
                 eventUoW.Save();
-                
+
                 return RedirectToAction("Manage", "Event");
             }
 
@@ -79,7 +83,7 @@ namespace EventsApp.Controllers
                     publicEvents.Remove(e);
                 }
             }
-            
+
             foreach (var e in publicEvents)
             {
                 events.Add(new ViewEvent { Brief = e.Brief, Detailed = e.Detailed, Address = e.Address, Latitude = e.Latitude, Longitude = e.Longitude, StartTime = e.StartTime, Relation = EventUserRelation.Public });
@@ -94,8 +98,14 @@ namespace EventsApp.Controllers
         {
             var user = eventUoW.Users.GetUserById(User.Identity.GetUserId());
             var events = new List<Event>();
-            events = eventUoW.Events.GetAllCreatedEvents(user).ToList(); 
+            events = eventUoW.Events.GetAllCreatedEvents(user).ToList();
             return View(events);
+        }
+
+        [Authorize]
+        public ActionResult EventDetails()
+        {
+            return View();
         }
 
 
@@ -106,10 +116,32 @@ namespace EventsApp.Controllers
         }
 
         [Authorize]
-        [HttpPost]
-        public ActionResult ManageEvent(ManageEventViewModel model)
+        public async Task<ActionResult> EditEvent(int? eventId)
         {
-            return View();
+            if (eventId == null)
+            {
+
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Event _event = await db.Events.FindAsync(eventId);
+            if (_event == null)
+            {
+                return HttpNotFound();
+            }
+            return View(_event);
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult> EditEvent([Bind(Include = "Brief, Detailed, Address, Latitude, Longitude, StartTime, Visibility")] Event _event)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(_event).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index", "Home");
+            }
+            return View(_event);
         }
 
         [Authorize]
@@ -132,7 +164,7 @@ namespace EventsApp.Controllers
         public ActionResult ConfirmLink(string code)
         {
             InviteLink invite = eventUoW.InviteLinks.GetLinkGraphByCode(code);
-         
+
             if (invite != null)
             {
                 if (!User.Identity.IsAuthenticated)
@@ -188,7 +220,7 @@ namespace EventsApp.Controllers
                 throw new InvalidOperationException();
             eventUoW.InviteLinks.Remove(link);
             eventUoW.Save();
-            
+
             return RedirectToAction("Index", "Home");
         }
 
@@ -205,5 +237,5 @@ namespace EventsApp.Controllers
             return RedirectToAction("Index", "Home");
         }
     }
-   
+
 }

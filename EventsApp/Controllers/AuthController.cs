@@ -33,7 +33,7 @@ namespace EventsApp.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> LogIn(LoginViewModel model, string returnUrl)
+        public async Task<ActionResult> LogIn(LoginUserViewModel model, string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -70,7 +70,7 @@ namespace EventsApp.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(RegisterUserViewModel model)
         {
             if(ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace EventsApp.Controllers
                 }
             }
             return View(model);
-            //return View();
+      
         }
 
         private async Task SignInAsync(AppUser user, bool isPersistent)
@@ -95,7 +95,6 @@ namespace EventsApp.Controllers
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
             var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
             AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
-
         }
 
 
@@ -116,7 +115,7 @@ namespace EventsApp.Controllers
         // POST: /Auth/Manage
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Manage(ManageViewModel model)
+        public async Task<ActionResult> Manage(ManageUserViewModel model)
         {
             bool hasPassword = HasPassword();
             ViewBag.HasLocalPassword = hasPassword;
@@ -208,6 +207,14 @@ namespace EventsApp.Controllers
             SetPasswordSuccess,
             RemoveLoginSuccess,
             Error
+        }
+
+        [ChildActionOnly]
+        public ActionResult RemoveAccountList()
+        {
+            var linkedAccounts = UserManager.GetLogins(User.Identity.GetUserId());
+            ViewBag.ShowRemoveButton = HasPassword() || linkedAccounts.Count > 1;
+            return (ActionResult)PartialView("_RemoveAccountPartial", linkedAccounts);
         }
     }
 }

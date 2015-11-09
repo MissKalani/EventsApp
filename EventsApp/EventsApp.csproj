@@ -300,6 +300,15 @@
     <Content Include="Views\Event\Confirm.cshtml" />
     <Content Include="Views\Event\ConfirmOwner.cshtml" />
     <Content Include="Views\Event\ConfirmInvited.cshtml" />
+    <Content Include="Views\Event\EditEvent.cshtml" />
+    <Content Include="Views\Auth\Manage.cshtml" />
+    <Content Include="Views\Auth\_ChangePasswordPartial.cshtml" />
+    <Content Include="Views\Auth\_RemoveAccountPartial.cshtml" />
+    <Content Include="Views\Auth\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\Auth\_SetPasswordPartial.cshtml" />
+    <Content Include="Views\Auth\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Auth\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\Event\EventDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

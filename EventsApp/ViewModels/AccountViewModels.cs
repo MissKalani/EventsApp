@@ -6,7 +6,7 @@ using System.Web;
 
 namespace EventsApp.ViewModels
 {
-    public class RegisterViewModel
+    public class RegisterUserViewModel
     {
         [Required]
         [Display (Name = "Username")]
@@ -26,7 +26,7 @@ namespace EventsApp.ViewModels
 
     }
 
-    public class LoginViewModel
+    public class LoginUserViewModel
     {
         [Required]
         [Display(Name = "Username")]
@@ -42,7 +42,7 @@ namespace EventsApp.ViewModels
 
     }
 
-    public class ManageViewModel
+    public class ManageUserViewModel
     {
         [Required]
         [DataType(DataType.Password)]

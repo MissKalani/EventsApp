@@ -15,6 +15,7 @@ namespace EventsApp.ViewModels
 
     public class ViewEvent
     {
+        public int EventId { get; set; }
         public string Brief { get; set; }
         public string Detailed { get; set; }
         public string Address { get; set; }
