@@ -62,14 +62,18 @@
                     console.log(eventData);
 
                     var event = new EventManager.Event();
+                    event.id = eventData.Id;
                     event.brief = eventData.Brief;
                     event.detailed = eventData.Detailed;
                     event.position = new google.maps.LatLng(eventData.Latitude, eventData.Longitude);
                     event.address = eventData.Address;
+                    event.visibility = eventData.Visibility;
                     event.userEventRelation = eventData.Relation;
 
                     eventManager.addEvent(event);
                 }
+
+                console.log(eventManager.eventEntries);
             }
 
             function fetchEventError(xhr, status, exception) {
