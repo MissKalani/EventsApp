@@ -19,7 +19,7 @@ namespace EventsApp
             bundles.Add(new ScriptBundle("~/bundles/js/bootstrap").Include("~/Scripts/bootstrap.min.js"));
             bundles.Add(new ScriptBundle("~/bundles/js/bootstrap-datepicker").Include("~/Scripts/bootstrap-datepicker.min.js"));
             bundles.Add(new ScriptBundle("~/bundles/js/event").Include("~/Scripts/event.js"));
-            bundles.Add(new StyleBundle("~/bundles/css/style").Include("~/Content/bootstrap.min.css", "~/Content/bootstrap-datepicker.min.css", "~/Content/Site.css"));
+            bundles.Add(new StyleBundle("~/bundles/css/style").Include("~/Content/bootstrap.min.css", "~/Content/bootstrap-datepicker.min.css", "~/Content/Site.css", "~/Content/MapContextMenu.css"));
         }
     }
 }

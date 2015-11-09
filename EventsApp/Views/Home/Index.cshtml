@@ -62,14 +62,18 @@
                     console.log(eventData);
 
                     var event = new EventManager.Event();
+                    event.id = eventData.Id;
                     event.brief = eventData.Brief;
                     event.detailed = eventData.Detailed;
                     event.position = new google.maps.LatLng(eventData.Latitude, eventData.Longitude);
                     event.address = eventData.Address;
+                    event.visibility = eventData.Visibility;
                     event.userEventRelation = eventData.Relation;
 
                     eventManager.addEvent(event);
                 }
+
+                console.log(eventManager.eventEntries);
             }
 
             function fetchEventError(xhr, status, exception) {
@@ -93,21 +97,6 @@
                     eventManager.showAll();
                 }
             });
-
-            /*
-            var event1 = new Event();
-            event1.brief = "Konstig utställning hos Harry";
-            event1.detailed = "Harry bjuder på konstig konst.";
-            event1.position = new google.maps.LatLng(60.0320092, 15.5318782);
-
-            var event2 = new Event();
-            event2.brief = "Viktors Bar Mitzva";
-            event2.detailed = "Mazel tow!";
-            event2.position = new google.maps.LatLng(61.0320092, 16.5318782);
-
-            addEvent(document.getElementById('eventList'), map, event1);
-            addEvent(document.getElementById('eventList'), map, event2);
-            */
         }
     </script>
 }

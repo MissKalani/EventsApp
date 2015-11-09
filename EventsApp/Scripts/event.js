@@ -7,9 +7,12 @@ var EventManager = (function () {
 
     var EventManager = {};
 
-    EventManager.EVENT_HOSTED = 0;
-    EventManager.EVENT_INVITED = 1;
-    EventManager.EVENT_PUBLIC = 2;
+    EventManager.VISIBILITY_PUBLIC = 0;
+    EventManager.VISIBILITY_PRIVATE = 1;
+
+    EventManager.RELATION_HOSTED = 0;
+    EventManager.RELATION_INVITED = 1;
+    EventManager.RELATION_PUBLIC = 2;
 
     /**
         @class Event
@@ -17,11 +20,13 @@ var EventManager = (function () {
         Used to specify an event.
     */
     EventManager.Event = function () {
+        this.id = 0;
         this.brief = "";
         this.detailed = "";
         this.address = "";
         this.position = new google.maps.LatLng(0, 0);
-        this.userEventRelation = EventManager.EVENT_HOSTED;
+        this.visibility = EventManager.VISIBILITY_PUBLIC;
+        this.userEventRelation = EventManager.RELATION_HOSTED;
     };
 
     /**
@@ -153,7 +158,7 @@ var EventManager = (function () {
     EventManager.Manager.prototype.showHosted = function () {
         for (var i = 0; i < this.eventEntries.length; i++) {
             var entry = this.eventEntries[i];
-            if (this.eventEntries[i].event.userEventRelation == EventManager.EVENT_HOSTED) {
+            if (this.eventEntries[i].event.userEventRelation == EventManager.RELATION_HOSTED) {
                 entry.show();
             } else {
                 entry.hide();
@@ -164,7 +169,7 @@ var EventManager = (function () {
     EventManager.Manager.prototype.showInvited = function () {
         for (var i = 0; i < this.eventEntries.length; i++) {
             var entry = this.eventEntries[i];
-            if (this.eventEntries[i].event.userEventRelation == EventManager.EVENT_INVITED) {
+            if (this.eventEntries[i].event.userEventRelation == EventManager.RELATION_INVITED) {
                 entry.show();
             } else {
                 entry.hide();
@@ -175,7 +180,7 @@ var EventManager = (function () {
     EventManager.Manager.prototype.showPublic = function () {
         for (var i = 0; i < this.eventEntries.length; i++) {
             var entry = this.eventEntries[i];
-            if (this.eventEntries[i].event.userEventRelation == EventManager.EVENT_PUBLIC) {
+            if (this.eventEntries[i].event.visibility == EventManager.VISIBILITY_PUBLIC) {
                 entry.show();
             } else {
                 entry.hide();
@@ -185,85 +190,3 @@ var EventManager = (function () {
 
     return EventManager;
 })();
-
-
-/*
-var EVENT_HOSTED = 0;
-var EVENT_INVITED = 1;
-var EVENT_PUBLIC = 2;
-
-function Event() {
-    this.brief = "";
-    this.detailed = "";
-    this.address = "";
-    this.position = new google.maps.LatLng(0, 0);
-    this.userEventRelation = EVENT_HOSTED;
-}
-
-function ListItem() {
-    this.containerElement = null;
-    this.briefElement = null;
-    this.detailedElement = null;
-}
-
-function showAll(listElement) {
-
-}
-
-function addEvent(listElement, map, event) {
-    var marker = new google.maps.Marker({
-        position: event.position,
-        map: map,
-        title: event.brief
-    });
-
-    var item = addEventListItem(listElement, event);
-
-    // Setup event listeners.
-    marker.addListener('click', function () {
-        toggleListItem(item);
-        map.setCenter(event.position);
-        map.setZoom(8);
-    });
-
-    item.briefElement.addEventListener('click', function (e) {
-        toggleListItem(item);
-        if (isListItemOpen(item)) {
-            map.setCenter(event.position);
-            map.setZoom(8);
-        }
-    });
-}
-
-function isListItemOpen(item) {
-    return item.detailedElement.style.display === 'block';
-}
-
-function toggleListItem(item) {
-    var isOpen = isListItemOpen(item);
-    if (isOpen) {
-        item.detailedElement.style.display = 'none';
-    } else {
-        item.detailedElement.style.display = 'block';
-    }
-}
-
-function addEventListItem(listElement, event) {
-    var item = new ListItem();
-
-    item.containerElement = document.createElement('div');
-    item.briefElement = document.createElement('div');
-    item.detailedElement = document.createElement('div');
-
-    listElement.appendChild(item.containerElement);
-    item.containerElement.appendChild(item.briefElement);
-    item.containerElement.appendChild(item.detailedElement);
-
-    item.briefElement.innerHTML = event.brief;
-    item.detailedElement.innerHTML = event.detailed;
-
-    item.detailedElement.setAttribute('style', 'display: none');
-
-    return item;
-}
-*/
