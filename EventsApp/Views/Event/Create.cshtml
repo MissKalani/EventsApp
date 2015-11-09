@@ -105,8 +105,22 @@
 
             marker.addListener('dragend', function () {
                 // Update the hidden lat/lng fields.
-                $('#create-event-latitude').val(places[0].geometry.location.lat);
-                $('#create-event-longitude').val(places[0].geometry.location.lng);
+                $('#create-event-latitude').val(marker.position.lat());
+                $('#create-event-longitude').val(marker.position.lng());
+            });
+
+            $('#create-event-latitude').change(function () {
+                var latitude = Number($(this).val());
+                console.log(latitude);
+                marker.setPosition(new google.maps.LatLng(latitude, marker.position.lng()));
+                console.log(marker.position);
+            });
+
+            $('#create-event-longitude').change(function () {
+                var longitude = Number($(this).val());
+                console.log(longitude);
+                marker.setPosition(new google.maps.LatLng(marker.position.lat(), longitude));
+                console.log(marker.position);
             });
 
         }
