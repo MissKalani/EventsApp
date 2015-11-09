@@ -123,6 +123,79 @@
                 console.log(marker.position);
             });
 
+            // Add a right-click context menu.
+            function getCanvasPosition(latlng) {
+                var scale = Math.pow(2, map.getZoom());
+                var projection = map.getProjection();
+                var topRight = projection.fromLatLngToPoint(map.getBounds().getNorthEast());
+                var bottomLeft = projection.fromLatLngToPoint(map.getBounds().getSouthWest());
+                var point = projection.fromLatLngToPoint(latlng);
+                return new google.maps.Point((point.x - bottomLeft.x) * scale, (point.y - topRight.y) * scale);
+            }
+
+            function setMenuPosition(menuElement, latlng) {
+                var mapWidth = $('#map').width();
+                var mapHeight = $('#map').height();
+                var menuWidth = $('.contextmenu').width();
+                var menuHeight = $('.contextmenu').height();
+                var clickpoint = getCanvasPosition(latlng);
+                var x = clickpoint.x;
+                var y = clickpoint.y;
+
+                if ((mapWidth - x) < menuWidth)
+                    x = x - menuWidth;
+                if ((mapHeight - y) < menuHeight)
+                    y = y - menuHeight;
+
+                $('.contextmenu').css('left', x);
+                $('.contextmenu').css('top', y);
+            }
+
+            function createContextMenuElement() {
+                var menuButton = document.createElement("a");
+                menuButton.innerHTML = "Set Event Location";
+                menuButton.className = "btn btn-primary contextmenu";
+                map.getDiv().appendChild(menuButton);
+                return menuButton;
+            }
+
+            function showContextMenu(latlng) {
+                var projection = map.getProjection();
+                
+                // Remove any existing context menu.
+                removeContextMenu();
+
+                // Create a new menu.
+                var menuElement = createContextMenuElement();
+
+                // Set the position when the menu button is clicked.
+                menuElement.addEventListener('click', function (e) {
+                    marker.setPosition(latlng);
+                    $('#create-event-latitude').val(latlng.lat());
+                    $('#create-event-longitude').val(latlng.lng());
+
+                    map.getDiv().removeChild(menuElement);
+                });
+
+                // Set the position of the menu.
+                setMenuPosition(menuElement, latlng);
+                
+                menuElement.style.visibility = "visible";
+            }
+
+            function removeContextMenu() {
+                $('.contextmenu').remove();
+            }
+
+            google.maps.event.addListener(map, "rightclick", function (event) {
+                console.log("Right click, showing context menu");
+                showContextMenu(event.latLng);
+            });
+
+            google.maps.event.addListener(map, "click", function () {
+                console.log("Click, removing context menu");
+                removeContextMenu();
+            });
         }
 
         $(document).ready(function () {

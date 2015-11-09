@@ -1,0 +1,9 @@
+﻿.contextmenu {
+    visibility:hidden;
+    z-index: 10;
+    position: relative;
+}
+
+.contextmenu div {
+    padding-left: 5px
+}
