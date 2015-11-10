@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
+using EventsApp.DataAccess;
 
 namespace Tests
 {

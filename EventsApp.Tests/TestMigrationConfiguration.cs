@@ -1,4 +1,5 @@
-﻿using EventsApp.DataModels;
+﻿using EventsApp.DataAccess;
+using EventsApp.DataModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;

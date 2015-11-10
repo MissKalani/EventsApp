@@ -1,7 +1,8 @@
 ﻿using System.Data.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using EventsApp.DataModels;
 
-namespace EventsApp.DataModels
+namespace EventsApp.DataAccess
 {
     public class EventContext : IdentityDbContext<AppUser>
     {

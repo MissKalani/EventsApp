@@ -321,6 +321,10 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EventsApp.DataAccess\EventsApp.DataAccess.csproj">
+      <Project>{e399be50-d586-4a75-877a-0e7cddc9fe77}</Project>
+      <Name>EventsApp.DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EventsApp.DataModels\EventsApp.DataModels.csproj">
       <Project>{f0821e72-e148-4de6-a979-21465895f60a}</Project>
       <Name>EventsApp.DataModels</Name>

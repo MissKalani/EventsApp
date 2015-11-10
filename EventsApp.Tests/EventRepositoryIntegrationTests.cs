@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity.Migrations;
 using System.Collections.Generic;
+using EventsApp.DataAccess;
 
 namespace Tests
 {

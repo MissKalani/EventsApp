@@ -2,6 +2,7 @@ using System;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
 using EventsApp.DataModels;
+using EventsApp.DataAccess;
 
 namespace EventsApp.MVC
 {

@@ -1,4 +1,5 @@
-﻿using EventsApp.DataModels;
+﻿using EventsApp.DataAccess;
+using EventsApp.DataModels;
 using EventsApp.MVC.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;

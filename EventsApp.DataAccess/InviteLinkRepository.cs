@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using EventsApp.DataModels;
 
-namespace EventsApp.DataModels
+namespace EventsApp.DataAccess
 {
     public class InviteLinkRepository : IInviteLinkRepository
     {
