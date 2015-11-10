@@ -1,5 +1,5 @@
 ﻿using EventsApp.DataModels;
-using EventsApp.ViewModels;
+using EventsApp.MVC.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
-namespace EventsApp.Controllers
+namespace EventsApp.MVC.Controllers
 {
     public class AuthController : Controller
     {

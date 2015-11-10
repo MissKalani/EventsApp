@@ -1,5 +1,5 @@
 ﻿using EventsApp.DataModels;
-using EventsApp.ViewModels;
+using EventsApp.MVC.ViewModels;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
-namespace EventsApp.Controllers
+namespace EventsApp.MVC.Controllers
 {
     public class EventController : Controller
     {

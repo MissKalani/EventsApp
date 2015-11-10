@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace EventsApp.ViewModels
+namespace EventsApp.MVC.ViewModels
 {
     public class CreateViewModel
     {

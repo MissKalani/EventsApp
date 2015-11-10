@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventsApp.ViewModels
+namespace EventsApp.MVC.ViewModels
 {
     public enum EventUserRelation
     {

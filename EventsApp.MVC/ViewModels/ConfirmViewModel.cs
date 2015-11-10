@@ -1,6 +1,6 @@
 ﻿using EventsApp.DataModels;
 
-namespace EventsApp.ViewModels
+namespace EventsApp.MVC.ViewModels
 {
     /// <summary>
     /// Inheriting from LoginUserViewModel since this view model is used when logged out.

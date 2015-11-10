@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace EventsApp.ViewModels
+namespace EventsApp.MVC.ViewModels
 {
     public class RegisterUserViewModel
     {

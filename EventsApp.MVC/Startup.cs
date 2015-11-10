@@ -5,9 +5,9 @@ using Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.AspNet.Identity;
 
-[assembly: OwinStartup(typeof(EventsApp.Startup))]
+[assembly: OwinStartup(typeof(EventsApp.MVC.Startup))]
 
-namespace EventsApp
+namespace EventsApp.MVC
 {
     public class Startup
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Optimization;
 
-namespace EventsApp
+namespace EventsApp.MVC
 {
     public static class BundleConfig
     {

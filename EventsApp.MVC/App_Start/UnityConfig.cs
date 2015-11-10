@@ -3,7 +3,7 @@ using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
 using EventsApp.DataModels;
 
-namespace EventsApp.App_Start
+namespace EventsApp.MVC
 {
     /// <summary>
     /// Specifies the Unity configuration for the main container.
