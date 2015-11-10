@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsApp", "EventsApp\EventsApp.csproj", "{E2D7EED3-48B6-47CE-803A-FF749052BAD3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsApp.MVC", "EventsApp.MVC\EventsApp.MVC.csproj", "{E2D7EED3-48B6-47CE-803A-FF749052BAD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataModels", "DataModels\DataModels.csproj", "{F0821E72-E148-4DE6-A979-21465895F60A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsApp.DataModels", "EventsApp.DataModels\EventsApp.DataModels.csproj", "{F0821E72-E148-4DE6-A979-21465895F60A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{4720521E-3EC5-4B90-A21B-76D0C0FB9006}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsApp.Tests", "EventsApp.Tests\EventsApp.Tests.csproj", "{4720521E-3EC5-4B90-A21B-76D0C0FB9006}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

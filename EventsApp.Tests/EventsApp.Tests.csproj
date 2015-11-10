@@ -85,9 +85,9 @@
     <Compile Include="TestMigrationConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataModels\DataModels.csproj">
+    <ProjectReference Include="..\EventsApp.DataModels\EventsApp.DataModels.csproj">
       <Project>{f0821e72-e148-4de6-a979-21465895f60a}</Project>
-      <Name>DataModels</Name>
+      <Name>EventsApp.DataModels</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
