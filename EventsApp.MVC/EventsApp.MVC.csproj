@@ -280,6 +280,7 @@
     <Compile Include="ViewModels\CreateViewModel.cs" />
     <Compile Include="ViewModels\ManageEventViewModel.cs" />
     <Compile Include="ViewModels\ViewEvent.cs" />
+    <Compile Include="ViewModels\ViewModels.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -301,7 +302,7 @@
     <Content Include="Views\Event\Confirm.cshtml" />
     <Content Include="Views\Event\ConfirmOwner.cshtml" />
     <Content Include="Views\Event\ConfirmInvited.cshtml" />
-    <Content Include="Views\Event\EditEvent.cshtml" />
+    <Content Include="Views\Event\Edit.cshtml" />
     <Content Include="Views\Auth\Manage.cshtml" />
     <Content Include="Views\Auth\_ChangePasswordPartial.cshtml" />
     <Content Include="Views\Auth\_RemoveAccountPartial.cshtml" />
@@ -309,7 +310,7 @@
     <Content Include="Views\Auth\_SetPasswordPartial.cshtml" />
     <Content Include="Views\Auth\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Auth\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Event\EventDetails.cshtml" />
+    <Content Include="Views\Event\Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

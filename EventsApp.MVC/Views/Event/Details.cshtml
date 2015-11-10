@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EventsApp.DataModels.Event>
+﻿@model EventsApp.MVC.ViewModels.ViewModels
 
 @{
     ViewBag.Title = "EventDetails";
@@ -12,33 +12,33 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.AppUser.Email)
+            Email
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Brief)
+            Brief
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Detailed)
+            Detailed
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Address)
+            Address
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Latitude)
+            Latitude
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Longitude)
+            Longitude
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.StartTime)
+            Start Time
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Visibility)
+            Visibility
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model.Events) {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.AppUser.Email)

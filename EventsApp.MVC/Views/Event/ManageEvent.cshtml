@@ -1,4 +1,4 @@
-﻿@model EventsApp.MVC.ViewModels.ManageEventViewModel
+﻿@model EventsApp.MVC.ViewModels.ViewModels
 @{
     ViewBag.Title = "ManageEvent";
 }
@@ -12,9 +12,9 @@
                 {
                     @Html.ValidationSummary("", new { @class = "text-danger" })
                     <div class="form-group">
-                        @Html.LabelFor(t => t.Brief, new { @class = "control-label" })
-                        @Html.EditorFor(t => t.Brief, new { @class = "form-control", placeholder = "Write a brief event description." })
-                        @Html.ValidationMessageFor(t => t.Brief, null, new { @class = "text-danger" })
+                        @Html.LabelFor(t => t.ManageEventViewModel.Brief, new { @class = "control-label" })
+                        @Html.EditorFor(t => t.ManageEventViewModel.Brief, new { @class = "form-control", placeholder = "Write a brief event description." })
+                        @Html.ValidationMessageFor(t => t.ManageEventViewModel.Brief, null, new { @class = "text-danger" })
                     </div>
                    
                     <div id="map">

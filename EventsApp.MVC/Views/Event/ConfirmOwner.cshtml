@@ -1,13 +1,13 @@
-﻿@model EventsApp.MVC.ViewModels.ConfirmViewModel
+﻿@model EventsApp.MVC.ViewModels.ViewModels
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="row">
             <div class="col-md-12">
                 <p>Send this link to anyone you want to invite to your event!</p>
-                <p><b>@Model.Link.Event.Brief</b></p>
+                <p><b>@Model.ConfirmViewModel.Link.Event.Brief</b></p>
                 @using (Html.BeginForm("DeactivateLink", "Event", FormMethod.Post, new { role = "form", name = "reject" }))
                 {
-                    @Html.HiddenFor(t => t.LinkGUID)
+                    @Html.HiddenFor(t => t.ConfirmViewModel.LinkGUID)
                     <button type="submit" class="btn btn-danger">Deactive link</button>
                 }
             </div>

@@ -1,5 +1,5 @@
 ﻿
-@model EventsApp.MVC.ViewModels.LoginUserViewModel
+@model EventsApp.MVC.ViewModels.ViewModels
 @{
     ViewBag.Title = "Log In";
 }
@@ -15,24 +15,24 @@
                 <hr />
                 @Html.ValidationSummary(true)
                 <div class="form-group">
-                    @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
+                    @Html.LabelFor(m => m.LoginUserViewModel.UserName, new { @class = "col-md-2 control-label" })
                     <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.UserName)
+                        @Html.TextBoxFor(m => m.LoginUserViewModel.UserName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.LoginUserViewModel.UserName)
                     </div>
                 </div>
                 <div class="form-group">
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                    @Html.LabelFor(m => m.LoginUserViewModel.Password, new { @class = "col-md-2 control-label" })
                     <div class="col-md-10">
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Password)
+                        @Html.PasswordFor(m => m.LoginUserViewModel.Password, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.LoginUserViewModel.Password)
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <div class="checkbox">
-                            @Html.CheckBoxFor(m => m.RememberMe)
-                            @Html.LabelFor(m => m.RememberMe)
+                            @Html.CheckBoxFor(m => m.LoginUserViewModel.RememberMe)
+                            @Html.LabelFor(m => m.LoginUserViewModel.RememberMe)
                         </div>
                     </div>
                 </div>

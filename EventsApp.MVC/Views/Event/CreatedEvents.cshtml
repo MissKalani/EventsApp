@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EventsApp.DataModels.Event>
+﻿@model EventsApp.MVC.ViewModels.ViewModels
 
 @{
     ViewBag.Title = "Created Events";
@@ -15,7 +15,7 @@
             <th>Brief</th>
             <th colspan="2">Event Date</th>
         </tr>
-        @foreach (var m in Model)
+        @foreach (var m in Model.Events)
         {
             <tr> 
                 <td>

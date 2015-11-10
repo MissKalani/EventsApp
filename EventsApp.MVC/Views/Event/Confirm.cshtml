@@ -1,4 +1,4 @@
-﻿@model EventsApp.MVC.ViewModels.ConfirmViewModel
+﻿@model EventsApp.MVC.ViewModels.ViewModels
 @{
     ViewBag.Title = "Create";
 }
@@ -8,16 +8,16 @@
         <div class="row">
             <div class="col-md-12">
                 <p>You are invited to an event!</p>
-                <p><b>@Model.Link.Event.Brief</b></p>
+                <p><b>@Model.ConfirmViewModel.Link.Event.Brief</b></p>
                 <p>Hosted by</p>
-                <p><b>@Model.Link.Event.AppUser.UserName</b></p>
+                <p><b>@Model.ConfirmViewModel.Link.Event.AppUser.UserName</b></p>
                 <div class="row">
                     <div class="col-md-6">
                     @if (User.Identity.IsAuthenticated)
                     {
                         using (Html.BeginForm("Accept", "Event", FormMethod.Post, new { role = "form", name = "accept" }))
                         {
-                            @Html.HiddenFor(t => t.LinkGUID)
+                            @Html.HiddenFor(t => t.ConfirmViewModel.LinkGUID)
                             <button type="submit" class="btn btn-success">I'll be there</button>
                         }
                     }
@@ -30,7 +30,7 @@
                     <div class="col-md-6">
                         @using (Html.BeginForm("Reject", "Event", FormMethod.Post, new { role = "form", name = "reject" }))
                         {
-                            @Html.HiddenFor(t => t.LinkGUID)
+                            @Html.HiddenFor(t => t.ConfirmViewModel.LinkGUID)
                             <button type="submit" class="btn btn-danger">I'll pass</button>
                         }
                     </div>
