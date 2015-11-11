@@ -34,14 +34,14 @@ namespace EventsApp.MVC.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> LogIn(LoginUserViewModel model, string returnUrl)
+        public async Task<ActionResult> LogIn(HellViewModel model, string returnUrl)
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindAsync(model.UserName, model.Password);
+                var user = await UserManager.FindAsync(model.LoginUserViewModel.UserName, model.LoginUserViewModel.Password);
                 if(user != null)
                 {
-                    await SignInAsync(user, model.RememberMe);
+                    await SignInAsync(user, model.LoginUserViewModel.RememberMe);
                     return RedirectToLocal(returnUrl);
                 }
                 else
@@ -71,12 +71,12 @@ namespace EventsApp.MVC.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterUserViewModel model)
+        public async Task<ActionResult> Register(HellViewModel model)
         {
             if(ModelState.IsValid)
             {
-                var user = new AppUser() { UserName = model.UserName };
-                var result = await UserManager.CreateAsync(user, model.Password);
+                var user = new AppUser() { UserName = model.RegisterUserViewModel.UserName };
+                var result = await UserManager.CreateAsync(user, model.RegisterUserViewModel.Password);
                 if (result.Succeeded)
                 {
                     await SignInAsync(user, isPersistent: false);
@@ -116,7 +116,7 @@ namespace EventsApp.MVC.Controllers
         // POST: /Auth/Manage
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Manage(ManageUserViewModel model)
+        public async Task<ActionResult> Manage(HellViewModel model)
         {
             bool hasPassword = HasPassword();
             ViewBag.HasLocalPassword = hasPassword;
@@ -125,7 +125,7 @@ namespace EventsApp.MVC.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+                    IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.ManageUserViewModel.OldPassword, model.ManageUserViewModel.NewPassword);
                     if (result.Succeeded)
                     {
                         return RedirectToAction("Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
@@ -147,7 +147,7 @@ namespace EventsApp.MVC.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    IdentityResult result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
+                    IdentityResult result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.ManageUserViewModel.NewPassword);
                     if (result.Succeeded)
                     {
                         return RedirectToAction("Manage", new { Message = ManageMessageId.SetPasswordSuccess });
