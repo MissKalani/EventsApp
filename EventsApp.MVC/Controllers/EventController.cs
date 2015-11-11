@@ -62,7 +62,7 @@ namespace EventsApp.MVC.Controllers
         [HttpPost]
         public ActionResult Visible()
         {
-            List<ViewEvent> events = new List<ViewEvent>();
+            List<EventListViewModel> events = new List<EventListViewModel>();
             var publicEvents = eventUoW.Events.GetAllPublicEvents();
             if (User.Identity.IsAuthenticated)
             {
@@ -73,21 +73,21 @@ namespace EventsApp.MVC.Controllers
                 // Prioritize in order (hosted, invited, public) for setting a user-event relation.
                 foreach (var e in hostedEvents)
                 {
-                    events.Add(new ViewEvent { Id = e.Id, Brief = e.Brief, Detailed = e.Detailed, Address = e.Address, Latitude = e.Latitude, Longitude = e.Longitude, StartTime = e.StartTime, Visibility = e.Visibility, Relation = EventUserRelation.Hosted });
+                    events.Add(new EventListViewModel { Id = e.Id, Brief = e.Brief, Detailed = e.Detailed, Address = e.Address, Latitude = e.Latitude, Longitude = e.Longitude, StartTime = e.StartTime, Visibility = e.Visibility, Relation = EventUserRelation.Hosted });
                     invitedEvents.Remove(e);
                     publicEvents.Remove(e);
                 }
 
                 foreach (var e in invitedEvents)
                 {
-                    events.Add(new ViewEvent { Id = e.Id, Brief = e.Brief, Detailed = e.Detailed, Address = e.Address, Latitude = e.Latitude, Longitude = e.Longitude, StartTime = e.StartTime, Visibility = e.Visibility, Relation = EventUserRelation.Invited });
+                    events.Add(new EventListViewModel { Id = e.Id, Brief = e.Brief, Detailed = e.Detailed, Address = e.Address, Latitude = e.Latitude, Longitude = e.Longitude, StartTime = e.StartTime, Visibility = e.Visibility, Relation = EventUserRelation.Invited });
                     publicEvents.Remove(e);
                 }
             }
 
             foreach (var e in publicEvents)
             {
-                events.Add(new ViewEvent { Id = e.Id, Brief = e.Brief, Detailed = e.Detailed, Address = e.Address, Latitude = e.Latitude, Longitude = e.Longitude, StartTime = e.StartTime, Visibility = e.Visibility, Relation = EventUserRelation.Public });
+                events.Add(new EventListViewModel { Id = e.Id, Brief = e.Brief, Detailed = e.Detailed, Address = e.Address, Latitude = e.Latitude, Longitude = e.Longitude, StartTime = e.StartTime, Visibility = e.Visibility, Relation = EventUserRelation.Public });
             }
 
             return Json(events);

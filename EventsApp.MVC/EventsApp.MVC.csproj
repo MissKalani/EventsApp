@@ -280,7 +280,7 @@
     <Compile Include="ViewModels\ConfirmViewModel.cs" />
     <Compile Include="ViewModels\CreateViewModel.cs" />
     <Compile Include="ViewModels\ManageEventViewModel.cs" />
-    <Compile Include="ViewModels\ViewEvent.cs" />
+    <Compile Include="ViewModels\EventListViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
