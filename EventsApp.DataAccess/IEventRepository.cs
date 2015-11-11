@@ -25,5 +25,7 @@ namespace EventsApp.DataAccess
         /// </summary>
         /// <param name="user">The user who created the events.</param>
         List<Event> GetAllCreatedEvents(AppUser user);
+
+        Event GetEventByID(int id);
     }
 }

@@ -76,7 +76,7 @@ var EventManager = (function () {
         this.marker.setVisible(true);
         this.item.containerElement.setAttribute('style', 'display: block');
     }
-    
+
     EventManager.EventEntry.prototype.hide = function () {
         this.marker.setVisible(false);
         this.item.containerElement.setAttribute('style', 'display: none');
@@ -136,12 +136,21 @@ var EventManager = (function () {
         item.briefElement = document.createElement('div');
         item.detailedElement = document.createElement('div');
 
+        var txt = document.createElement('p');
+        txt.innerHTML = event.detailed;
+        item.detailedElement.appendChild(txt);
+
+        var details = document.createElement('a');
+        details.innerHTML = "Show Event Details";
+        details.className = "btn btn-primary";
+        details.href = "Event/Details/" + event.id;
+        item.detailedElement.appendChild(details);
+
         this.listElement.appendChild(item.containerElement);
         item.containerElement.appendChild(item.briefElement);
         item.containerElement.appendChild(item.detailedElement);
 
         item.briefElement.innerHTML = event.brief;
-        item.detailedElement.innerHTML = event.detailed;
 
         item.detailedElement.setAttribute('style', 'display: none');
 

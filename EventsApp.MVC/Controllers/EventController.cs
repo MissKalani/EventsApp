@@ -49,7 +49,7 @@ namespace EventsApp.MVC.Controllers
                 eventUoW.Events.Attach(e);
                 eventUoW.Save();
 
-                return RedirectToAction("Details", "Event");
+                return RedirectToAction("Details", "Event", new { id = e.Id });
             }
 
             return View();
@@ -104,9 +104,10 @@ namespace EventsApp.MVC.Controllers
         }
 
         [Authorize]
-        public ActionResult EventDetails()
+        public ActionResult Details(int id)
         {
-            return View();
+            var e = eventUoW.Events.GetEventByID(id);
+            return View(new HellViewModel { Event = e });
         }
 
 
@@ -116,34 +117,40 @@ namespace EventsApp.MVC.Controllers
         //        return View(new HellViewModel { ManageUserViewModel new ManageEventViewModel { EventId = eventId });
         //    }
 
-        //    [Authorize]
-        //    public async Task<ActionResult> EditEvent(int? eventId)
-        //    {
-        //        if (eventId == null)
-        //        {
-
-        //            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //        }
-        //        Event _event = await db.Events.FindAsync(eventId);
-        //        if (_event == null)
-        //        {
-        //            return HttpNotFound();
-        //        }
-        //        return View(_event);
-        //    }
+        [Authorize]
+        public ActionResult Edit(int id)
+        {          
+            Event _event = eventUoW.Events.GetEventByID(id);
+            if (_event == null)
+            {
+                return HttpNotFound();
+            }
+            return View(new HellViewModel { Event = _event });
+        }
 
 
-        //    [HttpPost]
-        //    public async Task<ActionResult> EditEvent([Bind(Include = "Brief, Detailed, Address, Latitude, Longitude, StartTime, Visibility")] Event _event)
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            db.Entry(_event).State = EntityState.Modified;
-        //            await db.SaveChangesAsync();
-        //            return RedirectToAction("Index", "Home");
-        //        }
-        //        return View(_event);
-        //    }
+        [HttpPost]
+        public ActionResult Edit(HellViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Event e = eventUoW.Events.GetEventByID(model.Event.Id);
+                e.Brief = model.Event.Brief;
+                e.Detailed = model.Event.Detailed;
+                e.Visibility = model.Event.Visibility;
+                e.Address = model.Event.Address;
+                e.Latitude = model.Event.Latitude;
+                e.Longitude = model.Event.Longitude;
+                e.StartTime = model.Event.StartTime;
+                e.ModificationState = ModificationState.Modified;
+
+                eventUoW.Events.Attach(e);
+                eventUoW.Save();
+
+                return RedirectToAction("Details", "Event", new { id = e.Id });
+            }
+            return View(model);
+        }
 
         //    [Authorize]
         //    [HttpPost]

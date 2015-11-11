@@ -9,67 +9,10 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            Email
-        </th>
-        <th>
-            Brief
-        </th>
-        <th>
-            Detailed
-        </th>
-        <th>
-            Address
-        </th>
-        <th>
-            Latitude
-        </th>
-        <th>
-            Longitude
-        </th>
-        <th>
-            Start Time
-        </th>
-        <th>
-            Visibility
-        </th>
-        <th></th>
-    </tr>
+<p>@Model.Event.Brief</p>
+<p>@Model.Event.Detailed</p>
+<p>@Model.Event.Address</p>
+<p>@Model.Event.StartTime</p>
 
-@foreach (var item in Model.Events) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.AppUser.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Brief)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Detailed)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Address)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Latitude)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Longitude)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StartTime)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Visibility)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
 
-</table>
+@Html.ActionLink("Edit Event", "Edit", new { id = Model.Event.Id })

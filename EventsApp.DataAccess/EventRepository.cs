@@ -40,5 +40,10 @@ namespace EventsApp.DataAccess
         {
             return context.Events.Where(t => t.OwnerId == user.Id).ToList();
         }
+
+        public Event GetEventByID(int i)
+        {
+            return context.Events.Find(i); 
+        }
     }
 }
