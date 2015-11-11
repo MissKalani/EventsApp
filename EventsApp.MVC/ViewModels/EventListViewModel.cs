@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 
 namespace EventsApp.MVC.ViewModels
 {
+    /// <summary>
+    /// Specifies how a user is related to an event: whether they
+    /// have created it, have been invited to it, or whether the event
+    /// is public to all.
+    /// </summary>
     public enum EventUserRelation
     {
         Hosted,
@@ -14,7 +19,11 @@ namespace EventsApp.MVC.ViewModels
         Public
     }
 
-    public class ViewEvent
+    /// <summary>
+    /// Used for populating the list and map on the home page. Currently only
+    /// serialized to JSON and parsed after an AJAX call on the client.
+    /// </summary>
+    public class EventListViewModel
     {
         public int Id { get; set; }
         public string Brief { get; set; }
