@@ -60,6 +60,10 @@ button.navbar-toggle{
     margin-top: 15px;
 }
 
+#edit-panel {
+    margin-top: 15px;
+}
+
 .panel-default > .panel-heading {
     background-color: #C6491A;
     color: #E6E3BB;
