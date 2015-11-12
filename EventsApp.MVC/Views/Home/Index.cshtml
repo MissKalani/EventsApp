@@ -4,18 +4,15 @@
 
 <div id="index-panel" class="panel panel-default">
     <div class="panel-heading">
-        <h2>Something going on?</h2>
-        @Html.ActionLink("Create Event", "Create", "Event", new { }, new { @class = "btn btn-primary btn-lg" })
-        @if (Context.User.Identity.IsAuthenticated)
-        {
-            @Html.ActionLink("Show created events", "CreatedEvents", "Event", new { }, new { @class = "btn btn-default" })
-        }
+        <h3>Something going on?</h3>   
 
     </div>
     <div class="panel-body">
         <div class="row">
+           
             <div id="eventList" class="col-md-3">
-
+                @Html.ActionLink("Create Event", "Create", "Event", new { }, new { @class = "btn btn-block" })
+                
             </div>
             <div id="mapView" class="col-md-9">
                 @if (Context.User.Identity.IsAuthenticated)
