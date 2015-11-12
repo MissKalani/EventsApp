@@ -65,8 +65,10 @@
                     event.id = eventData.Id;
                     event.brief = eventData.Brief;
                     event.detailed = eventData.Detailed;
-                    event.position = new google.maps.LatLng(eventData.Latitude, eventData.Longitude);
+                    event.hostName = eventData.HostName;
                     event.address = eventData.Address;
+                    event.position = new google.maps.LatLng(eventData.Latitude, eventData.Longitude);
+                    event.startTime = new Date(parseInt(eventData.StartTime.substr(6)));
                     event.visibility = eventData.Visibility;
                     event.userEventRelation = eventData.Relation;
 

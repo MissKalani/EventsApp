@@ -73,21 +73,24 @@ namespace EventsApp.MVC.Controllers
                 // Prioritize in order (hosted, invited, public) for setting a user-event relation.
                 foreach (var e in hostedEvents)
                 {
-                    events.Add(new EventListViewModel { Id = e.Id, Brief = e.Brief, Detailed = e.Detailed, Address = e.Address, Latitude = e.Latitude, Longitude = e.Longitude, StartTime = e.StartTime, Visibility = e.Visibility, Relation = EventUserRelation.Hosted });
+                    var host = eventUoW.Events.LoadUserGraph(e);
+                    events.Add(new EventListViewModel { Id = e.Id, Brief = e.Brief, Detailed = e.Detailed, HostName = host.UserName, Address = e.Address, Latitude = e.Latitude, Longitude = e.Longitude, StartTime = e.StartTime, Visibility = e.Visibility, Relation = EventUserRelation.Hosted });
                     invitedEvents.Remove(e);
                     publicEvents.Remove(e);
                 }
 
                 foreach (var e in invitedEvents)
                 {
-                    events.Add(new EventListViewModel { Id = e.Id, Brief = e.Brief, Detailed = e.Detailed, Address = e.Address, Latitude = e.Latitude, Longitude = e.Longitude, StartTime = e.StartTime, Visibility = e.Visibility, Relation = EventUserRelation.Invited });
+                    var host = eventUoW.Events.LoadUserGraph(e);
+                    events.Add(new EventListViewModel { Id = e.Id, Brief = e.Brief, Detailed = e.Detailed, HostName = host.UserName, Address = e.Address, Latitude = e.Latitude, Longitude = e.Longitude, StartTime = e.StartTime, Visibility = e.Visibility, Relation = EventUserRelation.Invited });
                     publicEvents.Remove(e);
                 }
             }
 
             foreach (var e in publicEvents)
             {
-                events.Add(new EventListViewModel { Id = e.Id, Brief = e.Brief, Detailed = e.Detailed, Address = e.Address, Latitude = e.Latitude, Longitude = e.Longitude, StartTime = e.StartTime, Visibility = e.Visibility, Relation = EventUserRelation.Public });
+                var host = eventUoW.Events.LoadUserGraph(e);
+                events.Add(new EventListViewModel { Id = e.Id, Brief = e.Brief, Detailed = e.Detailed, HostName = host.UserName, Address = e.Address, Latitude = e.Latitude, Longitude = e.Longitude, StartTime = e.StartTime, Visibility = e.Visibility, Relation = EventUserRelation.Public });
             }
 
             return Json(events);

@@ -23,8 +23,10 @@ var EventManager = (function () {
         this.id = 0;
         this.brief = "";
         this.detailed = "";
+        this.hostName = "John Doe";
         this.address = "";
         this.position = new google.maps.LatLng(0, 0);
+        this.startTime = new Date();
         this.visibility = EventManager.VISIBILITY_PUBLIC;
         this.userEventRelation = EventManager.RELATION_HOSTED;
     };
@@ -46,10 +48,12 @@ var EventManager = (function () {
 
     EventManager.EventListItem.prototype.showDetailed = function () {
         this.detailedElement.setAttribute('style', 'display: block');
+        this.briefElement.className = "event-list-brief expanded";
     }
 
     EventManager.EventListItem.prototype.hideDetailed = function () {
         this.detailedElement.setAttribute('style', 'display: none');
+        this.briefElement.className = "event-list-brief";
     }
 
     EventManager.EventListItem.prototype.toggleDetailed = function () {
@@ -132,26 +136,58 @@ var EventManager = (function () {
     EventManager.Manager.prototype.createEventListItem = function (event) {
         var item = new EventManager.EventListItem();
 
+        // Create the container divs.
         item.containerElement = document.createElement('div');
         item.briefElement = document.createElement('div');
         item.detailedElement = document.createElement('div');
-
-        var txt = document.createElement('p');
-        txt.innerHTML = event.detailed;
-        item.detailedElement.appendChild(txt);
-
-        var details = document.createElement('a');
-        details.innerHTML = "Show Event Details";
-        details.className = "btn btn-primary";
-        details.href = "Event/Details/" + event.id;
-        item.detailedElement.appendChild(details);
+        
+        item.briefElement.className = "event-list-brief";
+        item.detailedElement.className = "event-list-details";
 
         this.listElement.appendChild(item.containerElement);
         item.containerElement.appendChild(item.briefElement);
         item.containerElement.appendChild(item.detailedElement);
 
-        item.briefElement.innerHTML = event.brief;
+        // Setup the contents of the brief container.
+        var briefParagraph = document.createElement('span');
+        briefParagraph.innerHTML = event.brief;
+        briefParagraph.className = "brief";
 
+        var hostedByParagraph = document.createElement('span');
+        hostedByParagraph.innerHTML = " hosted by " + event.hostName;
+        hostedByParagraph.className = "hosted-by";
+
+        item.briefElement.appendChild(briefParagraph);
+        item.briefElement.appendChild(hostedByParagraph);
+
+        // Setup the contents of the details container.
+        var detailsParagraph = document.createElement('p');
+        detailsParagraph.innerHTML = event.detailed;
+        detailsParagraph.className = "details";
+        item.detailedElement.appendChild(detailsParagraph);
+
+        if (event.address != "")
+        {
+            var addressParagraph = document.createElement('div');
+            addressParagraph.innerHTML = event.address;
+            addressParagraph.className = "address";
+            item.detailedElement.appendChild(addressParagraph);
+        }
+
+        var startTimeParagraph = document.createElement('div');
+        startTimeParagraph.innerHTML = event.startTime.getFullYear() + "-"
+                                     + (event.startTime.getMonth() + 1) + "-"
+                                     + event.startTime.getDate();
+        startTimeParagraph.className = "datetime";
+        item.detailedElement.appendChild(startTimeParagraph);
+
+        var detailsButton = document.createElement('a');
+        detailsButton.innerHTML = "Details";
+        detailsButton.className = "btn btn-primary";
+        detailsButton.href = "Event/Details/" + event.id;
+        item.detailedElement.appendChild(detailsButton);
+
+        // Per default: hide the detailed container.
         item.detailedElement.setAttribute('style', 'display: none');
 
         return item;

@@ -26,6 +26,11 @@ namespace EventsApp.DataAccess
         /// <param name="user">The user who created the events.</param>
         List<Event> GetAllCreatedEvents(AppUser user);
 
+        /// <summary>
+        /// Loads the AppUser node in the specified event graph.
+        /// </summary>
+        AppUser LoadUserGraph(Event e);
+
         Event GetEventByID(int id);
     }
 }

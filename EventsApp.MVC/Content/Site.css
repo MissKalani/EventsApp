@@ -33,3 +33,41 @@
 #edit-panel {
     margin-top: 15px;
 }
+
+.event-list-brief .brief {
+    font-family: "Courier New";
+    font-size: 1.2em;
+    text-transform: uppercase;
+    margin-top: 5px;
+}
+
+.event-list-brief .hosted-by {
+    font-size: 0.7em;
+}
+
+.event-list-brief.expanded {
+    background-color: lightblue;
+}
+
+.event-list-details {
+    background-color: antiquewhite;
+}
+
+.event-list-details .address {
+    font-family: "Courier New";
+    font-size: 0.7em;
+    color: gray;
+    margin-top: 5px;
+}
+
+.event-list-details .datetime {
+    font-family: "Courier New";
+    font-size: 0.7em;
+    font-weight: bolder;
+    color: gray;
+    margin-top: 5px;
+}
+
+.event-list-details a {
+    margin: 10px 5px 5px;
+}

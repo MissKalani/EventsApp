@@ -41,6 +41,12 @@ namespace EventsApp.DataAccess
             return context.Events.Where(t => t.OwnerId == user.Id).ToList();
         }
 
+        public AppUser LoadUserGraph(Event e)
+        {
+            context.Entry(e).Reference(t => t.AppUser).Load();
+            return e.AppUser;
+        }
+
         public Event GetEventByID(int i)
         {
             return context.Events.Find(i); 

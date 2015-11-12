@@ -28,6 +28,7 @@ namespace EventsApp.MVC.ViewModels
         public int Id { get; set; }
         public string Brief { get; set; }
         public string Detailed { get; set; }
+        public string HostName { get; set; }
         public string Address { get; set; }
         public float Latitude { get; set; }
         public float Longitude { get; set; }
