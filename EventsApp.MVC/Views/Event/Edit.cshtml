@@ -4,52 +4,69 @@
     ViewBag.Title = "EditEvent";
 }
 
-<h1>@ViewBag.Title</h1>
+<!--<h1>@ViewBag.Title</h1>-->
 
-@using (Html.BeginForm())
-{
-    <div class="form-horizontal">
-        @Html.ValidationSummary(true,"", new {@class = "text-danger" })
-        @Html.HiddenFor(m => m.Event.Id)
+<div id="edit-panel" class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                @using (Html.BeginForm())
+                {
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(m => m.EditViewModel.EventId)
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.Event.Brief)
-            @Html.EditorFor(m => m.Event.Brief, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(m => m.Event.Brief, "", new { @class = "text-danger" })
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(t => t.Event.Detailed, new { @class = "control-label" })
-            @Html.TextAreaFor(t => t.Event.Detailed, 5, 80, new { @class = "form-control"})
-            @Html.ValidationMessageFor(t => t.Event.Detailed, null, new { @class = "text-danger" })
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(t => t.Event.Visibility, "Public", new { @class = "control-label" })
-            @Html.RadioButtonFor(t => t.Event.Visibility, "Public")
-            @Html.LabelFor(t => t.Event.Visibility, "Private", new { @class = "control-label" })
-            @Html.RadioButtonFor(t => t.Event.Visibility, "Private")
-        </div>
-        <div class="form-group">
-            @Html.TextBoxFor(t => t.Event.Latitude, new { id = "create-event-latitude" })
-        </div>
-        <div class="form-group">
-            @Html.TextBoxFor(t => t.Event.Longitude, new { id = "create-event-longitude" })
-        </div>
-        <div class="form-group date">
-            @Html.LabelFor(t => t.Event.StartTime, new { @class = "control-label" })
-            @Html.TextBoxFor(t => t.Event.StartTime, new { @class = "form-control", id = "create-event-datepicker", placeholder = "Select date." })
-            @Html.ValidationMessageFor(t => t.Event.StartTime, null, new { @class = "text-danger" })
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(t => t.Event.Address, new { @class = "control-label" })
-            @Html.TextBoxFor(t => t.Event.Address, new { @class = "form-control", id = "create-event-address", placeholder = "Search for an address." })
-            @Html.ValidationMessageFor(t => t.Event.Address, null, new { @class = "text-danger" })
-        </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.EditViewModel.Brief)
+                        @Html.EditorFor(m => m.EditViewModel.Brief, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(m => m.EditViewModel.Brief, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(t => t.EditViewModel.Detailed, new { @class = "control-label" })
+                        @Html.TextAreaFor(t => t.EditViewModel.Detailed, 5, 80, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(t => t.EditViewModel.Detailed, null, new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(t => t.EditViewModel.Visibility, "Public", new { @class = "control-label" })
+                        @Html.RadioButtonFor(t => t.EditViewModel.Visibility, "Public")
+                        @Html.LabelFor(t => t.EditViewModel.Visibility, "Private", new { @class = "control-label" })
+                        @Html.RadioButtonFor(t => t.EditViewModel.Visibility, "Private")
+                    </div>
+                    <div class="form-group">
+                        @Html.TextBoxFor(t => t.EditViewModel.Latitude, new { id = "create-event-latitude" })
+                    </div>
+                    <div class="form-group">
+                        @Html.TextBoxFor(t => t.EditViewModel.Longitude, new { id = "create-event-longitude" })
+                    </div>
+                    <div class="form-group date">
+                        @Html.LabelFor(t => t.EditViewModel.StartTime, new { @class = "control-label" })
+                        @Html.TextBoxFor(t => t.EditViewModel.StartTime, new { @class = "form-control", id = "edit-event-datetimepicker", Value="" })
+                        @Html.ValidationMessageFor(t => t.EditViewModel.StartTime, null, new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(t => t.EditViewModel.Address, new { @class = "control-label" })
+                        @Html.TextBoxFor(t => t.EditViewModel.Address, new { @class = "form-control", id = "create-event-address", placeholder = "Search for an address." })
+                        @Html.ValidationMessageFor(t => t.EditViewModel.Address, null, new { @class = "text-danger" })
+                    </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" class="btn btn-default" />
+                        </div>
+                    </div>
+                }
             </div>
         </div>
-
     </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#edit-event-datetimepicker').datetimepicker({
+                format: 'YYYY-MM-DD HH:mm',
+                defaultDate: Date.parse("@Model.EditViewModel.StartTime")
+            });
+        });
+    </script>
 }

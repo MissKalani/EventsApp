@@ -125,7 +125,9 @@ namespace EventsApp.MVC.Controllers
             {
                 return HttpNotFound();
             }
-            return View(new HellViewModel { Event = _event });
+
+            var vm = new EditViewModel { EventId = _event.Id, Brief = _event.Brief, Detailed = _event.Detailed, Address = _event.Address, Latitude = _event.Latitude, Longitude = _event.Longitude, StartTime = _event.StartTime, Visibility = _event.Visibility };
+            return View(new HellViewModel { EditViewModel = vm });
         }
 
 
@@ -134,14 +136,14 @@ namespace EventsApp.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                Event e = eventUoW.Events.GetEventByID(model.Event.Id);
-                e.Brief = model.Event.Brief;
-                e.Detailed = model.Event.Detailed;
-                e.Visibility = model.Event.Visibility;
-                e.Address = model.Event.Address;
-                e.Latitude = model.Event.Latitude;
-                e.Longitude = model.Event.Longitude;
-                e.StartTime = model.Event.StartTime;
+                Event e = eventUoW.Events.GetEventByID(model.EditViewModel.EventId);
+                e.Brief = model.EditViewModel.Brief;
+                e.Detailed = model.EditViewModel.Detailed;
+                e.Visibility = model.EditViewModel.Visibility;
+                e.Address = model.EditViewModel.Address;
+                e.Latitude = model.EditViewModel.Latitude;
+                e.Longitude = model.EditViewModel.Longitude;
+                e.StartTime = model.EditViewModel.StartTime;
                 e.ModificationState = ModificationState.Modified;
 
                 eventUoW.Events.Attach(e);
