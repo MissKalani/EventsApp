@@ -1,6 +1,10 @@
-﻿body {
+﻿
+body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background-color: #FDFFE3;
+    font-family: 'Open Sans', 'Lucida Sans','Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana;
+    color: #444;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -9,19 +13,45 @@
     padding-right: 15px;
 }
 
-#eventList{
-    /*background-color: cadetblue;*/
+
+/*-------------Navbar-----------------------*/
+
+button.navbar-toggle{
+    /*background-color: #C6491A;*/
 }
 
-#mapView{
-    /*background-color:darkorange;*/
+
+.navbar-brand {
+    font-size: 30px;
+    line-height: 25px;
+    letter-spacing: -2px;
+    font-weight: bold;
+    color: #444;
+    top: 10px;
 }
 
-#map{
-    height:500px;
+.navbar-fixed-top {
+    background-color: #E6E3BB;
 }
+
+.navbar-nav > li > a {
+    color: #444;
+    font-size: 1.2em;
+    top: 10px;
+    padding-bottom: 3px;
+}
+
+    .navbar-nav > li > a:hover {
+        /*border-bottom: 2px solid #444;*/
+        color: #C6491A;
+        background-color: #E6E3BB;
+        /*font-size: 20px;*/
+}
+
+/*------------- Index Panel-----------------------*/
 
 #index-panel {
+    background-color: #E6E3BB;
     border-color: #fff;
     margin-top: 15px;
 }
@@ -30,8 +60,43 @@
     margin-top: 15px;
 }
 
-#edit-panel {
-    margin-top: 15px;
+.panel-default > .panel-heading {
+    background-color: #C6491A;
+    color: #E6E3BB;
+}
+
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+a.btn-block {
+    color: #444;
+    font-weight: 700;
+    font-size: 1.2em;
+    text-align: left;
+}
+
+a.btn:hover, a.btn:focus {
+    color: #C6491A;
+}
+
+
+/*------------- Map -----------------------*/
+
+
+#eventList {
+    /*background-color: cadetblue;*/
+}
+
+#mapView {
+    /*background-color:darkorange;*/
+}
+
+#map {
+    height: 500px;
 }
 
 .event-list-brief .brief {
