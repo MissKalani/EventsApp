@@ -109,8 +109,13 @@ namespace EventsApp.MVC.Controllers
         [Authorize]
         public ActionResult Details(int id)
         {
-            var e = eventUoW.Events.GetEventByID(id);
-            return View(new HellViewModel { Event = e });
+            var vm = new DetailsViewModel();
+            vm.Event = eventUoW.Events.GetEventByID(id);
+            vm.Event.AppUser = eventUoW.Users.GetUserById(vm.Event.OwnerId);
+            vm.InvitedUsers = eventUoW.Events.GetInvitedUsers(vm.Event);
+            vm.IsOwner = User.Identity.IsAuthenticated && User.Identity.GetUserId() == vm.Event.OwnerId;
+
+            return View(new HellViewModel { DetailsViewModel = vm });
         }
 
 

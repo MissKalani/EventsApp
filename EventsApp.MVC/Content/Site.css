@@ -83,7 +83,7 @@ a.btn-block {
     text-align: left;
 }
 
-a.btn:hover, a.btn:focus {
+a.btn.textlink:hover, a.btn.textlink:focus {
     color: #C6491A;
 }
 
@@ -103,6 +103,17 @@ a.btn:hover, a.btn:focus {
     height: 500px;
 }
 
+#details-info {
+    margin-bottom: 5px;
+}
+
+#details-map {
+    height: 300px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+/* ------------- Event List Styling ------------- */
 .event-list-brief .brief {
     font-family: "Courier New";
     font-size: 1.2em;
@@ -139,4 +150,13 @@ a.btn:hover, a.btn:focus {
 
 .event-list-details a {
     margin: 10px 5px 5px;
+}
+
+/* ------------- Details Page Styling ------------- */
+.details-page-brief {
+    font-size: 2.0em;
+}
+
+.details-page-hosted-by {
+    font-size: 0.7em;
 }
