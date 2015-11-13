@@ -331,6 +331,7 @@
     <Content Include="Views\Auth\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Auth\ExternalLoginFailure.cshtml" />
     <Content Include="Views\Event\Details.cshtml" />
+    <Content Include="Views\Event\Delete.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

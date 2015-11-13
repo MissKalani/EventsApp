@@ -48,7 +48,7 @@ button.navbar-toggle{
         /*font-size: 20px;*/
 }
 
-/*------------- Index Panel-----------------------*/
+/*------------- Panels -----------------------*/
 
 #index-panel {
     background-color: #E6E3BB;
@@ -61,6 +61,10 @@ button.navbar-toggle{
 }
 
 #edit-panel {
+    margin-top: 15px;
+}
+
+#delete-panel {
     margin-top: 15px;
 }
 

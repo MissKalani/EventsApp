@@ -162,6 +162,37 @@ namespace EventsApp.MVC.Controllers
             return View(model);
         }
 
+        [Authorize]
+        public ActionResult Delete(int id)
+        {
+            Event e = eventUoW.Events.GetEventByID(id);
+            if (e.OwnerId == User.Identity.GetUserId())
+            {
+                return View(new HellViewModel { Event = e });
+            }
+
+            return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult Delete(HellViewModel model)
+        {
+            Event e = eventUoW.Events.GetEventByID(model.Event.Id);
+            if (e.OwnerId == User.Identity.GetUserId())
+            {
+                e.ModificationState = ModificationState.Deleted;
+                eventUoW.Events.Attach(e);
+                eventUoW.Save();
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+        }
+
+
+
         //    [Authorize]
         //    [HttpPost]
         //    public ActionResult GenerateLink(int eventId)
