@@ -27,6 +27,9 @@ namespace Tests
 
                 AppUser user2 = new AppUser() { UserName = "TestUser2" };
                 userManager.Create(user2, "TestPassword");
+
+                AppUser user3 = new AppUser() { UserName = "TestUser3" };
+                userManager.Create(user3, "TestPassword");
             }
         }
 
@@ -232,6 +235,56 @@ namespace Tests
 
                 events.Should().HaveCount(1);
                 events[0].Brief.Should().Be("User 1 Event");
+            }
+        }
+
+        [TestMethod]
+        public void GetInvitedUsersReturnsOnlyPeopleInvitedToAnEvent()
+        {
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
+                var user1 = context.Users.Single(t => t.UserName == "TestUser");
+                var user2 = context.Users.Single(t => t.UserName == "TestUser2");
+                var user3 = context.Users.Single(t => t.UserName == "TestUser3");
+
+                Event e1 = new Event();
+                e1.Brief = "User 1 Event";
+                e1.Visibility = EventVisibility.Private;
+                e1.ModificationState = ModificationState.Added;
+                e1.AppUser = user1;
+                eventUoW.Events.Attach(e1);
+
+                Invite i1 = new Invite();
+                i1.AppUser = user2;
+                i1.Event = e1;
+                i1.ModificationState = ModificationState.Added;
+                eventUoW.Invites.Attach(i1);
+
+                Invite i2 = new Invite();
+                i2.AppUser = user3;
+                i2.Event = e1;
+                i2.ModificationState = ModificationState.Added;
+                eventUoW.Invites.Attach(i2);
+
+                eventUoW.Save();
+            }
+
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
+                var e1 = context.Events.Single(t => t.Brief == "User 1 Event");
+                var user1 = context.Users.Single(t => t.UserName == "TestUser");
+                var user2 = context.Users.Single(t => t.UserName == "TestUser2");
+                var user3 = context.Users.Single(t => t.UserName == "TestUser3");
+
+                var invited = eventUoW.Events.GetInvitedUsers(e1);
+                invited.Should().HaveCount(2);
+                invited.Should().Contain(user2);
+                invited.Should().Contain(user3);
+                invited.Should().NotContain(user1);
             }
         }
     }

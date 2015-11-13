@@ -106,11 +106,21 @@ namespace EventsApp.MVC.Controllers
             return View(events);
         }
 
-        [Authorize]
         public ActionResult Details(int id)
         {
-            var e = eventUoW.Events.GetEventByID(id);
-            return View(new HellViewModel { Event = e });
+            var vm = new DetailsViewModel();
+            vm.Event = eventUoW.Events.GetEventByID(id);
+
+            if (vm.Event == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            vm.Event.AppUser = eventUoW.Users.GetUserById(vm.Event.OwnerId);
+            vm.InvitedUsers = eventUoW.Events.GetInvitedUsers(vm.Event);
+            vm.IsOwner = User.Identity.IsAuthenticated && User.Identity.GetUserId() == vm.Event.OwnerId;
+
+            return View(new HellViewModel { DetailsViewModel = vm });
         }
 
 
@@ -126,7 +136,12 @@ namespace EventsApp.MVC.Controllers
             Event _event = eventUoW.Events.GetEventByID(id);
             if (_event == null)
             {
-                return HttpNotFound();
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            if (_event.OwnerId != User.Identity.GetUserId())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
 
             var vm = new EditViewModel { EventId = _event.Id, Brief = _event.Brief, Detailed = _event.Detailed, Address = _event.Address, Latitude = _event.Latitude, Longitude = _event.Longitude, StartTime = _event.StartTime, Visibility = _event.Visibility };
@@ -134,12 +149,24 @@ namespace EventsApp.MVC.Controllers
         }
 
 
+        [Authorize]
         [HttpPost]
         public ActionResult Edit(HellViewModel model)
         {
             if (ModelState.IsValid)
             {
                 Event e = eventUoW.Events.GetEventByID(model.EditViewModel.EventId);
+
+                if (e == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                }
+
+                if (e.OwnerId != User.Identity.GetUserId())
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                }
+
                 e.Brief = model.EditViewModel.Brief;
                 e.Detailed = model.EditViewModel.Detailed;
                 e.Visibility = model.EditViewModel.Visibility;
@@ -154,8 +181,50 @@ namespace EventsApp.MVC.Controllers
 
                 return RedirectToAction("Details", "Event", new { id = e.Id });
             }
+
             return View(model);
         }
+
+        [Authorize]
+        public ActionResult Delete(int id)
+        {
+            Event e = eventUoW.Events.GetEventByID(id);
+            if (e == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            if (e.OwnerId != User.Identity.GetUserId())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+
+            return View(new HellViewModel { Event = e });
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult Delete(HellViewModel model)
+        {
+            Event e = eventUoW.Events.GetEventByID(model.Event.Id);
+            if (e == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            if (e.OwnerId != User.Identity.GetUserId())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+
+            e.ModificationState = ModificationState.Deleted;
+            eventUoW.Events.Attach(e);
+            eventUoW.Save();
+
+            return RedirectToAction("Index", "Home");
+        }
+
+
 
         //    [Authorize]
         //    [HttpPost]

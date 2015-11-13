@@ -4,15 +4,87 @@
     ViewBag.Title = "EventDetails";
 }
 
-<h2>EventDetails</h2>
+<div class="container-fluid">
+    <div class="row">
+        <div id ="details-info" class="col-md-6">
+            <h2 class="details-page-brief">@Model.DetailsViewModel.Event.Brief</h2>
+            <p class="details-page-hosted-by">hosted by @Model.DetailsViewModel.Event.AppUser.UserName</p>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<p>@Model.Event.Brief</p>
-<p>@Model.Event.Detailed</p>
-<p>@Model.Event.Address</p>
-<p>@Model.Event.StartTime</p>
+            <p>@Model.DetailsViewModel.Event.Detailed</p>
+            <p>@Model.DetailsViewModel.Event.Address</p>
+            <p>@Model.DetailsViewModel.Event.StartTime</p>
 
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Invited people
+                </div>
+                <div class="panel-body">
+                    @if (Model.DetailsViewModel.InvitedUsers.Count != 0)
+                    {
+                        <table>
+                            @foreach (var user in Model.DetailsViewModel.InvitedUsers)
+                            {
+                                <tr>
+                                    <td>@user.UserName</td>
+                                </tr>
+                            }
+                        </table>
+                    }
+                    else
+                    {
+                        <span>No one has been invited to this event.</span>
+                    }
+                </div>
+            </div>
+            
+            
+        </div>
+        <div class="col-md-6">
+            <div id="details-map">
+                
+            </div>
+        </div>
+    </div>    
+    @if (Model.DetailsViewModel.IsOwner)
+    {
+        <div class="row">
 
-@Html.ActionLink("Edit Event", "Edit", new { id = Model.Event.Id })
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Invite others
+                    </div>
+                    <div id="" class="panel-body">
+                        Invitation functionality has been temporarily disabled. We are working on it!
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- TODO: Implement remove functionality. -->
+                @Html.ActionLink("Edit Event", "Edit", new { id = Model.DetailsViewModel.Event.Id }, new { @class = "btn btn-primary" })
+                @Html.ActionLink("Delete Event", "Delete", new { id = Model.DetailsViewModel.Event.Id }, new { @class = "btn btn-danger" })
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD41720sN_6eizUy9C-_xg9l7CdNrb7iiE&callback=initMap"></script>
+
+    <script>
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('details-map'), {
+            center: { lat: @Model.DetailsViewModel.Event.Latitude, lng: @Model.DetailsViewModel.Event.Longitude },
+            zoom: 8
+        });
+
+        var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(@Model.DetailsViewModel.Event.Latitude, @Model.DetailsViewModel.Event.Longitude),
+            map: map,
+            title: "@HttpUtility.HtmlEncode(Model.DetailsViewModel.Event.Brief)"
+        });
+    }
+    </script>
+}

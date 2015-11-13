@@ -1,0 +1,46 @@
+﻿@model EventsApp.MVC.ViewModels.HellViewModel
+@{ 
+    ViewBag.Title = "Delete";
+}
+
+<div id="delete-panel" class="panel panel-default">
+    <div class="panel-body">
+        <h2 class="text-danger">Danger Zone</h2>
+        <p>Are you sure you want to delete this event?</p>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table">
+                    <tr>
+                        <td>Brief</td>
+                        <td>@Model.Event.Brief</td>
+                    </tr>
+                    <tr>
+                        <td>Detailed</td>
+                        <td>@Model.Event.Detailed</td>
+                    </tr>
+                    <tr>
+                        <td>Start Date and Time</td>
+                        <td>@Model.Event.StartTime</td>
+                    </tr>
+                    @if (Model.Event.Address.Length != 0)
+                    {
+                        <tr>
+                            <td>Address</td>
+                            <td>@Model.Event.Address</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+
+        @using (Html.BeginForm("Delete", "Event", FormMethod.Post))
+        {
+            @Html.HiddenFor(t => t.Event.Id)
+            <button type="submit" class="btn btn-danger">Delete (Permanently)</button>
+            @Html.ActionLink("I changed my mind!", "Details", new { id = Model.Event.Id }, new { @class = "btn btn-primary" })
+        }
+
+        
+    </div>
+</div>
+

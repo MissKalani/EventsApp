@@ -47,6 +47,15 @@ namespace EventsApp.DataAccess
             return e.AppUser;
         }
 
+        public List<AppUser> GetInvitedUsers(Event e)
+        {
+            var query = from u in context.Users
+                        join i in context.Invites on u.Id equals i.AppUserId
+                        where i.EventId == e.Id
+                        select u;
+            return query.ToList();
+        }
+
         public Event GetEventByID(int i)
         {
             return context.Events.Find(i); 
