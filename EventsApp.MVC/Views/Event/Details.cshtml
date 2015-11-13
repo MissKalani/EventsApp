@@ -32,7 +32,15 @@
                     }
                     else
                     {
-                        <span>No one has been invited to this event.</span>
+                        if (Model.DetailsViewModel.Event.Visibility == EventsApp.DataModels.EventVisibility.Public)
+                        {
+                            <span>This event is public and anyone can view it. People can still be invited though!</span>
+                        }
+                        else
+                        {
+                            <span>No one has been invited to this event.</span>
+                        }
+
                     }
                 </div>
             </div>
@@ -55,7 +63,11 @@
                         Invite others
                     </div>
                     <div id="" class="panel-body">
-                        Invitation functionality has been temporarily disabled. We are working on it!
+                        <p>Invitation functionality has been temporarily disabled. We are working on it!</p>
+                        @if (Model.DetailsViewModel.Event.Visibility == EventsApp.DataModels.EventVisibility.Public)
+                        {   
+                            <p>This event is public, so anyone can find it anyway!</p>
+                        }                        
                     </div>
                 </div>
             </div>
