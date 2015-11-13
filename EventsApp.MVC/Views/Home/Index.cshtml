@@ -4,25 +4,27 @@
 
 <div id="index-panel" class="panel panel-default">
     <div class="panel-heading">
-        <h3>Something going on?</h3>   
+        <h3>Something going on?</h3>
 
     </div>
     <div class="panel-body">
         <div class="row">
-           
+
             <div id="eventList" class="col-md-3">
                 @Html.ActionLink("Create Event", "Create", "Event", new { }, new { @class = "btn btn-block" })
-                
+
             </div>
             <div id="mapView" class="col-md-9">
                 @if (Context.User.Identity.IsAuthenticated)
                 {
-                    <div id="filterButtons" class="btn-group btn-group-lg">
-                        <button id="filterButtonHosted" type="button" class="btn btn-default">Hosted</button>
-                        <button id="filterButtonInvited" type="button" class="btn btn-default">Invited</button>
-                        <button id="filterButtonPublic" type="button" class="btn btn-default">Public</button>
-                        <button id="filterButtonAll" type="button" class="btn btn-default active">All</button>
-                    </div>
+                    
+                        <div id="filterButtons" class="btn-group btn-group-lg btn-group-justified">
+                            <button id="filterButtonHosted" type="button" class="btn btn-default col-lg-3">Hosted</button>
+                            <button id="filterButtonInvited" type="button" class="btn btn-default col-lg-3">Invited</button>
+                            <button id="filterButtonPublic" type="button" class="btn btn-default col-lg-3">Public</button>
+                            <button id="filterButtonAll" type="button" class="btn btn-default col-lg-3 active">All</button>
+                        </div>
+               
                 }
                 <div id="map">
 

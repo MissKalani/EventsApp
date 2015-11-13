@@ -16,7 +16,7 @@ body {
 
 /*-------------Navbar-----------------------*/
 
-button.navbar-toggle{
+button.navbar-toggle {
     /*background-color: #C6491A;*/
 }
 
@@ -46,7 +46,7 @@ button.navbar-toggle{
         color: #C6491A;
         background-color: #E6E3BB;
         /*font-size: 20px;*/
-}
+    }
 
 /*------------- Index Panel-----------------------*/
 
@@ -92,7 +92,7 @@ a.btn:hover, a.btn:focus {
 
 
 #eventList {
-    /*background-color: cadetblue;*/
+    text-indent: 5px;
 }
 
 #mapView {
@@ -104,10 +104,12 @@ a.btn:hover, a.btn:focus {
 }
 
 .event-list-brief .brief {
-    font-family: "Courier New";
-    font-size: 1.2em;
+    /*font-family: "Courier New";*/
+    font-size: 1.1em;
+    text-indent: 3px;
     text-transform: uppercase;
-    margin-top: 5px;
+    margin-top: 5px;   
+   
 }
 
 .event-list-brief .hosted-by {
@@ -115,28 +117,52 @@ a.btn:hover, a.btn:focus {
 }
 
 .event-list-brief.expanded {
-    background-color: lightblue;
+    background-color: #C6491A;
+    color: #E6E3BB;
 }
 
 .event-list-details {
     background-color: antiquewhite;
-}
-
-.event-list-details .address {
-    font-family: "Courier New";
-    font-size: 0.7em;
-    color: gray;
     margin-top: 5px;
 }
 
-.event-list-details .datetime {
-    font-family: "Courier New";
-    font-size: 0.7em;
-    font-weight: bolder;
-    color: gray;
-    margin-top: 5px;
-}
+    .event-list-details a.btn {
+        background-color: #D3741C;
+        border: none;
+        color: #FDFFE3;
+    }
 
-.event-list-details a {
-    margin: 10px 5px 5px;
-}
+        .event-list-details a.btn:active {
+            background-color: #D3741C;
+        }
+
+    .event-list-details .address {
+        font-family: "Courier New";
+        font-size: 0.7em;
+        color: gray;
+        margin-top: 5px;
+    }
+
+    .event-list-details .datetime {
+        font-family: "Courier New";
+        font-size: 0.7em;
+        font-weight: bolder;
+        color: gray;
+        margin-top: 5px;
+    }
+
+    .event-list-details a {
+        margin: 10px 5px 5px;
+    }
+
+    .btn-group-justified>.btn{
+        width:25%;
+    }
+
+    #btnEditSubmit{
+        margin-top: 10px;
+        width: 200px;
+        background-color: #D3741C;
+        border: none;
+        color: #FDFFE3;
+    }

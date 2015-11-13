@@ -47,10 +47,11 @@
                         @Html.TextBoxFor(t => t.EditViewModel.Address, new { @class = "form-control", id = "create-event-address", placeholder = "Search for an address." })
                         @Html.ValidationMessageFor(t => t.EditViewModel.Address, null, new { @class = "text-danger" })
                     </div>
-
+                    <div id="map">
+                    </div>
                     <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Save" class="btn btn-default" />
+                        <div class="span">
+                            <input   id="btnEditSubmit" type="submit" value="Save" class="btn btn-default" />
                         </div>
                     </div>
                 }
@@ -61,6 +62,154 @@
 
 
 @section Scripts {
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD41720sN_6eizUy9C-_xg9l7CdNrb7iiE&libraries=places&callback=initMap"></script>
+
+<script>
+        var map;
+        function initMap() {
+            var initialCenter = new google.maps.LatLng(59.690815, 15.215400);
+
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: initialCenter,
+                zoom: 8
+            });
+
+            var marker = new google.maps.Marker({
+                position: initialCenter,
+                map: map,
+                draggable: true
+            });
+
+            $('#create-event-latitude').val(initialCenter.lat);
+            $('#create-event-longitude').val(initialCenter.lng);
+
+            var addressInput = $('#create-event-address')[0];
+            var searchBox = new google.maps.places.SearchBox(addressInput);
+
+            searchBox.addListener('places_changed', function () {
+                var places = searchBox.getPlaces();
+
+                if (places.length != 1)
+                    return;
+
+                // Set the position of the draggable marker.
+                marker.setPosition(places[0].geometry.location);
+
+                // Update the hidden lat/lng fields.
+                $('#create-event-latitude').val(places[0].geometry.location.lat);
+                $('#create-event-longitude').val(places[0].geometry.location.lng);
+
+                // Fit the map bounds.
+                var bounds = new google.maps.LatLngBounds();
+                if (places[0].geometry.viewport) {
+                    bounds.union(places[0].geometry.viewport);
+                } else {
+                    bounds.extend(places[0].geometry.location);
+                }
+
+                map.fitBounds(bounds);
+            });
+
+            marker.addListener('dragend', function () {
+                // Update the hidden lat/lng fields.
+                $('#create-event-latitude').val(marker.position.lat());
+                $('#create-event-longitude').val(marker.position.lng());
+            });
+
+            $('#create-event-latitude').change(function () {
+                var latitude = Number($(this).val());
+                console.log(latitude);
+                marker.setPosition(new google.maps.LatLng(latitude, marker.position.lng()));
+                console.log(marker.position);
+            });
+
+            $('#create-event-longitude').change(function () {
+                var longitude = Number($(this).val());
+                console.log(longitude);
+                marker.setPosition(new google.maps.LatLng(marker.position.lat(), longitude));
+                console.log(marker.position);
+            });
+
+            // Add a right-click context menu.
+            function getCanvasPosition(latlng) {
+                var scale = Math.pow(2, map.getZoom());
+                var projection = map.getProjection();
+                var topRight = projection.fromLatLngToPoint(map.getBounds().getNorthEast());
+                var bottomLeft = projection.fromLatLngToPoint(map.getBounds().getSouthWest());
+                var point = projection.fromLatLngToPoint(latlng);
+                return new google.maps.Point((point.x - bottomLeft.x) * scale, (point.y - topRight.y) * scale);
+            }
+
+            function setMenuPosition(menuElement, latlng) {
+                var mapWidth = $('#map').width();
+                var mapHeight = $('#map').height();
+                var menuWidth = $('.contextmenu').width();
+                var menuHeight = $('.contextmenu').height();
+                var clickpoint = getCanvasPosition(latlng);
+                var x = clickpoint.x;
+                var y = clickpoint.y;
+
+                if ((mapWidth - x) < menuWidth)
+                    x = x - menuWidth;
+                if ((mapHeight - y) < menuHeight)
+                    y = y - menuHeight;
+
+                $('.contextmenu').css('left', x);
+                $('.contextmenu').css('top', y);
+            }
+
+            function createContextMenuElement() {
+                var menuButton = document.createElement("a");
+                menuButton.innerHTML = "Set Event Location";
+                menuButton.className = "btn btn-primary contextmenu";
+                map.getDiv().appendChild(menuButton);
+                return menuButton;
+            }
+
+            function showContextMenu(latlng) {
+                var projection = map.getProjection();
+
+                // Remove any existing context menu.
+                removeContextMenu();
+
+                // Create a new menu.
+                var menuElement = createContextMenuElement();
+
+                // Set the position when the menu button is clicked.
+                menuElement.addEventListener('click', function (e) {
+                    marker.setPosition(latlng);
+                    $('#create-event-latitude').val(latlng.lat());
+                    $('#create-event-longitude').val(latlng.lng());
+
+                    map.getDiv().removeChild(menuElement);
+                });
+
+                // Set the position of the menu.
+                setMenuPosition(menuElement, latlng);
+
+                menuElement.style.visibility = "visible";
+            }
+
+            function removeContextMenu() {
+                $('.contextmenu').remove();
+            }
+
+            google.maps.event.addListener(map, "rightclick", function (event) {
+                console.log("Right click, showing context menu");
+                showContextMenu(event.latLng);
+            });
+
+            google.maps.event.addListener(map, "click", function () {
+                console.log("Click, removing context menu");
+                removeContextMenu();
+            });
+        }
+
+        $(document).ready(function () {
+            $('#create-event-datetimepicker').datetimepicker({ format: 'YYYY-MM-DD HH:mm' });
+        });
+</script>
+
     <script>
         $(document).ready(function () {
             $('#edit-event-datetimepicker').datetimepicker({
