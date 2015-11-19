@@ -318,8 +318,6 @@
     <Content Include="Views\Event\Create.cshtml" />
     <Content Include="Views\Shared\_LogInPartial.cshtml" />
     <Content Include="Views\Shared\_LogOutPartial.cshtml" />
-    <Content Include="Views\Event\CreatedEvents.cshtml" />
-    <Content Include="Views\Event\ManageEvent.cshtml" />
     <Content Include="Views\Link\Confirm.cshtml" />
     <Content Include="Views\Link\Owner.cshtml" />
     <Content Include="Views\Link\Invited.cshtml" />

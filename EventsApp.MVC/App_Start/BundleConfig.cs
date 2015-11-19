@@ -19,6 +19,7 @@ namespace EventsApp.MVC
             bundles.Add(new ScriptBundle("~/bundles/js/bootstrap").Include("~/Scripts/bootstrap.min.js"));
             bundles.Add(new ScriptBundle("~/bundles/js/bootstrap-datetimepicker").Include("~/Scripts/moment.min.js", "~/Scripts/bootstrap-datetimepicker.min.js"));
             bundles.Add(new ScriptBundle("~/bundles/js/event").Include("~/Scripts/event.js"));
+            bundles.Add(new ScriptBundle("~/bundles/js/jquery-ui").Include("~/Scripts/jquery-ui-1.11.4.min.js"));
             bundles.Add(new StyleBundle("~/bundles/css/style").Include("~/Content/bootstrap.min.css", "~/Content/bootstrap-datetimepicker.min.css", "~/Content/Site.css", "~/Content/MapContextMenu.css"));
         }
     }
