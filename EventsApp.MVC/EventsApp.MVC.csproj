@@ -291,6 +291,7 @@
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LinkController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -300,7 +301,7 @@
     <Compile Include="ViewModels\DetailsViewModel.cs" />
     <Compile Include="ViewModels\EditViewModel.cs" />
     <Compile Include="ViewModels\HellViewModel.cs" />
-    <Compile Include="ViewModels\ConfirmViewModel.cs" />
+    <Compile Include="ViewModels\LinkConfirmViewModel.cs" />
     <Compile Include="ViewModels\CreateViewModel.cs" />
     <Compile Include="ViewModels\ManageEventViewModel.cs" />
     <Compile Include="ViewModels\EventListViewModel.cs" />
@@ -319,9 +320,9 @@
     <Content Include="Views\Shared\_LogOutPartial.cshtml" />
     <Content Include="Views\Event\CreatedEvents.cshtml" />
     <Content Include="Views\Event\ManageEvent.cshtml" />
-    <Content Include="Views\Event\Confirm.cshtml" />
-    <Content Include="Views\Event\ConfirmOwner.cshtml" />
-    <Content Include="Views\Event\ConfirmInvited.cshtml" />
+    <Content Include="Views\Link\Confirm.cshtml" />
+    <Content Include="Views\Link\Owner.cshtml" />
+    <Content Include="Views\Link\Invited.cshtml" />
     <Content Include="Views\Event\Edit.cshtml" />
     <Content Include="Views\Auth\Manage.cshtml" />
     <Content Include="Views\Auth\_ChangePasswordPartial.cshtml" />

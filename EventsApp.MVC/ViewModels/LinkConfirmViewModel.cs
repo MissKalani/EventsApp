@@ -2,10 +2,7 @@
 
 namespace EventsApp.MVC.ViewModels
 {
-    /// <summary>
-    /// Inheriting from LoginUserViewModel since this view model is used when logged out.
-    /// </summary>
-    public class ConfirmViewModel : LoginUserViewModel
+    public class LinkConfirmViewModel
     {
         /// <summary>
         /// Sent to the view when browsing to the confirm page via an invite link.

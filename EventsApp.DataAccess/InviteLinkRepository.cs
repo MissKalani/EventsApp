@@ -23,9 +23,9 @@ namespace EventsApp.DataAccess
             ContextStateHelper.ApplyStateChanges(context);
         }
 
-        public InviteLink GetLinkGraphByCode(string code)
+        public InviteLink GetLinkGraphByGuid(string guid)
         {
-            return context.InviteLinks.Include(t => t.Event.AppUser).SingleOrDefault(t => t.LinkGUID == code);
+            return context.InviteLinks.Include(t => t.Event.AppUser).SingleOrDefault(t => t.LinkGUID == guid);
         }
 
         public void Remove(InviteLink link)

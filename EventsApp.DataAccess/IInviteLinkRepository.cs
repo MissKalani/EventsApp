@@ -12,7 +12,7 @@ namespace EventsApp.DataAccess
         /// <summary>
         /// Get the link and the associated event and user graph.
         /// </summary>
-        InviteLink GetLinkGraphByCode(string code);
+        InviteLink GetLinkGraphByGuid(string guid);
 
         /// <summary>
         /// Remove a link.

@@ -67,7 +67,7 @@
 <script>
         var map;
         function initMap() {
-            var initialCenter = new google.maps.LatLng(59.690815, 15.215400);
+            var initialCenter = new google.maps.LatLng(@Model.EditViewModel.Latitude, @Model.EditViewModel.Longitude);
 
             map = new google.maps.Map(document.getElementById('map'), {
                 center: initialCenter,
