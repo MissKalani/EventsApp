@@ -25,5 +25,10 @@ namespace EventsApp.DataAccess
         {
             return context.Users.SingleOrDefault(u => u.UserName == username);
         }
+
+        public List<AppUser> SearchForUser(string usernameSubstring)
+        {
+            return context.Users.Where(t => t.UserName.Contains(usernameSubstring)).ToList();
+        }
     }
 }

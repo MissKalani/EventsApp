@@ -138,17 +138,20 @@
         }
     });
 
-    $('#input-username').change(function() {
+    $('#input-username').on('input', function(e) {
+        console.log("Input changed");
+
         $.ajax({
             url: '@Url.Action("Search", "User")',
-            data: { searchString: $(this).val() },
+            data: { usernameSubstring: $(this).val() },
             method: "POST",
             success: fetchUserSuccess,
             error: fetchUserError
         });
 
-        function fetchUserSuccess(data, status) {            
-            $(this).autocomplete({
+        function fetchUserSuccess(data, status) {          
+            console.log(data);
+            $('#input-username').autocomplete({
                 source: data
             });
         }

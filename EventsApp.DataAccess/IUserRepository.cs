@@ -13,5 +13,7 @@ namespace EventsApp.DataAccess
     public interface IUserRepository
     {
         AppUser GetUserById(string userId);
+
+        List<AppUser> SearchForUser(string usernameSubstring);
     }
 }
