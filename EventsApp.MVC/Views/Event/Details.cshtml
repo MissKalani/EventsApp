@@ -63,18 +63,33 @@
                         Invite others
                     </div>
                     <div id="" class="panel-body">
-                        <p>Invitation functionality has been temporarily disabled. We are working on it!</p>
+                        <!--<p>Invitation functionality has been temporarily disabled. We are working on it!</p>-->
                         @if (Model.DetailsViewModel.Event.Visibility == EventsApp.DataModels.EventVisibility.Public)
-                        {   
-                            <p>This event is public, so anyone can find it anyway!</p>
-                        }                        
+                        {
+                            <p>This event is public, so anyone can find it. You can still invite people though!</p>
+                        }
+
+                        <p>Send a one-use invitation link to a friend:</p>
+
+                        <div class="input-group">
+                            <span id="link-button" class="input-group-addon btn btn-default">Create Invitation Link</span>
+                            <input id="link-text" type="text" class="form-control" readonly aria-describedby="link-button" />
+                        </div>
+                        
+                        <!--
+                        <button id="link-button" class="btn btn-success">Create Invitation Link</button>
+                        <div id="link-panel" class="panel panel-default" style="display:none">
+                            <div class="panel-body">
+                                <p id="link-panel-text"></p>
+                            </div>
+                        </div>
+                        -->
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <!-- TODO: Implement remove functionality. -->
                 @Html.ActionLink("Edit Event", "Edit", new { id = Model.DetailsViewModel.Event.Id }, new { @class = "btn btn-primary" })
                 @Html.ActionLink("Delete Event", "Delete", new { id = Model.DetailsViewModel.Event.Id }, new { @class = "btn btn-danger" })
             </div>
@@ -98,5 +113,24 @@
             title: "@HttpUtility.HtmlEncode(Model.DetailsViewModel.Event.Brief)"
         });
     }
+
+    $('#link-button').click(function () {
+        // Generate a new link using AJAX.
+        $.ajax({
+            url: '@Url.Action("Generate", "Link")',
+            data: { eventId: @Model.DetailsViewModel.Event.Id },
+            method: "POST",
+            success: fetchLinkSuccess,
+            error: fetchLinkError
+        });
+
+        function fetchLinkSuccess(data, status) {
+            $("#link-text").val(data.url);
+        }
+
+        function fetchLinkError(xhr, status, exception) {
+            $('#link-text').val('Failed to retrieve link');
+        }
+    });
     </script>
 }

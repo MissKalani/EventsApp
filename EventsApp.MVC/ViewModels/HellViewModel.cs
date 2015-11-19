@@ -11,7 +11,7 @@ namespace EventsApp.MVC.ViewModels
         public RegisterUserViewModel RegisterUserViewModel { get; set; }
         public LoginUserViewModel LoginUserViewModel { get; set; }
         public ManageUserViewModel ManageUserViewModel { get; set; }
-        //public ConfirmViewModel ConfirmViewModel { get; set; }
+        public LinkConfirmViewModel LinkConfirmViewModel { get; set; }
         public CreateViewModel CreateViewModel { get; set; }
         public EditViewModel EditViewModel { get; set; }
         public DetailsViewModel DetailsViewModel { get; set; }
