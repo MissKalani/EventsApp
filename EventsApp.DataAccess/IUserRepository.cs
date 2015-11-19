@@ -14,6 +14,10 @@ namespace EventsApp.DataAccess
     {
         AppUser GetUserById(string userId);
 
+
         List<AppUser> SearchForUser(string usernameSubstring);
+
+        AppUser GetUserByUsername(string username);
+
     }
 }

@@ -1,6 +1,11 @@
+
 ﻿using EventsApp.DataAccess;
-using EventsApp.DataModels;
+
 using EventsApp.MVC.ViewModels;
+
+﻿using EventsApp.DataModels;
+using Microsoft.AspNet.Identity;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +16,7 @@ namespace EventsApp.MVC.Controllers
 {
     public class UserController : Controller
     {
+
         private IEventUnitOfWork eventUoW;
 
         public UserController(IEventUnitOfWork eventUoW)
@@ -18,9 +24,12 @@ namespace EventsApp.MVC.Controllers
             this.eventUoW = eventUoW;
         }
 
+        public UserManager<AppUser> UserManager { get; private set; }
+
         // GET: User
-        public ActionResult Index()
+        public ActionResult Details()
         {
+            var userId = User.Identity.GetUserId();
             return View();
         }
 

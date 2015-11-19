@@ -18,5 +18,7 @@ namespace EventsApp.MVC.ViewModels
         //public ViewEvent ViewEvent { get; set; }
         //public List<Event> Events { get; set; }
         public Event Event { get; set; }
+
+        public AppUser User { get; set; }
     }
 }

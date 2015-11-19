@@ -1,0 +1,19 @@
+﻿@model EventsApp.MVC.ViewModels.HellViewModel
+@{
+    ViewBag.Title = "Details";
+}
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">@Model.User.UserName</div>
+    <div class="panel-body">
+
+        @foreach (var _event in Model.User.Events)
+        {
+            <p>@_event.Brief</p>
+        }
+
+    </div>
+</div>
+
+
