@@ -22,7 +22,7 @@
                         <td>Start Date and Time</td>
                         <td>@Model.Event.StartTime</td>
                     </tr>
-                    @if (Model.Event.Address.Length != 0)
+                    @if (Model.Event.Address == null || Model.Event.Address.Length != 0)
                     {
                         <tr>
                             <td>Address</td>

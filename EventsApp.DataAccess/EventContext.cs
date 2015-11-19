@@ -25,6 +25,7 @@ namespace EventsApp.DataAccess
 
             modelBuilder.Entity<AppUser>().Ignore(t => t.ModificationState);
             modelBuilder.Entity<AppUser>().HasMany(t => t.Events).WithRequired(t => t.AppUser).HasForeignKey(t => t.OwnerId);
+     
 
             modelBuilder.Entity<Invite>().HasKey(t => new { t.EventId, t.AppUserId });
             modelBuilder.Entity<Invite>().Property(t => t.Status).IsRequired();

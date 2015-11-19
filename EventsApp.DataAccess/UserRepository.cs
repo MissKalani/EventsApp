@@ -20,5 +20,10 @@ namespace EventsApp.DataAccess
         {
             return context.Users.Find(userId);
         }
+
+        public AppUser GetUserByUsername(string username)
+        {
+            return context.Users.SingleOrDefault(u => u.UserName == username);
+        }
     }
 }
