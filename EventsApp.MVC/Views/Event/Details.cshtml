@@ -82,10 +82,15 @@
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <p>Invite a user by their username:</p>
-                                <div class="input-group">
-                                    <span id="input-username-text" class="input-group-addon">Username</span>
-                                    <input id="input-username" type="text" class="form-control" aria-describedby="input-username-text" />
-                                </div>
+                                <form id="username-invite-form" class="form-inline">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span id="input-username-text" class="input-group-addon">Username</span>
+                                            <input id="input-username" type="text" class="form-control" aria-describedby="input-username-text" />
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-default">Invite</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -138,6 +143,35 @@
         }
     });
 
+    $('#username-invite-form').on('submit', function(e) {
+        e.preventDefault();
+        console.log("Form submitted");
+		
+		$.ajax({
+			url: '@Url.Action("InviteByUsername", "User")',
+			data: { eventId: @Model.DetailsViewModel.Event.Id, username: $('#input-username').val() },
+			method: "POST",
+			success: usernameInviteSuccess,
+			error: usernameInviteError
+		});
+		
+        function usernameInviteSuccess(data, status) {
+            if (data.InviteResult == 0)
+            {
+                console.log("Successfully invited user");
+                location.reload();
+            }
+            else
+            {
+                console.log("Failed to invite user " + data.InviteResult);
+            }
+		}
+		
+		function usernameInviteError(xhr, status, exception) {
+		    console.log("Failed to send invite user AJAX request");
+		}
+    });
+
     $('#input-username').on('input', function(e) {
         console.log("Input changed");
 
@@ -150,9 +184,14 @@
         });
 
         function fetchUserSuccess(data, status) {          
-            console.log(data);
+            var usernameArray = [];
+            for (var i = 0; i < data.length; ++i)
+            {
+                usernameArray.push(data[i].Username);
+            }
+
             $('#input-username').autocomplete({
-                source: data
+                source: usernameArray
             });
         }
 
