@@ -46,7 +46,7 @@ button.navbar-toggle {
         color: #C6491A;
         background-color: #E6E3BB;
         /*font-size: 20px;*/
-}
+    }
 
 /*------------- Panels -----------------------*/
 
@@ -91,6 +91,32 @@ a.btn.textlink:hover, a.btn.textlink:focus {
     color: #C6491A;
 }
 
+/*-------------User Details------------------------*/
+#userDetailsPanel {
+    margin-top: 20px;
+}
+
+div#dataTable_length.dataTables_length {
+    position: relative;
+    float: left;
+}
+
+div#dataTable_filter.dataTables_filter {
+    position: relative;
+    float: right;
+    bottom: 5px;
+}
+
+#acceptBtn {
+    margin-left: 20px;
+    width: 100px;
+}
+
+#declineBtn {
+    margin-left: 20px;
+    width: 100px;
+}
+
 
 /*------------- Map -----------------------*/
 
@@ -124,7 +150,6 @@ a.btn.textlink:hover, a.btn.textlink:focus {
     text-indent: 3px;
     text-transform: uppercase;
     margin-top: 5px;
-   
 }
 
 .event-list-brief .hosted-by {
@@ -141,34 +166,34 @@ a.btn.textlink:hover, a.btn.textlink:focus {
     margin-top: 5px;
 }
 
-.event-list-details a.btn {
-    background-color: #D3741C;
-    border: none;
-    color: #FDFFE3;
-}
-
-.event-list-details a.btn:active {
+    .event-list-details a.btn {
         background-color: #D3741C;
+        border: none;
+        color: #FDFFE3;
     }
 
-.event-list-details .address {
-    font-family: "Courier New";
-    font-size: 0.7em;
-    color: gray;
-    margin-top: 5px;
-}
+        .event-list-details a.btn:active {
+            background-color: #D3741C;
+        }
 
-.event-list-details .datetime {
-    font-family: "Courier New";
-    font-size: 0.7em;
-    font-weight: bolder;
-    color: gray;
-    margin-top: 5px;
-}
+    .event-list-details .address {
+        font-family: "Courier New";
+        font-size: 0.7em;
+        color: gray;
+        margin-top: 5px;
+    }
 
-.event-list-details a {
-    margin: 10px 5px 5px;
-}
+    .event-list-details .datetime {
+        font-family: "Courier New";
+        font-size: 0.7em;
+        font-weight: bolder;
+        color: gray;
+        margin-top: 5px;
+    }
+
+    .event-list-details a {
+        margin: 10px 5px 5px;
+    }
 
 /* ------------- Details Page Styling ------------- */
 .details-page-brief {
@@ -179,11 +204,11 @@ a.btn.textlink:hover, a.btn.textlink:focus {
     font-size: 0.7em;
 }
 
-.btn-group-justified>.btn{
-    width:25%;
+.btn-group-justified > .btn {
+    width: 25%;
 }
 
-#btnEditSubmit{
+#btnEditSubmit {
     margin-top: 10px;
     width: 200px;
     background-color: #D3741C;

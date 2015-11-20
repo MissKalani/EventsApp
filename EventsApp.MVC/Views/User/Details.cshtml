@@ -4,16 +4,62 @@
 }
 
 
-<div class="panel panel-default">
+<div class="panel panel-default" id="userDetailsPanel">
     <div class="panel-heading">@Model.User.UserName</div>
     <div class="panel-body">
 
-        @foreach (var _event in Model.User.Events)
+        @if (User.Identity.GetUserId() == Model.User.Id)
         {
-            <p>@_event.Brief</p>
+            @Html.ActionLink("Edit Account", "Manage", "Auth")
+
+        }
+        <br />
+        <br />
+        <table id="dataTable" class="table table-striped table-bordered cellspacing='0'">
+            <thead>
+                <tr>
+                    <th>Events</th>
+                    <th>Address</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            @foreach (var _event in Model.User.Events)
+            {
+                <tr>
+                    <td>@_event.Brief</td>
+                    <td>@_event.Address</td>
+                    <td>@_event.StartTime</td>
+                </tr>
+            }
+
+        </table>
+        <br />
+        @if (User.Identity.GetUserId() == Model.User.Id)
+        {
+            <table class="table table-striped table-bordered">
+                <thead><strong>Invitations</strong></thead>
+                <tr>
+                    <td>Forest Run Event</td>
+                    <td><a id="acceptBtn" class="btn btn-primary">Accept</a> <a id="declineBtn" class="btn btn-danger">Decline</a></td>
+
+                </tr>
+            </table>
         }
 
     </div>
 </div>
+@section Scripts{
+    @Scripts.Render("~/bundles/js/dataTables")
+    <script>
+        $(document).ready(function () {
+            $('#dataTable').DataTable({
+            });
+        });
+    </script>
+}
+
+
+
+
 
 
