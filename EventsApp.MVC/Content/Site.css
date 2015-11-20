@@ -46,7 +46,7 @@ button.navbar-toggle {
         color: #C6491A;
         background-color: #E6E3BB;
         /*font-size: 20px;*/
-    }
+}
 
 /*------------- Panels -----------------------*/
 
@@ -166,34 +166,34 @@ div#dataTable_filter.dataTables_filter {
     margin-top: 5px;
 }
 
-    .event-list-details a.btn {
+.event-list-details a.btn {
+    background-color: #D3741C;
+    border: none;
+    color: #FDFFE3;
+}
+
+.event-list-details a.btn:active {
         background-color: #D3741C;
-        border: none;
-        color: #FDFFE3;
     }
 
-        .event-list-details a.btn:active {
-            background-color: #D3741C;
-        }
+.event-list-details .address {
+    font-family: "Courier New";
+    font-size: 0.7em;
+    color: gray;
+    margin-top: 5px;
+}
 
-    .event-list-details .address {
-        font-family: "Courier New";
-        font-size: 0.7em;
-        color: gray;
-        margin-top: 5px;
-    }
+.event-list-details .datetime {
+    font-family: "Courier New";
+    font-size: 0.7em;
+    font-weight: bolder;
+    color: gray;
+    margin-top: 5px;
+}
 
-    .event-list-details .datetime {
-        font-family: "Courier New";
-        font-size: 0.7em;
-        font-weight: bolder;
-        color: gray;
-        margin-top: 5px;
-    }
-
-    .event-list-details a {
-        margin: 10px 5px 5px;
-    }
+.event-list-details a {
+    margin: 10px 5px 5px;
+}
 
 /* ------------- Details Page Styling ------------- */
 .details-page-brief {
@@ -214,4 +214,57 @@ div#dataTable_filter.dataTables_filter {
     background-color: #D3741C;
     border: none;
     color: #FDFFE3;
+}
+
+/* ------------- Username Autocomplete Styling ------------- */
+/* Credits: https://gist.github.com/daz/2168334 */
+
+.ui-autocomplete {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    float: left;
+    display: none;
+    min-width: 160px;
+    _width: 160px;
+    padding: 4px 0;
+    margin: 2px 0 0 0;
+    list-style: none;
+    background-color: #ffffff;
+    border-color: #ccc;
+    border-color: rgba(0, 0, 0, 0.2);
+    border-style: solid;
+    border-width: 1px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding;
+    background-clip: padding-box;
+    *border-right-width: 2px;
+    *border-bottom-width: 2px;
+}
+
+.ui-menu-item > a.ui-corner-all {
+    display: block;
+    padding: 3px 15px;
+    clear: both;
+    font-weight: normal;
+    line-height: 18px;
+    color: #555555;
+    white-space: nowrap;
+}
+
+.ui-widget-content .ui-state-focus {
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #0088cc;
+    border-radius: 0px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    background-image: none;
 }

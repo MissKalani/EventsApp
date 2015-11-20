@@ -116,7 +116,7 @@ namespace EventsApp.MVC.Controllers
             }
 
             vm.Event.AppUser = eventUoW.Users.GetUserById(vm.Event.OwnerId);
-            vm.InvitedUsers = eventUoW.Events.GetInvitedUsers(vm.Event);
+            vm.Invites = eventUoW.Invites.GetInvitedToEvent(vm.Event);
             vm.IsOwner = User.Identity.IsAuthenticated && User.Identity.GetUserId() == vm.Event.OwnerId;
 
             return View(new HellViewModel { DetailsViewModel = vm });

@@ -239,52 +239,75 @@ namespace Tests
         }
 
         [TestMethod]
-        public void GetInvitedUsersReturnsOnlyPeopleInvitedToAnEvent()
+        public void LoadUserGraphMakesTheOwnerNodeAccessible()
         {
+            int id = 0;
             using (var context = new EventContext())
             {
                 var eventUoW = new EventUnitOfWork(context);
                 var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
                 var user1 = context.Users.Single(t => t.UserName == "TestUser");
-                var user2 = context.Users.Single(t => t.UserName == "TestUser2");
-                var user3 = context.Users.Single(t => t.UserName == "TestUser3");
 
                 Event e1 = new Event();
                 e1.Brief = "User 1 Event";
                 e1.Visibility = EventVisibility.Private;
                 e1.ModificationState = ModificationState.Added;
                 e1.AppUser = user1;
+
                 eventUoW.Events.Attach(e1);
-
-                Invite i1 = new Invite();
-                i1.AppUser = user2;
-                i1.Event = e1;
-                i1.ModificationState = ModificationState.Added;
-                eventUoW.Invites.Attach(i1);
-
-                Invite i2 = new Invite();
-                i2.AppUser = user3;
-                i2.Event = e1;
-                i2.ModificationState = ModificationState.Added;
-                eventUoW.Invites.Attach(i2);
-
                 eventUoW.Save();
+
+                id = e1.Id;
             }
 
             using (var context = new EventContext())
             {
                 var eventUoW = new EventUnitOfWork(context);
+                var e = eventUoW.Events.GetEventByID(id);
+
+                e.AppUser.Should().BeNull();
+                eventUoW.Events.LoadUserGraph(e);
+                e.AppUser.UserName.Should().Be("TestUser");
+            }
+        }
+
+        [TestMethod]
+        public void GetEventByIdReturnsCorrectEvent()
+        {
+            int id1 = 0;
+            int id2 = 0;
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
                 var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
-                var e1 = context.Events.Single(t => t.Brief == "User 1 Event");
                 var user1 = context.Users.Single(t => t.UserName == "TestUser");
                 var user2 = context.Users.Single(t => t.UserName == "TestUser2");
-                var user3 = context.Users.Single(t => t.UserName == "TestUser3");
 
-                var invited = eventUoW.Events.GetInvitedUsers(e1);
-                invited.Should().HaveCount(2);
-                invited.Should().Contain(user2);
-                invited.Should().Contain(user3);
-                invited.Should().NotContain(user1);
+                Event e1 = new Event();
+                e1.Brief = "User 1 Event";
+                e1.Visibility = EventVisibility.Private;
+                e1.ModificationState = ModificationState.Added;
+                e1.AppUser = user1;
+
+                Event e2 = new Event();
+                e2.Brief = "User 2 Event";
+                e2.Visibility = EventVisibility.Private;
+                e2.ModificationState = ModificationState.Added;
+                e2.AppUser = user2;
+
+                eventUoW.Events.Attach(e1);
+                eventUoW.Events.Attach(e2);
+                eventUoW.Save();
+
+                id1 = e1.Id;
+                id2 = e2.Id;
+            }
+
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                eventUoW.Events.GetEventByID(id1).Brief.Should().Be("User 1 Event");
+                eventUoW.Events.GetEventByID(id2).Brief.Should().Be("User 2 Event");
             }
         }
     }

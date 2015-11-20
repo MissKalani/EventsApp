@@ -32,10 +32,8 @@ namespace EventsApp.DataAccess
         AppUser LoadUserGraph(Event e);
 
         /// <summary>
-        /// Get all users invited to a particular event. Does not include the host.
+        /// Returns an event by its primary key.
         /// </summary>
-        List<AppUser> GetInvitedUsers(Event e);
-
         Event GetEventByID(int id);
     }
 }

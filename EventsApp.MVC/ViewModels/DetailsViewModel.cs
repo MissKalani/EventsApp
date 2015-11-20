@@ -10,7 +10,7 @@ namespace EventsApp.MVC.ViewModels
     public class DetailsViewModel
     {
         public Event Event { get; set; }
-        public List<AppUser> InvitedUsers { get; set; }
+        public List<Invite> Invites { get; set; }
         public bool IsOwner { get; set; }
     }
 }

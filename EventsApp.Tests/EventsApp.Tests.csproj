@@ -82,6 +82,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInitialize.cs" />
     <Compile Include="EventRepositoryIntegrationTests.cs" />
+    <Compile Include="InviteRepositoryIntegrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RollbackTestClass.cs" />
     <Compile Include="TestMigrationConfiguration.cs" />
