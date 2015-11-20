@@ -1,6 +1,7 @@
 ﻿using EventsApp.DataModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace EventsApp.DataAccess
     {
         private EventContext context;
 
+
         public UserRepository(EventContext context)
         {
             this.context = context;
@@ -20,10 +22,12 @@ namespace EventsApp.DataAccess
         {
             return context.Users.Find(userId);
         }
+        
 
         public AppUser GetUserByUsername(string username)
         {
-            return context.Users.SingleOrDefault(u => u.UserName == username);
+            var userDetails = context.Users.Include(e => e.Events).Where(u => u.UserName == username);
+            return userDetails.SingleOrDefault();
         }
 
         public List<AppUser> SearchForUser(string usernameSubstring)

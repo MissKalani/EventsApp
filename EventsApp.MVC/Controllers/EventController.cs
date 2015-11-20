@@ -14,7 +14,6 @@ namespace EventsApp.MVC.Controllers
 {
     public class EventController : Controller
     {
-        private EventContext db = new EventContext();
         private IEventUnitOfWork eventUoW;
 
         public EventController(IEventUnitOfWork eventUoW)
@@ -132,7 +131,7 @@ namespace EventsApp.MVC.Controllers
 
         [Authorize]
         public ActionResult Edit(int id)
-        {          
+        {
             Event _event = eventUoW.Events.GetEventByID(id);
             if (_event == null)
             {

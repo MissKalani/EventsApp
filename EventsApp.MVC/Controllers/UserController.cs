@@ -1,9 +1,9 @@
 
-﻿using EventsApp.DataAccess;
+using EventsApp.DataAccess;
 
 using EventsApp.MVC.ViewModels;
 
-﻿using EventsApp.DataModels;
+using EventsApp.DataModels;
 using Microsoft.AspNet.Identity;
 
 using System;
@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Net;
 
 namespace EventsApp.MVC.Controllers
 {
@@ -27,10 +28,18 @@ namespace EventsApp.MVC.Controllers
         public UserManager<AppUser> UserManager { get; private set; }
 
         // GET: User
-        public ActionResult Details()
-        {
-            var userId = User.Identity.GetUserId();
-            return View();
+        public ActionResult Details(string username)
+        {           
+                var user = eventUoW.Users.GetUserByUsername(username);
+                if(user != null)
+                {
+                    return View(new HellViewModel { User = user});
+                }
+                else
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                }    
+            
         }
 
         public ActionResult Search(string usernameSubstring)
