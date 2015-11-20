@@ -62,9 +62,7 @@
 
 
 @section Scripts {
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD41720sN_6eizUy9C-_xg9l7CdNrb7iiE&libraries=places&callback=initMap"></script>
-
-<script>
+    <script>
         var map;
         function initMap() {
             var initialCenter = new google.maps.LatLng(@Model.EditViewModel.Latitude, @Model.EditViewModel.Longitude);
@@ -208,7 +206,7 @@
         $(document).ready(function () {
             $('#create-event-datetimepicker').datetimepicker({ format: 'YYYY-MM-DD HH:mm' });
         });
-</script>
+    </script>
 
     <script>
         $(document).ready(function () {
@@ -218,4 +216,5 @@
             });
         });
     </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD41720sN_6eizUy9C-_xg9l7CdNrb7iiE&libraries=places&callback=initMap"></script>
 }

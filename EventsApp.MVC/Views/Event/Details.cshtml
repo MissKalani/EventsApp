@@ -107,97 +107,97 @@
 </div>
 
 @section Scripts {
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD41720sN_6eizUy9C-_xg9l7CdNrb7iiE&callback=initMap"></script>
     @Scripts.Render("~/bundles/js/jquery-ui")
 
     <script>
-    function initMap() {
-        var map = new google.maps.Map(document.getElementById('details-map'), {
-            center: { lat: @Model.DetailsViewModel.Event.Latitude, lng: @Model.DetailsViewModel.Event.Longitude },
-            zoom: 8
-        });
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById('details-map'), {
+                center: { lat: @Model.DetailsViewModel.Event.Latitude, lng: @Model.DetailsViewModel.Event.Longitude },
+                zoom: 8
+            });
 
-        var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(@Model.DetailsViewModel.Event.Latitude, @Model.DetailsViewModel.Event.Longitude),
-            map: map,
-            title: "@HttpUtility.HtmlEncode(Model.DetailsViewModel.Event.Brief)"
-        });
-    }
-
-    $('#link-button').click(function () {
-        // Generate a new link using AJAX.
-        $.ajax({
-            url: '@Url.Action("Generate", "Link")',
-            data: { eventId: @Model.DetailsViewModel.Event.Id },
-            method: "POST",
-            success: fetchLinkSuccess,
-            error: fetchLinkError
-        });
-
-        function fetchLinkSuccess(data, status) {
-            $("#link-text").val(data.url);
-        }
-
-        function fetchLinkError(xhr, status, exception) {
-            $('#link-text').val('Failed to retrieve link');
-        }
-    });
-
-    $('#username-invite-form').on('submit', function(e) {
-        e.preventDefault();
-        console.log("Form submitted");
-		
-		$.ajax({
-			url: '@Url.Action("InviteByUsername", "User")',
-			data: { eventId: @Model.DetailsViewModel.Event.Id, username: $('#input-username').val() },
-			method: "POST",
-			success: usernameInviteSuccess,
-			error: usernameInviteError
-		});
-		
-        function usernameInviteSuccess(data, status) {
-            if (data.InviteResult == 0)
-            {
-                console.log("Successfully invited user");
-                location.reload();
-            }
-            else
-            {
-                console.log("Failed to invite user " + data.InviteResult);
-            }
-		}
-		
-		function usernameInviteError(xhr, status, exception) {
-		    console.log("Failed to send invite user AJAX request");
-		}
-    });
-
-    $('#input-username').on('input', function(e) {
-        console.log("Input changed");
-
-        $.ajax({
-            url: '@Url.Action("Search", "User")',
-            data: { usernameSubstring: $(this).val() },
-            method: "POST",
-            success: fetchUserSuccess,
-            error: fetchUserError
-        });
-
-        function fetchUserSuccess(data, status) {          
-            var usernameArray = [];
-            for (var i = 0; i < data.length; ++i)
-            {
-                usernameArray.push(data[i].Username);
-            }
-
-            $('#input-username').autocomplete({
-                source: usernameArray
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(@Model.DetailsViewModel.Event.Latitude, @Model.DetailsViewModel.Event.Longitude),
+                map: map,
+                title: "@HttpUtility.HtmlEncode(Model.DetailsViewModel.Event.Brief)"
             });
         }
 
-        function fetchUserError(xhr, status, exception) {
-            console.log("Failed to search for usernames");
-        }
-    });
+        $('#link-button').click(function () {
+            // Generate a new link using AJAX.
+            $.ajax({
+                url: '@Url.Action("Generate", "Link")',
+                data: { eventId: @Model.DetailsViewModel.Event.Id },
+                method: "POST",
+                success: fetchLinkSuccess,
+                error: fetchLinkError
+            });
+
+            function fetchLinkSuccess(data, status) {
+                $("#link-text").val(data.url);
+            }
+
+            function fetchLinkError(xhr, status, exception) {
+                $('#link-text').val('Failed to retrieve link');
+            }
+        });
+
+        $('#username-invite-form').on('submit', function(e) {
+            e.preventDefault();
+            console.log("Form submitted");
+		
+		    $.ajax({
+			    url: '@Url.Action("InviteByUsername", "User")',
+			    data: { eventId: @Model.DetailsViewModel.Event.Id, username: $('#input-username').val() },
+			    method: "POST",
+			    success: usernameInviteSuccess,
+			    error: usernameInviteError
+		    });
+		
+            function usernameInviteSuccess(data, status) {
+                if (data.InviteResult == 0)
+                {
+                    console.log("Successfully invited user");
+                    location.reload();
+                }
+                else
+                {
+                    console.log("Failed to invite user " + data.InviteResult);
+                }
+		    }
+		
+		    function usernameInviteError(xhr, status, exception) {
+		        console.log("Failed to send invite user AJAX request");
+		    }
+        });
+
+        $('#input-username').on('input', function(e) {
+            console.log("Input changed");
+
+            $.ajax({
+                url: '@Url.Action("Search", "User")',
+                data: { usernameSubstring: $(this).val() },
+                method: "POST",
+                success: fetchUserSuccess,
+                error: fetchUserError
+            });
+
+            function fetchUserSuccess(data, status) {          
+                var usernameArray = [];
+                for (var i = 0; i < data.length; ++i)
+                {
+                    usernameArray.push(data[i].Username);
+                }
+
+                $('#input-username').autocomplete({
+                    source: usernameArray
+                });
+            }
+
+            function fetchUserError(xhr, status, exception) {
+                console.log("Failed to search for usernames");
+            }
+        });
     </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD41720sN_6eizUy9C-_xg9l7CdNrb7iiE&callback=initMap"></script>
 }
