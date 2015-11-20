@@ -122,13 +122,6 @@ namespace EventsApp.MVC.Controllers
             return View(new HellViewModel { DetailsViewModel = vm });
         }
 
-
-        //    [Authorize]
-        //    public ActionResult ManageEvent(int eventId)
-        //    {
-        //        return View(new HellViewModel { ManageUserViewModel new ManageEventViewModel { EventId = eventId });
-        //    }
-
         [Authorize]
         public ActionResult Edit(int id)
         {

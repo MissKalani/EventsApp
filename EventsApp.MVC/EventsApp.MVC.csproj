@@ -337,6 +337,7 @@
     <Compile Include="ViewModels\DetailsViewModel.cs" />
     <Compile Include="ViewModels\EditViewModel.cs" />
     <Compile Include="ViewModels\HellViewModel.cs" />
+    <Compile Include="ViewModels\InviteUsernameViewModel.cs" />
     <Compile Include="ViewModels\LinkConfirmViewModel.cs" />
     <Compile Include="ViewModels\CreateViewModel.cs" />
     <Compile Include="ViewModels\ManageEventViewModel.cs" />

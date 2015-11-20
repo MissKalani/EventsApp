@@ -82,10 +82,16 @@
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <p>Invite a user by their username:</p>
-                                <div class="input-group">
-                                    <span id="input-username-text" class="input-group-addon">Username</span>
-                                    <input id="input-username" type="text" class="form-control" aria-describedby="input-username-text" />
-                                </div>
+                                <form id="username-invite-form" class="form-inline">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span id="input-username-text" class="input-group-addon">Username</span>
+                                            <input id="input-username" type="text" class="form-control" aria-describedby="input-username-text" />
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-default">Invite</button>
+                                    <span id="input-username-error" class="text-danger"></span>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -102,63 +108,108 @@
 </div>
 
 @section Scripts {
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD41720sN_6eizUy9C-_xg9l7CdNrb7iiE&callback=initMap"></script>
     @Scripts.Render("~/bundles/js/jquery-ui")
 
     <script>
-    function initMap() {
-        var map = new google.maps.Map(document.getElementById('details-map'), {
-            center: { lat: @Model.DetailsViewModel.Event.Latitude, lng: @Model.DetailsViewModel.Event.Longitude },
-            zoom: 8
-        });
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById('details-map'), {
+                center: { lat: @Model.DetailsViewModel.Event.Latitude, lng: @Model.DetailsViewModel.Event.Longitude },
+                zoom: 8
+            });
 
-        var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(@Model.DetailsViewModel.Event.Latitude, @Model.DetailsViewModel.Event.Longitude),
-            map: map,
-            title: "@HttpUtility.HtmlEncode(Model.DetailsViewModel.Event.Brief)"
-        });
-    }
-
-    $('#link-button').click(function () {
-        // Generate a new link using AJAX.
-        $.ajax({
-            url: '@Url.Action("Generate", "Link")',
-            data: { eventId: @Model.DetailsViewModel.Event.Id },
-            method: "POST",
-            success: fetchLinkSuccess,
-            error: fetchLinkError
-        });
-
-        function fetchLinkSuccess(data, status) {
-            $("#link-text").val(data.url);
-        }
-
-        function fetchLinkError(xhr, status, exception) {
-            $('#link-text').val('Failed to retrieve link');
-        }
-    });
-
-    $('#input-username').on('input', function(e) {
-        console.log("Input changed");
-
-        $.ajax({
-            url: '@Url.Action("Search", "User")',
-            data: { usernameSubstring: $(this).val() },
-            method: "POST",
-            success: fetchUserSuccess,
-            error: fetchUserError
-        });
-
-        function fetchUserSuccess(data, status) {          
-            console.log(data);
-            $('#input-username').autocomplete({
-                source: data
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(@Model.DetailsViewModel.Event.Latitude, @Model.DetailsViewModel.Event.Longitude),
+                map: map,
+                title: "@HttpUtility.HtmlEncode(Model.DetailsViewModel.Event.Brief)"
             });
         }
 
-        function fetchUserError(xhr, status, exception) {
-            console.log("Failed to search for usernames");
-        }
-    });
+        $('#link-button').click(function () {
+            // Generate a new link using AJAX.
+            $.ajax({
+                url: '@Url.Action("Generate", "Link")',
+                data: { eventId: @Model.DetailsViewModel.Event.Id },
+                method: "POST",
+                success: fetchLinkSuccess,
+                error: fetchLinkError
+            });
+
+            function fetchLinkSuccess(data, status) {
+                $("#link-text").val(data.url);
+            }
+
+            function fetchLinkError(xhr, status, exception) {
+                $('#link-text').val('Failed to retrieve link');
+            }
+        });
+
+        $('#username-invite-form').on('submit', function(e) {
+            e.preventDefault();
+            console.log("Form submitted");
+		
+		    $.ajax({
+			    url: '@Url.Action("InviteByUsername", "User")',
+			    data: { eventId: @Model.DetailsViewModel.Event.Id, username: $('#input-username').val() },
+			    method: "POST",
+			    success: usernameInviteSuccess,
+			    error: usernameInviteError
+		    });
+		
+            function usernameInviteSuccess(data, status) {
+                if (data.InviteResult == 0)
+                {
+                    console.log("Successfully invited user");
+                    location.reload();
+                }
+                else
+                {
+                    console.log("Failed to invite user " + data.InviteResult);
+                    var errorElement = $('#input-username-error');
+                    switch (data.InviteResult)
+                    {
+                        case 1: errorElement.text("No user by that name"); break;
+                        case 2: errorElement.text("Event not found. It might have been removed."); break;
+                        case 3: errorElement.text("You do not have permission to invite people."); break;
+                        case 4: errorElement.text("This user has already been invited to this event."); break;
+                        case 5: errorElement.text("You cannot invite the owner of the event."); break;
+                    }
+                }
+		    }
+		
+		    function usernameInviteError(xhr, status, exception) {
+		        console.log("Failed to send invite user AJAX request");
+		        var errorElement = $('#input-username-error');
+		        errorElement.text("No response from the server. Try again later.");
+		    }
+        });
+
+        $('#input-username').on('input', function(e) {
+            console.log("Input changed");
+
+            $.ajax({
+                url: '@Url.Action("Search", "User")',
+                data: { usernameSubstring: $(this).val() },
+                method: "POST",
+                success: fetchUserSuccess,
+                error: fetchUserError
+            });
+
+            function fetchUserSuccess(data, status) {          
+                var usernameArray = [];
+                for (var i = 0; i < data.length; ++i)
+                {
+                    usernameArray.push(data[i].Username);
+                }
+
+                $('#input-username').autocomplete({
+                    source: usernameArray
+                });
+            }
+
+            function fetchUserError(xhr, status, exception) {
+                console.log("Failed to search for usernames");
+            }
+        });
     </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD41720sN_6eizUy9C-_xg9l7CdNrb7iiE&callback=initMap"></script>
 }
