@@ -19,13 +19,21 @@
                     Invited people
                 </div>
                 <div class="panel-body">
-                    @if (Model.DetailsViewModel.InvitedUsers.Count != 0)
+                    @if (Model.DetailsViewModel.Invites.Count != 0)
                     {
-                        <table>
-                            @foreach (var user in Model.DetailsViewModel.InvitedUsers)
+                        <table class="table">
+                            @foreach (var invite in Model.DetailsViewModel.Invites)
                             {
                                 <tr>
-                                    <td>@user.UserName</td>
+                                    <td>@invite.AppUser.UserName</td>
+                                    @if (@invite.Status == EventsApp.DataModels.InviteStatus.Accepted)
+                                    {
+                                        <td class="text-success">Is coming</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-info">Has been invited</td>
+                                    }
                                 </tr>
                             }
                         </table>
