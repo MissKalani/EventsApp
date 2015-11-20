@@ -237,5 +237,78 @@ namespace Tests
                 events[0].Brief.Should().Be("User 1 Event");
             }
         }
+
+        [TestMethod]
+        public void LoadUserGraphMakesTheOwnerNodeAccessible()
+        {
+            int id = 0;
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
+                var user1 = context.Users.Single(t => t.UserName == "TestUser");
+
+                Event e1 = new Event();
+                e1.Brief = "User 1 Event";
+                e1.Visibility = EventVisibility.Private;
+                e1.ModificationState = ModificationState.Added;
+                e1.AppUser = user1;
+
+                eventUoW.Events.Attach(e1);
+                eventUoW.Save();
+
+                id = e1.Id;
+            }
+
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                var e = eventUoW.Events.GetEventByID(id);
+
+                e.AppUser.Should().BeNull();
+                eventUoW.Events.LoadUserGraph(e);
+                e.AppUser.UserName.Should().Be("TestUser");
+            }
+        }
+
+        [TestMethod]
+        public void GetEventByIdReturnsCorrectEvent()
+        {
+            int id1 = 0;
+            int id2 = 0;
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
+                var user1 = context.Users.Single(t => t.UserName == "TestUser");
+                var user2 = context.Users.Single(t => t.UserName == "TestUser2");
+
+                Event e1 = new Event();
+                e1.Brief = "User 1 Event";
+                e1.Visibility = EventVisibility.Private;
+                e1.ModificationState = ModificationState.Added;
+                e1.AppUser = user1;
+
+                Event e2 = new Event();
+                e2.Brief = "User 2 Event";
+                e2.Visibility = EventVisibility.Private;
+                e2.ModificationState = ModificationState.Added;
+                e2.AppUser = user2;
+
+                eventUoW.Events.Attach(e1);
+                eventUoW.Events.Attach(e2);
+                eventUoW.Save();
+
+                id1 = e1.Id;
+                id2 = e2.Id;
+            }
+
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                eventUoW.Events.GetEventByID(id1).Brief.Should().Be("User 1 Event");
+                eventUoW.Events.GetEventByID(id2).Brief.Should().Be("User 2 Event");
+            }
+        }
     }
 }

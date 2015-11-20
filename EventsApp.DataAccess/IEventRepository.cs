@@ -31,6 +31,9 @@ namespace EventsApp.DataAccess
         /// </summary>
         AppUser LoadUserGraph(Event e);
 
+        /// <summary>
+        /// Returns an event by its primary key.
+        /// </summary>
         Event GetEventByID(int id);
     }
 }
