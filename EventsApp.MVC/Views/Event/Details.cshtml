@@ -90,6 +90,7 @@
                                         </div>
                                     </div>
                                     <button type="submit" class="btn btn-default">Invite</button>
+                                    <span id="input-username-error" class="text-danger"></span>
                                 </form>
                             </div>
                         </div>
@@ -163,11 +164,22 @@
                 else
                 {
                     console.log("Failed to invite user " + data.InviteResult);
+                    var errorElement = $('#input-username-error');
+                    switch (data.InviteResult)
+                    {
+                        case 1: errorElement.text("No user by that name"); break;
+                        case 2: errorElement.text("Event not found. It might have been removed."); break;
+                        case 3: errorElement.text("You do not have permission to invite people."); break;
+                        case 4: errorElement.text("This user has already been invited to this event."); break;
+                        case 5: errorElement.text("You cannot invite the owner of the event."); break;
+                    }
                 }
 		    }
 		
 		    function usernameInviteError(xhr, status, exception) {
 		        console.log("Failed to send invite user AJAX request");
+		        var errorElement = $('#input-username-error');
+		        errorElement.text("No response from the server. Try again later.");
 		    }
         });
 
