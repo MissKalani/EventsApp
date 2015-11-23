@@ -40,12 +40,16 @@ namespace EventsApp.DataAccess
         
         public int GetUnseenPendingInvitesCount(AppUser user)
         {
-            return 0;
+            return context.Invites.Count(t => t.AppUserId == user.Id && !t.Seen);
         }
 
         public void MarkAllInvitesAsSeen(AppUser user)
         {
-
+            var invites = context.Invites.Where(t => t.AppUserId == user.Id && !t.Seen).ToList();
+            foreach (var invite in invites)
+            {
+                invite.Seen = true;
+            }
         }
     }
 }
