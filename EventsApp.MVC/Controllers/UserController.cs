@@ -31,16 +31,19 @@ namespace EventsApp.MVC.Controllers
         // GET: User
         public ActionResult Details(string username)
         {           
-                var user = eventUoW.Users.GetUserByUsername(username);
-                if(user != null)
-                {
-                    return View(new HellViewModel { User = user});
-                }
-                else
-        {
-                    return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-                }    
+            var user = eventUoW.Users.GetUserByUsername(username);
             
+            if (user != null)
+            {
+                var vm = new UserDetailsViewModel();
+                vm.User = user;
+                vm.PendingInvites = eventUoW.Invites.GetPendingInvitesWithEventGraph(user);
+                return View(new HellViewModel { UserDetailsViewModel = vm });
+            }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
         }
 
         [HttpPost]

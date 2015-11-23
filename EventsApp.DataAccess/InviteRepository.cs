@@ -32,5 +32,10 @@ namespace EventsApp.DataAccess
         {
             return context.Invites.Any(t => t.EventId == e.Id && t.AppUserId == user.Id);
         }
+
+        public List<Invite> GetPendingInvitesWithEventGraph(AppUser user)
+        {
+            return context.Invites.Include(t => t.Event).Where(t => t.Status == InviteStatus.Pending && t.AppUserId == user.Id).ToList();
+        }
     }
 }
