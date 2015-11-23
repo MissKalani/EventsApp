@@ -35,6 +35,14 @@ namespace EventsApp.MVC.Controllers
             
             if (user != null)
             {
+                // Mark all invites as seen if we are going to view or own page (since we'll be seeing them soon).
+                if (User.Identity.GetUserId() == user.Id)
+                {
+                    eventUoW.Invites.MarkAllInvitesAsSeen(user);
+                    eventUoW.Save();
+                }
+
+                // Return the page.
                 var vm = new UserDetailsViewModel();
                 vm.User = user;
                 vm.PendingInvites = eventUoW.Invites.GetPendingInvitesWithEventGraph(user);
