@@ -45,5 +45,33 @@
     @Scripts.Render("~/bundles/js/event")
     @RenderSection("Scripts", required: false)
 
+    @if (User.Identity.IsAuthenticated)
+    {
+        <script>
+        $(function () {
+            $.ajax({
+                url: "@Url.Action("UnseenInviteCount", "User")",
+                method: "POST",
+                success: fetchUnseenInviteCountSuccess,
+                error: fetchUnseenInviteCountError
+            });
+
+            function fetchUnseenInviteCountSuccess(data, status) {
+                console.log("Successfully fetched invite count");
+                console.log(data);
+                if (data.count > 0) {
+                    $('#unseenInvitesBadge').text(data.count);
+                } else {
+                    $('#unseenInvitesBadge').text("");
+                }
+            }
+
+            function fetchUnseenInviteCountError(xhr, status, exception) {
+                console.log("Failed to fetch invite count");
+                $('#unseenInvitesBadge').text("");
+            }
+        });
+        </script>
+    }
 </body>
 </html>

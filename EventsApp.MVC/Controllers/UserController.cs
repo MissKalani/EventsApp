@@ -103,5 +103,19 @@ namespace EventsApp.MVC.Controllers
             result.InviteResult = InviteUsernameViewModel.Result.Invited;
             return Json(result);
         }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult UnseenInviteCount()
+        {
+            var user = eventUoW.Users.GetUserById(User.Identity.GetUserId());
+            if (user == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            int count = eventUoW.Invites.GetUnseenPendingInvitesCount(user);
+            return Json(new { count = count });
+        }
     }
 }
