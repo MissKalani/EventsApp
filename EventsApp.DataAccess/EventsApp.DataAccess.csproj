@@ -113,6 +113,10 @@
     <Compile Include="Migrations\201511190852593_AddUniqueIndexToUsername.Designer.cs">
       <DependentUpon>201511190852593_AddUniqueIndexToUsername.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201511230925559_AddInviteSeen.cs" />
+    <Compile Include="Migrations\201511230925559_AddInviteSeen.Designer.cs">
+      <DependentUpon>201511230925559_AddInviteSeen.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserRepository.cs" />
@@ -126,6 +130,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201511190852593_AddUniqueIndexToUsername.resx">
       <DependentUpon>201511190852593_AddUniqueIndexToUsername.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511230925559_AddInviteSeen.resx">
+      <DependentUpon>201511230925559_AddInviteSeen.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
