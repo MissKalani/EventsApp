@@ -175,5 +175,290 @@ namespace EventsApp.Tests
                 invited.Any(t => t.AppUser == user3).Should().BeTrue();
             }
         }
+
+        [TestMethod]
+        public void GetPendingInvitesWithEventGraphReturnsOnlyEventsTheUserIsInvitedTo()
+        {
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
+                var user1 = context.Users.Single(t => t.UserName == "TestUser");
+                var user2 = context.Users.Single(t => t.UserName == "TestUser2");
+                var user3 = context.Users.Single(t => t.UserName == "TestUser3");
+
+                Event e1 = new Event();
+                e1.Brief = "User 1 Event 1";
+                e1.Visibility = EventVisibility.Private;
+                e1.ModificationState = ModificationState.Added;
+                e1.AppUser = user1;
+                eventUoW.Events.Attach(e1);
+
+                Event e2 = new Event();
+                e2.Brief = "User 1 Event 2";
+                e2.Visibility = EventVisibility.Private;
+                e2.ModificationState = ModificationState.Added;
+                e2.AppUser = user1;
+                eventUoW.Events.Attach(e2);
+
+                Event e3 = new Event();
+                e3.Brief = "User 2 Event";
+                e3.Visibility = EventVisibility.Private;
+                e3.ModificationState = ModificationState.Added;
+                e3.AppUser = user2;
+                eventUoW.Events.Attach(e3);
+
+                Invite i1 = new Invite();
+                i1.AppUser = user2;
+                i1.Event = e1;
+                i1.ModificationState = ModificationState.Added;
+                eventUoW.Invites.Attach(i1);
+
+                Invite i2 = new Invite();
+                i2.AppUser = user3;
+                i2.Event = e1;
+                i2.ModificationState = ModificationState.Added;
+                eventUoW.Invites.Attach(i2);
+
+                Invite i3 = new Invite();
+                i3.AppUser = user1;
+                i3.Event = e2;
+                i3.ModificationState = ModificationState.Added;
+                eventUoW.Invites.Attach(i3);
+
+                eventUoW.Save();
+            }
+
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
+                var user1 = context.Users.Single(t => t.UserName == "TestUser");
+                var user2 = context.Users.Single(t => t.UserName == "TestUser2");
+                var user3 = context.Users.Single(t => t.UserName == "TestUser3");
+
+                var invites = eventUoW.Invites.GetPendingInvitesWithEventGraph(user2);
+
+                invites.Should().HaveCount(1);
+                invites.Single().Event.Brief.Should().Be("User 1 Event 1");
+            }
+        }
+
+        [TestMethod]
+        public void GetPendingInvitesWithEventGraphReturnsOnlyEventsThatArePending()
+        {
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
+                var user1 = context.Users.Single(t => t.UserName == "TestUser");
+                var user2 = context.Users.Single(t => t.UserName == "TestUser2");
+
+                Event e1 = new Event();
+                e1.Brief = "User 1 Event 1";
+                e1.Visibility = EventVisibility.Private;
+                e1.ModificationState = ModificationState.Added;
+                e1.AppUser = user1;
+                eventUoW.Events.Attach(e1);
+
+                Event e2 = new Event();
+                e2.Brief = "User 1 Event 2";
+                e2.Visibility = EventVisibility.Private;
+                e2.ModificationState = ModificationState.Added;
+                e2.AppUser = user1;
+                eventUoW.Events.Attach(e2);
+
+                Invite i1 = new Invite();
+                i1.AppUser = user2;
+                i1.Event = e1;
+                i1.Status = InviteStatus.Pending;
+                i1.ModificationState = ModificationState.Added;
+                eventUoW.Invites.Attach(i1);
+
+                Invite i2 = new Invite();
+                i2.AppUser = user2;
+                i2.Event = e2;
+                i2.Status = InviteStatus.Accepted;
+                i2.ModificationState = ModificationState.Added;
+                eventUoW.Invites.Attach(i2);
+
+                eventUoW.Save();
+            }
+
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
+                var user1 = context.Users.Single(t => t.UserName == "TestUser");
+                var user2 = context.Users.Single(t => t.UserName == "TestUser2");
+
+                var invites = eventUoW.Invites.GetPendingInvitesWithEventGraph(user2);
+
+                invites.Should().HaveCount(1);
+                invites.Single().Event.Brief.Should().Be("User 1 Event 1");
+            }
+        }
+
+        [TestMethod]
+        public void GetUnseenPendingInvitesCountReturnsNewInvites()
+        {
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
+                var user1 = context.Users.Single(t => t.UserName == "TestUser");
+                var user2 = context.Users.Single(t => t.UserName == "TestUser2");
+
+                Event e1 = new Event();
+                e1.Brief = "User 1 Event 1";
+                e1.Visibility = EventVisibility.Private;
+                e1.ModificationState = ModificationState.Added;
+                e1.AppUser = user1;
+                eventUoW.Events.Attach(e1);
+
+                Invite i1 = new Invite();
+                i1.AppUser = user2;
+                i1.Event = e1;
+                i1.Status = InviteStatus.Pending;
+                i1.ModificationState = ModificationState.Added;
+                eventUoW.Invites.Attach(i1);
+
+                eventUoW.Save();
+            }
+
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
+                var user1 = context.Users.Single(t => t.UserName == "TestUser");
+                var user2 = context.Users.Single(t => t.UserName == "TestUser2");
+
+                var count = eventUoW.Invites.GetUnseenPendingInvitesCount(user2);
+
+                count.Should().Be(1);
+            }
+        }
+
+        [TestMethod]
+        public void GetUnseenPendingInvitesCountReturnsOnlyUnseenInvites()
+        {
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
+                var user1 = context.Users.Single(t => t.UserName == "TestUser");
+                var user2 = context.Users.Single(t => t.UserName == "TestUser2");
+
+                Event e1 = new Event();
+                e1.Brief = "User 1 Event 1";
+                e1.Visibility = EventVisibility.Private;
+                e1.ModificationState = ModificationState.Added;
+                e1.AppUser = user1;
+                eventUoW.Events.Attach(e1);
+
+                Event e2 = new Event();
+                e2.Brief = "User 1 Event 2";
+                e2.Visibility = EventVisibility.Private;
+                e2.ModificationState = ModificationState.Added;
+                e2.AppUser = user1;
+                eventUoW.Events.Attach(e2);
+
+                Invite i1 = new Invite();
+                i1.AppUser = user2;
+                i1.Event = e1;
+                i1.Status = InviteStatus.Pending;
+                i1.Seen = true;
+                i1.ModificationState = ModificationState.Added;
+                eventUoW.Invites.Attach(i1);
+
+                Invite i2 = new Invite();
+                i2.AppUser = user2;
+                i2.Event = e2;
+                i2.Status = InviteStatus.Pending;
+                i2.ModificationState = ModificationState.Added;
+                eventUoW.Invites.Attach(i2);
+
+                eventUoW.Save();
+            }
+
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
+                var user1 = context.Users.Single(t => t.UserName == "TestUser");
+                var user2 = context.Users.Single(t => t.UserName == "TestUser2");
+
+                var count = eventUoW.Invites.GetUnseenPendingInvitesCount(user2);
+
+                count.Should().Be(1);
+            }
+        }
+
+        [TestMethod]
+        public void MarkAllInvitesAsSeenShouldResetTheUnseenInviteCount()
+        {
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
+                var user1 = context.Users.Single(t => t.UserName == "TestUser");
+                var user2 = context.Users.Single(t => t.UserName == "TestUser2");
+
+                Event e1 = new Event();
+                e1.Brief = "User 1 Event 1";
+                e1.Visibility = EventVisibility.Private;
+                e1.ModificationState = ModificationState.Added;
+                e1.AppUser = user1;
+                eventUoW.Events.Attach(e1);
+
+                Event e2 = new Event();
+                e2.Brief = "User 1 Event 2";
+                e2.Visibility = EventVisibility.Private;
+                e2.ModificationState = ModificationState.Added;
+                e2.AppUser = user1;
+                eventUoW.Events.Attach(e2);
+
+                Invite i1 = new Invite();
+                i1.AppUser = user2;
+                i1.Event = e1;
+                i1.Status = InviteStatus.Pending;
+                i1.ModificationState = ModificationState.Added;
+                eventUoW.Invites.Attach(i1);
+
+                Invite i2 = new Invite();
+                i2.AppUser = user2;
+                i2.Event = e2;
+                i2.Status = InviteStatus.Pending;
+                i2.ModificationState = ModificationState.Added;
+                eventUoW.Invites.Attach(i2);
+
+                eventUoW.Save();
+            }
+
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
+                var user1 = context.Users.Single(t => t.UserName == "TestUser");
+                var user2 = context.Users.Single(t => t.UserName == "TestUser2");
+
+                var count = eventUoW.Invites.GetUnseenPendingInvitesCount(user2);
+                count.Should().Be(2);
+
+                eventUoW.Invites.MarkAllInvitesAsSeen(user2);
+                eventUoW.Save();
+            }
+
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
+                var user1 = context.Users.Single(t => t.UserName == "TestUser");
+                var user2 = context.Users.Single(t => t.UserName == "TestUser2");
+
+                var count = eventUoW.Invites.GetUnseenPendingInvitesCount(user2);
+                count.Should().Be(0);
+            }
+        }
     }
 }

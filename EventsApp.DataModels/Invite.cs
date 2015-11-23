@@ -17,6 +17,7 @@ namespace EventsApp.DataModels
         public int EventId { get; set; }
         public string AppUserId { get; set; }
         public InviteStatus Status { get; set; }
+        public bool Seen { get; set; }
         public ModificationState ModificationState { get; set; }
 
         public Event Event { get; set; }

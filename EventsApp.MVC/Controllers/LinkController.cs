@@ -98,7 +98,7 @@ namespace EventsApp.MVC.Controllers
             }
 
             // Create an invite and remove this link.
-            eventUoW.Invites.Attach(new Invite { Event = link.Event, AppUser = user, Status = InviteStatus.Accepted, ModificationState = ModificationState.Added });
+            eventUoW.Invites.Attach(new Invite { Event = link.Event, AppUser = user, Status = InviteStatus.Accepted, Seen = true, ModificationState = ModificationState.Added });
             eventUoW.InviteLinks.Remove(link);
             eventUoW.Save();
 

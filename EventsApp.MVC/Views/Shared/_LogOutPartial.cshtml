@@ -5,7 +5,10 @@
 
     <ul class="nav navbar-nav navbar-right">
         <li>
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Details", "User", routeValues: new { username = User.Identity.GetUserName()}, htmlAttributes: new { title = "User Details" })
+            @*@Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Details", "User", routeValues: new { username = User.Identity.GetUserName()}, htmlAttributes: new { title = "User Details" })*@
+            <!--<span class="badge">4</span>-->
+
+            <a href="@Url.Action("Details", "User", new { username = User.Identity.GetUserName() })">Hello @User.Identity.GetUserName()! <span id="unseenInvitesBadge" class="badge"></span></a>
         </li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
     </ul>

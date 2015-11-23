@@ -343,6 +343,7 @@
     <Compile Include="ViewModels\ManageEventViewModel.cs" />
     <Compile Include="ViewModels\EventListViewModel.cs" />
     <Compile Include="ViewModels\SearchUserViewModel.cs" />
+    <Compile Include="ViewModels\UserDetailsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />

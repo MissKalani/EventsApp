@@ -31,16 +31,27 @@ namespace EventsApp.MVC.Controllers
         // GET: User
         public ActionResult Details(string username)
         {           
-                var user = eventUoW.Users.GetUserByUsername(username);
-                if(user != null)
-                {
-                    return View(new HellViewModel { User = user});
-                }
-                else
-        {
-                    return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-                }    
+            var user = eventUoW.Users.GetUserByUsername(username);
             
+            if (user != null)
+            {
+                // Mark all invites as seen if we are going to view or own page (since we'll be seeing them soon).
+                if (User.Identity.GetUserId() == user.Id)
+                {
+                    eventUoW.Invites.MarkAllInvitesAsSeen(user);
+                    eventUoW.Save();
+                }
+
+                // Return the page.
+                var vm = new UserDetailsViewModel();
+                vm.User = user;
+                vm.PendingInvites = eventUoW.Invites.GetPendingInvitesWithEventGraph(user);
+                return View(new HellViewModel { UserDetailsViewModel = vm });
+            }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
         }
 
         [HttpPost]
@@ -99,6 +110,20 @@ namespace EventsApp.MVC.Controllers
 
             result.InviteResult = InviteUsernameViewModel.Result.Invited;
             return Json(result);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult UnseenInviteCount()
+        {
+            var user = eventUoW.Users.GetUserById(User.Identity.GetUserId());
+            if (user == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            int count = eventUoW.Invites.GetUnseenPendingInvitesCount(user);
+            return Json(new { count = count });
         }
     }
 }

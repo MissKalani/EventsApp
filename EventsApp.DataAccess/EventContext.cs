@@ -29,6 +29,7 @@ namespace EventsApp.DataAccess
 
             modelBuilder.Entity<Invite>().HasKey(t => new { t.EventId, t.AppUserId });
             modelBuilder.Entity<Invite>().Property(t => t.Status).IsRequired();
+            modelBuilder.Entity<Invite>().Property(t => t.Seen).IsRequired();
             modelBuilder.Entity<Invite>().Ignore(t => t.ModificationState);
             modelBuilder.Entity<Invite>().HasRequired(t => t.Event).WithMany().WillCascadeOnDelete(false);
             modelBuilder.Entity<Invite>().HasRequired(t => t.AppUser).WithMany().WillCascadeOnDelete(false);
