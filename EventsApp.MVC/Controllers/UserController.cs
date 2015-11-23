@@ -54,6 +54,67 @@ namespace EventsApp.MVC.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet]
+        public ActionResult AcceptInvite(int eventId)
+        {
+            var user = eventUoW.Users.GetUserById(User.Identity.GetUserId());
+            if (user == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            var e = eventUoW.Events.GetEventByID(eventId);
+            if (e == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            Invite invite = eventUoW.Invites.GetInviteByEventAndUser(e, user);
+            if (invite == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+
+            invite.Status = InviteStatus.Accepted;
+            invite.ModificationState = ModificationState.Modified;
+            eventUoW.Invites.Attach(invite);
+            eventUoW.Save();
+
+            return RedirectToAction("Details", "User", new { username = user.UserName });
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult DeclineInvite(int eventId)
+        {
+            var user = eventUoW.Users.GetUserById(User.Identity.GetUserId());
+            if (user == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            var e = eventUoW.Events.GetEventByID(eventId);
+            if (e == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            Invite invite = eventUoW.Invites.GetInviteByEventAndUser(e, user);
+            if (invite == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+
+            // Remove the invite.
+            // TODO: Possibly place this in another state, where the user can change their mind?
+            invite.ModificationState = ModificationState.Deleted;
+            eventUoW.Invites.Attach(invite);
+            eventUoW.Save();
+
+            return RedirectToAction("Details", "User", new { username = user.UserName });
+        }
+
         [HttpPost]
         public ActionResult Search(string usernameSubstring)
         {
