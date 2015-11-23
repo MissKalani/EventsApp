@@ -21,5 +21,15 @@ namespace EventsApp.DataAccess
         /// for all returned invites.
         /// </summary>
         List<Invite> GetPendingInvitesWithEventGraph(AppUser user);
+
+        /// <summary>
+        /// Get the number of pending invites that are new since the last time the user checked.
+        /// </summary>
+        int GetUnseenPendingInvitesCount(AppUser user);
+
+        /// <summary>
+        /// Mark all current invites as seen by the user (will influence what is returned by GetUnseenPendingInvitesCount).
+        /// </summary>
+        void MarkAllInvitesAsSeen(AppUser user);
     }
 }

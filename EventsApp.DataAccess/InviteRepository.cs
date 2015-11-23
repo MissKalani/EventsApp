@@ -37,5 +37,15 @@ namespace EventsApp.DataAccess
         {
             return context.Invites.Include(t => t.Event).Where(t => t.Status == InviteStatus.Pending && t.AppUserId == user.Id).ToList();
         }
+        
+        public int GetUnseenPendingInvitesCount(AppUser user)
+        {
+            return 0;
+        }
+
+        public void MarkAllInvitesAsSeen(AppUser user)
+        {
+
+        }
     }
 }
