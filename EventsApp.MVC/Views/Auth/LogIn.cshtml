@@ -1,4 +1,4 @@
-﻿
+﻿@using Microsoft.Owin.Security
 @model EventsApp.MVC.ViewModels.HellViewModel
 @{
     ViewBag.Title = "Log In";
@@ -46,7 +46,35 @@
                 </p>
             }
         </section>
+        <div>
+            @{
+                var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+                <p>@loginProviders.Count()</p>
+
+                foreach (AuthenticationDescription p in loginProviders)
+                {
+                    <br />
+                    @p.Caption
+                    <br />
+                    @p.AuthenticationType
+
+                }
+                using (Html.BeginForm("ExternalLogin", "Auth", new { ReturnUrl = Url.Action("Index", "Home") }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div id="socialLoginList">
+                        <p>
+                            @foreach (AuthenticationDescription p in loginProviders)
+                            {
+                                <button type="submit" class="btn btn-primary" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>
+                            }
+                        </p>
+                    </div>
+                }
+            }
+        </div>
+
     </div>
-    </div> <!--endrow-->
+</div> <!--endrow-->
 
 @section Scripts{}
