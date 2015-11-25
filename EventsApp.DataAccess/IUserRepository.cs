@@ -17,5 +17,6 @@ namespace EventsApp.DataAccess
         AppUser GetUserByUsername(string username);
 
         List<AppUser> SearchForUser(string usernameSubstring);
+        void RemoveAccount(AppUser user);
     }
 }

@@ -22,10 +22,11 @@ namespace EventsApp.DataAccess
             modelBuilder.Entity<Event>().Property(t => t.Longitude).IsRequired();
             modelBuilder.Entity<Event>().Property(t => t.StartTime).HasColumnType("datetime2");
             modelBuilder.Entity<Event>().Ignore(t => t.ModificationState);
+            modelBuilder.Entity<Event>().HasRequired(t => t.AppUser).WithMany().WillCascadeOnDelete(true);
 
             modelBuilder.Entity<AppUser>().Ignore(t => t.ModificationState);
             modelBuilder.Entity<AppUser>().HasMany(t => t.Events).WithRequired(t => t.AppUser).HasForeignKey(t => t.OwnerId);
-     
+           
 
             modelBuilder.Entity<Invite>().HasKey(t => new { t.EventId, t.AppUserId });
             modelBuilder.Entity<Invite>().Property(t => t.Status).IsRequired();
@@ -40,7 +41,6 @@ namespace EventsApp.DataAccess
 
             base.OnModelCreating(modelBuilder);
         }
-
-        //public System.Data.Entity.DbSet<EventsApp.DataModels.AppUser> AppUsers { get; set; }
+        
     }
 }

@@ -37,5 +37,7 @@ namespace EventsApp.DataAccess
             context.SaveChanges();
             ContextStateHelper.ResetModificationState(context);
         }
+
+  
     }
 }

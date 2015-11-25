@@ -14,12 +14,13 @@ namespace EventsApp.MVC.Controllers
 {
     public class AuthController : Controller
     {
-        //public static bool IsAuthenticated = false;
+        IEventUnitOfWork eventUoW;
 
         // GET: Auth
-        public AuthController()
+        public AuthController(IEventUnitOfWork eventUoW)
         {
             UserManager = new UserManager<AppUser>(new UserStore<AppUser>(new EventContext()));
+            this.eventUoW = eventUoW;       
 
         }
 
@@ -263,6 +264,27 @@ namespace EventsApp.MVC.Controllers
         public ActionResult ConnectExistingAccount(HellViewModel model)
         {
             return View("ConnectAccount", model);
+        }
+
+        
+        public ActionResult RemoveAccount()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult RemoveAccount(HellViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = eventUoW.Users.GetUserById(User.Identity.GetUserId());
+                eventUoW.Users.RemoveAccount(user);
+                eventUoW.Save();
+                LogOut();
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

@@ -1,0 +1,19 @@
+﻿@model EventsApp.MVC.ViewModels.HellViewModel
+@{
+    ViewBag.Title = "Remove Account";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    @using (Html.BeginForm("RemoveAccount", "Auth", FormMethod.Post, new { }))
+    {
+        <p>Do you really want to leave us? :(</p>
+
+       <button type="submit" class="btn btn-danger">Yes I do! Get me out!</button>
+    }
+
+
+</div>
+
+

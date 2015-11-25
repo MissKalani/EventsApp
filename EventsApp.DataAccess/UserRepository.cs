@@ -34,5 +34,10 @@ namespace EventsApp.DataAccess
         {
             return context.Users.Where(t => t.UserName.Contains(usernameSubstring)).ToList();
         }
+
+        public void RemoveAccount(AppUser user)
+        {
+            context.Entry(user).State = EntityState.Deleted;            
+        }
     }
 }
