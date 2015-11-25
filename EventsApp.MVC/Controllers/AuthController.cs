@@ -3,6 +3,7 @@ using EventsApp.DataModels;
 using EventsApp.MVC.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System.Net;
 using System.Threading.Tasks;
@@ -16,9 +17,10 @@ namespace EventsApp.MVC.Controllers
         //public static bool IsAuthenticated = false;
 
         // GET: Auth
-        public AuthController()           
+        public AuthController()
         {
             UserManager = new UserManager<AppUser>(new UserStore<AppUser>(new EventContext()));
+
         }
 
         public UserManager<AppUser> UserManager { get; private set; }
@@ -39,7 +41,7 @@ namespace EventsApp.MVC.Controllers
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindAsync(model.LoginUserViewModel.UserName, model.LoginUserViewModel.Password);
-                if(user != null)
+                if (user != null)
                 {
                     await SignInAsync(user, model.LoginUserViewModel.RememberMe);
                     return RedirectToLocal(returnUrl);
@@ -73,7 +75,7 @@ namespace EventsApp.MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(HellViewModel model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var user = new AppUser() { UserName = model.RegisterUserViewModel.UserName };
                 var result = await UserManager.CreateAsync(user, model.RegisterUserViewModel.Password);
@@ -88,7 +90,7 @@ namespace EventsApp.MVC.Controllers
                 }
             }
             return View(model);
-      
+
         }
 
         private async Task SignInAsync(AppUser user, bool isPersistent)
@@ -166,7 +168,7 @@ namespace EventsApp.MVC.Controllers
 
         private void AddErrors(IdentityResult result)
         {
-            foreach(var error in result.Errors)
+            foreach (var error in result.Errors)
             {
                 ModelState.AddModelError("", error);
             }
@@ -214,15 +216,59 @@ namespace EventsApp.MVC.Controllers
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
-          
+            if (loginInfo == null)
+            {
                 return RedirectToAction("Login");
-        
+            }            
+
+            var signInManager = new SignInManager<AppUser, string>(UserManager, HttpContext.GetOwinContext().Authentication);
+
+            var result = signInManager.ExternalSignIn(loginInfo, false);           
+
+            switch (result)
+            {
+                case SignInStatus.Success:
+                    return RedirectToAction("ConnectAccount");                    
+                //case SignInStatus.LockedOut:
+                //    return RedirectToAction("Index","Home");
+                //case SignInStatus.RequiresVerification:
+                //    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
+                case SignInStatus.Failure:
+                    var user = new AppUser { UserName = loginInfo.DefaultUserName };
+                    UserManager.Create(user);
+                    UserManager.AddLogin(user.Id, loginInfo.Login);
+                    signInManager.ExternalSignIn(loginInfo, false);
+                    return RedirectToAction("ConnectAccount");
+                default:
+                    return RedirectToAction("Register", "Auth");
+            }
+
         }
 
-        internal class ChallengeResult: HttpUnauthorizedResult
+        [Authorize]
+        public ActionResult ConnectAccount()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult ConnectNewAccount(HellViewModel model)
+        {
+            return View("ConnectAccount", model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult ConnectExistingAccount(HellViewModel model)
+        {
+            return View("ConnectAccount", model);
+        }
+
+        internal class ChallengeResult : HttpUnauthorizedResult
         {
             public ChallengeResult(string provider, string redirectUri)
-                :this(provider, redirectUri, null)
+                : this(provider, redirectUri, null)
             { }
             public ChallengeResult(string provider, string redirectUri, string userId)
             {
@@ -232,7 +278,7 @@ namespace EventsApp.MVC.Controllers
             }
 
             public string LoginProvider { get; set; }
-            public string  RedirectUri { get; set; }
+            public string RedirectUri { get; set; }
             public string UserId { get; set; }
 
             public override void ExecuteResult(ControllerContext context)

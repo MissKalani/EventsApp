@@ -16,6 +16,8 @@ namespace EventsApp.MVC.ViewModels
         public EditViewModel EditViewModel { get; set; }
         public DetailsViewModel DetailsViewModel { get; set; }
         public UserDetailsViewModel UserDetailsViewModel { get; set; }
+        public ConnectExistingAccountViewModel ConnectExistingAccountViewModel { get; set; }
+        public ConnectNewAccountViewModel ConnectNewAccountViewModel { get; set; }
         //public ViewEvent ViewEvent { get; set; }
         //public List<Event> Events { get; set; }
         public Event Event { get; set; }

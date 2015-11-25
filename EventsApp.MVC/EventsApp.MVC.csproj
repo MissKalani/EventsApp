@@ -377,6 +377,7 @@
     <Content Include="Views\Event\Details.cshtml" />
     <Content Include="Views\Event\Delete.cshtml" />
     <Content Include="Views\User\Details.cshtml" />
+    <Content Include="Views\Auth\ConnectAccount.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
