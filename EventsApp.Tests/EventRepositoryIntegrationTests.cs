@@ -310,5 +310,63 @@ namespace Tests
                 eventUoW.Events.GetEventByID(id2).Brief.Should().Be("User 2 Event");
             }
         }
+
+        [TestMethod]
+        public void TransferEventOwnershipTransfersAllEvents()
+        {
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
+                var user1 = context.Users.Single(t => t.UserName == "TestUser");
+                var user2 = context.Users.Single(t => t.UserName == "TestUser2");
+
+                Event e1 = new Event();
+                e1.Brief = "User 1 Event";
+                e1.ModificationState = ModificationState.Added;
+                e1.AppUser = user1;
+                eventUoW.Events.Attach(e1);
+
+                Event e2 = new Event();
+                e2.Brief = "User 2 Event 1";
+                e2.ModificationState = ModificationState.Added;
+                e2.AppUser = user2;
+                eventUoW.Events.Attach(e2);
+
+                Event e3 = new Event();
+                e3.Brief = "User 2 Event 2";
+                e3.ModificationState = ModificationState.Added;
+                e3.AppUser = user2;
+                eventUoW.Events.Attach(e3);
+                
+                eventUoW.Save();
+            }
+
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+
+                context.Events.ToList();
+                context.Invites.ToList();
+
+                var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
+                var user1 = context.Users.Single(t => t.UserName == "TestUser");
+                var user2 = context.Users.Single(t => t.UserName == "TestUser2");
+
+                eventUoW.Events.TransferEventOwnership(user2, user1);
+                eventUoW.Save();
+            }
+
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
+                var user1 = context.Users.Single(t => t.UserName == "TestUser");
+                var user2 = context.Users.Single(t => t.UserName == "TestUser2");
+
+                eventUoW.Events.GetAllCreatedEvents(user1).Should().HaveCount(3);
+                eventUoW.Events.GetAllCreatedEvents(user2).Should().HaveCount(0);
+            }
+        }
     }
 }

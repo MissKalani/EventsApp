@@ -35,5 +35,10 @@ namespace EventsApp.DataAccess
         /// Returns an event by its primary key.
         /// </summary>
         Event GetEventByID(int id);
+
+        /// <summary>
+        /// Transfers the ownership of all events created by previousOwner to newOwner.
+        /// </summary>
+        void TransferEventOwnership(AppUser previousOwner, AppUser newOwner);
     }
 }

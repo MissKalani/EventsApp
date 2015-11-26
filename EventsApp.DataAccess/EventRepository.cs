@@ -51,5 +51,15 @@ namespace EventsApp.DataAccess
         {
             return context.Events.Find(i); 
         }
+
+        public void TransferEventOwnership(AppUser previousOwner, AppUser newOwner)
+        {
+            List<Event> events = context.Events.Where(t => t.OwnerId == previousOwner.Id).ToList();
+            foreach (var e in events)
+            {
+                e.AppUser = newOwner;
+                e.ModificationState = ModificationState.Modified;
+            }
+        }
     }
 }

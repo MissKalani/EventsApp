@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace EventsApp.MVC.Controllers
         public AuthController(IEventUnitOfWork eventUoW)
         {
             UserManager = new UserManager<AppUser>(new UserStore<AppUser>(new EventContext()));
-            this.eventUoW = eventUoW;
+            this.eventUoW = eventUoW;       
 
         }
 
@@ -230,7 +231,7 @@ namespace EventsApp.MVC.Controllers
             if (loginInfo == null)
             {
                 return RedirectToAction("Login");
-            }
+            }            
 
             var signInManager = new SignInManager<AppUser, string>(UserManager, HttpContext.GetOwinContext().Authentication);
 
@@ -247,7 +248,7 @@ namespace EventsApp.MVC.Controllers
                         }
                         else
                         {
-                            return RedirectToAction("ConnectAccount");
+                    return RedirectToAction("ConnectAccount");                    
                         }
                     }
 
@@ -257,11 +258,11 @@ namespace EventsApp.MVC.Controllers
                 //    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
                 case SignInStatus.Failure:
                     {
-                        var user = new AppUser { UserName = loginInfo.DefaultUserName };
-                        UserManager.Create(user);
-                        UserManager.AddLogin(user.Id, loginInfo.Login);
-                        signInManager.ExternalSignIn(loginInfo, false);
-                        return RedirectToAction("ConnectAccount");
+                    var user = new AppUser { UserName = loginInfo.DefaultUserName };
+                    UserManager.Create(user);
+                    UserManager.AddLogin(user.Id, loginInfo.Login);
+                    signInManager.ExternalSignIn(loginInfo, false);
+                    return RedirectToAction("ConnectAccount");
                     }
 
                 default:
@@ -298,7 +299,7 @@ namespace EventsApp.MVC.Controllers
                     return RedirectToAction("Index", "Home");
                 }
                 else
-                {
+        {
                     AddErrors(result);
                 }
             }
@@ -307,12 +308,58 @@ namespace EventsApp.MVC.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult ConnectExistingAccount(HellViewModel model)
+        public async Task<ActionResult> ConnectExistingAccount(HellViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Invalid username or password.");
             return View("ConnectAccount", model);
         }
 
+            AppUser existingUser = await UserManager.FindAsync(model.ConnectExistingAccountViewModel.UserName, model.ConnectExistingAccountViewModel.Password);
+            if (existingUser == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
 
+            AppUser socialUser = eventUoW.Users.GetUserById(User.Identity.GetUserId());
+            if (socialUser == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            IList<UserLoginInfo> logins = await UserManager.GetLoginsAsync(socialUser.Id);
+            if (logins.Count > 1)
+            {
+                throw new InvalidOperationException("A social account was found to have more than one login.");
+            }
+
+            // Migrate the created events by the social user.
+            eventUoW.Events.TransferEventOwnership(socialUser, existingUser);
+
+            // Migrate the invites by the social user.
+            eventUoW.Invites.TransferInviteOwnership(socialUser, existingUser);
+
+            // Remove the dedicated social account.
+            AuthenticationManager.SignOut();
+            eventUoW.Users.RemoveAccount(socialUser);
+            eventUoW.Save();
+
+            // Add this social login to the existing user.
+            IdentityResult result = await UserManager.AddLoginAsync(existingUser.Id, logins[0]);
+            if (!result.Succeeded)
+            {
+                throw new Exception("Failed to connect " + logins[0].LoginProvider + " login to existing user.");
+            }
+
+            // Login as the existing user.
+            await SignInAsync(existingUser, false);
+
+            // Return to the homepage.
+            return RedirectToAction("Index", "Home");
+        }
+
+        
         public ActionResult RemoveAccount()
         {
             return View();
