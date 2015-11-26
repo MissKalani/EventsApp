@@ -1,4 +1,5 @@
 ﻿using EventsApp.DataModels;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -11,7 +12,6 @@ namespace EventsApp.DataAccess
     public class UserRepository : IUserRepository
     {
         private EventContext context;
-
 
         public UserRepository(EventContext context)
         {

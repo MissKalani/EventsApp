@@ -44,5 +44,10 @@ namespace EventsApp.DataAccess
         /// This will make all invites previousUser has to events belong to newUser.
         /// </summary>
         void TransferInviteOwnership(AppUser previousUser, AppUser newUser);
+
+        /// <summary>
+        /// Remove all invites for notwelcomed to events hosted by host.
+        /// </summary>
+        void UninviteUserFromAllUserEvents(AppUser notwelcomed, AppUser host);
     }
 }

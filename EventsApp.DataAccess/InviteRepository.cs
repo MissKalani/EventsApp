@@ -61,5 +61,17 @@ namespace EventsApp.DataAccess
         {
             context.Database.ExecuteSqlCommand("UPDATE Invites SET AppUserId = {0} WHERE AppUserId = {1}", newUser.Id, previousUser.Id);
         }
+
+        public void UninviteUserFromAllUserEvents(AppUser notwelcomed, AppUser host)
+        {
+            var invites = from i in context.Invites
+                          join e in context.Events on i.EventId equals e.Id
+                          where e.OwnerId == host.Id && i.AppUserId == notwelcomed.Id
+                          select i;
+            foreach (var invite in invites)
+            {
+                context.Invites.Remove(invite);
+            }
+        }
     }
 }

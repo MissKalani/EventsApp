@@ -277,7 +277,7 @@ namespace EventsApp.MVC.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
 
-            AppUser socialUser = eventUoW.Users.GetUserById(User.Identity.GetUserId());
+            AppUser socialUser = UserManager.FindById(User.Identity.GetUserId());
             if (socialUser == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
@@ -289,15 +289,17 @@ namespace EventsApp.MVC.Controllers
                 throw new InvalidOperationException("A social account was found to have more than one login.");
             }
 
+            // Migrate the invites by the social user. Make sure to remove existing invites between the two users.
+            eventUoW.Invites.UninviteUserFromAllUserEvents(existingUser, socialUser);
+            eventUoW.Invites.UninviteUserFromAllUserEvents(socialUser, existingUser);
+            eventUoW.Invites.TransferInviteOwnership(socialUser, existingUser);
+
             // Migrate the created events by the social user.
             eventUoW.Events.TransferEventOwnership(socialUser, existingUser);
 
-            // Migrate the invites by the social user.
-            eventUoW.Invites.TransferInviteOwnership(socialUser, existingUser);
-
             // Remove the dedicated social account.
             AuthenticationManager.SignOut();
-            eventUoW.Users.RemoveAccount(socialUser);
+            UserManager.Delete(socialUser);
             eventUoW.Save();
 
             // Add this social login to the existing user.
