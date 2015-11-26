@@ -1,4 +1,7 @@
-﻿using System;
+﻿using EventsApp.DataModels;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +21,7 @@ namespace EventsApp.DataAccess
         {
             context = new EventContext();
             Events = new EventRepository(context);
-            Users = new UserRepository(context);
+            Users = new UserRepository(context, new UserManager<AppUser, string>(new UserStore<AppUser>(context)));
             Invites = new InviteRepository(context);
             InviteLinks = new InviteLinkRepository(context);
         }
@@ -27,7 +30,7 @@ namespace EventsApp.DataAccess
         {
             this.context = context;
             Events = new EventRepository(context);
-            Users = new UserRepository(context);
+            Users = new UserRepository(context, new UserManager<AppUser, string>(new UserStore<AppUser>(context)));
             Invites = new InviteRepository(context);
             InviteLinks = new InviteLinkRepository(context);
         }

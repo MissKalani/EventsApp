@@ -16,17 +16,14 @@ namespace EventsApp.MVC.Controllers
 {
     public class AuthController : Controller
     {
-        IEventUnitOfWork eventUoW;
+        private IEventUnitOfWork eventUoW;
+        private IAuthenticationManager AuthenticationManager { get { return HttpContext.GetOwinContext().Authentication; } }
 
         // GET: Auth
         public AuthController(IEventUnitOfWork eventUoW)
         {
-            UserManager = new UserManager<AppUser>(new UserStore<AppUser>(new EventContext()));
-            this.eventUoW = eventUoW;       
-
+            this.eventUoW = eventUoW;
         }
-
-        public UserManager<AppUser> UserManager { get; private set; }
 
         [AllowAnonymous]
         public ActionResult LogIn(string returnUrl)
@@ -43,7 +40,7 @@ namespace EventsApp.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindAsync(model.LoginUserViewModel.UserName, model.LoginUserViewModel.Password);
+                var user = await eventUoW.Users.UserManager.FindAsync(model.LoginUserViewModel.UserName, model.LoginUserViewModel.Password);
                 if (user != null)
                 {
                     await SignInAsync(user, model.LoginUserViewModel.RememberMe);
@@ -81,7 +78,7 @@ namespace EventsApp.MVC.Controllers
             if (ModelState.IsValid)
             {
                 var user = new AppUser() { UserName = model.RegisterUserViewModel.UserName };
-                var result = await UserManager.CreateAsync(user, model.RegisterUserViewModel.Password);
+                var result = await eventUoW.Users.UserManager.CreateAsync(user, model.RegisterUserViewModel.Password);
                 if (result.Succeeded)
                 {
                     await SignInAsync(user, isPersistent: false);
@@ -99,7 +96,7 @@ namespace EventsApp.MVC.Controllers
         private async Task SignInAsync(AppUser user, bool isPersistent)
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-            var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+            var identity = await eventUoW.Users.UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
             AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
         }
 
@@ -130,7 +127,7 @@ namespace EventsApp.MVC.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.ManageUserViewModel.OldPassword, model.ManageUserViewModel.NewPassword);
+                    IdentityResult result = await eventUoW.Users.UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.ManageUserViewModel.OldPassword, model.ManageUserViewModel.NewPassword);
                     if (result.Succeeded)
                     {
                         return RedirectToAction("Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
@@ -152,7 +149,7 @@ namespace EventsApp.MVC.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    IdentityResult result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.ManageUserViewModel.NewPassword);
+                    IdentityResult result = await eventUoW.Users.UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.ManageUserViewModel.NewPassword);
                     if (result.Succeeded)
                     {
                         return RedirectToAction("Manage", new { Message = ManageMessageId.SetPasswordSuccess });
@@ -189,17 +186,9 @@ namespace EventsApp.MVC.Controllers
             }
         }
 
-        private IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
-        }
-
         private bool HasPassword()
         {
-            var user = UserManager.FindById(User.Identity.GetUserId());
+            var user = eventUoW.Users.UserManager.FindById(User.Identity.GetUserId());
             if (user != null)
             {
                 return user.PasswordHash != null;
@@ -224,7 +213,7 @@ namespace EventsApp.MVC.Controllers
                 return RedirectToAction("Login");
             }            
 
-            var signInManager = new SignInManager<AppUser, string>(UserManager, HttpContext.GetOwinContext().Authentication);
+            var signInManager = new SignInManager<AppUser, string>(eventUoW.Users.UserManager, HttpContext.GetOwinContext().Authentication);
 
             var result = signInManager.ExternalSignIn(loginInfo, false);           
 
@@ -238,8 +227,8 @@ namespace EventsApp.MVC.Controllers
                 //    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
                 case SignInStatus.Failure:
                     var user = new AppUser { UserName = loginInfo.DefaultUserName };
-                    UserManager.Create(user);
-                    UserManager.AddLogin(user.Id, loginInfo.Login);
+                    eventUoW.Users.UserManager.Create(user);
+                    eventUoW.Users.UserManager.AddLogin(user.Id, loginInfo.Login);
                     signInManager.ExternalSignIn(loginInfo, false);
                     return RedirectToAction("ConnectAccount");
                 default:
@@ -271,27 +260,25 @@ namespace EventsApp.MVC.Controllers
                 return View("ConnectAccount", model);
             }
 
-            AppUser existingUser = await UserManager.FindAsync(model.ConnectExistingAccountViewModel.UserName, model.ConnectExistingAccountViewModel.Password);
+            AppUser existingUser = await eventUoW.Users.UserManager.FindAsync(model.ConnectExistingAccountViewModel.UserName, model.ConnectExistingAccountViewModel.Password);
             if (existingUser == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
 
-            AppUser socialUser = UserManager.FindById(User.Identity.GetUserId());
+            AppUser socialUser = eventUoW.Users.UserManager.FindById(User.Identity.GetUserId());
             if (socialUser == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
 
-            IList<UserLoginInfo> logins = await UserManager.GetLoginsAsync(socialUser.Id);
+            IList<UserLoginInfo> logins = await eventUoW.Users.UserManager.GetLoginsAsync(socialUser.Id);
             if (logins.Count > 1)
             {
                 throw new InvalidOperationException("A social account was found to have more than one login.");
             }
 
-            // Migrate the invites by the social user. Make sure to remove existing invites between the two users.
-            eventUoW.Invites.UninviteUserFromAllUserEvents(existingUser, socialUser);
-            eventUoW.Invites.UninviteUserFromAllUserEvents(socialUser, existingUser);
+            // Migrate the invites by the social user. Ignore invites to events hosted by the existingUser, let them be destroyed with the socialUser.
             eventUoW.Invites.TransferInviteOwnership(socialUser, existingUser);
 
             // Migrate the created events by the social user.
@@ -299,11 +286,11 @@ namespace EventsApp.MVC.Controllers
 
             // Remove the dedicated social account.
             AuthenticationManager.SignOut();
-            UserManager.Delete(socialUser);
+            eventUoW.Users.UserManager.Delete(socialUser);
             eventUoW.Save();
 
             // Add this social login to the existing user.
-            IdentityResult result = await UserManager.AddLoginAsync(existingUser.Id, logins[0]);
+            IdentityResult result = await eventUoW.Users.UserManager.AddLoginAsync(existingUser.Id, logins[0]);
             if (!result.Succeeded)
             {
                 throw new Exception("Failed to connect " + logins[0].LoginProvider + " login to existing user.");
@@ -372,7 +359,7 @@ namespace EventsApp.MVC.Controllers
         [ChildActionOnly]
         public ActionResult RemoveAccountList()
         {
-            var linkedAccounts = UserManager.GetLogins(User.Identity.GetUserId());
+            var linkedAccounts = eventUoW.Users.UserManager.GetLogins(User.Identity.GetUserId());
             ViewBag.ShowRemoveButton = HasPassword() || linkedAccounts.Count > 1;
             return (ActionResult)PartialView("_RemoveAccountPartial", linkedAccounts);
         }

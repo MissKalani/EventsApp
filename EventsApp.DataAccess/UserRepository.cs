@@ -12,22 +12,22 @@ namespace EventsApp.DataAccess
     public class UserRepository : IUserRepository
     {
         private EventContext context;
+        public UserManager<AppUser, string> UserManager { get; private set; }
 
-        public UserRepository(EventContext context)
+        public UserRepository(EventContext context, UserManager<AppUser, string> userManager)
         {
             this.context = context;
+            UserManager = userManager;
         }
 
         public AppUser GetUserById(string userId)
         {
-            return context.Users.Find(userId);
+            return UserManager.FindById(userId);
         }
         
-
         public AppUser GetUserByUsername(string username)
         {
-            var userDetails = context.Users.Include(e => e.Events).Where(u => u.UserName == username);
-            return userDetails.SingleOrDefault();
+            return context.Users.Include(e => e.Events).Where(u => u.UserName == username).SingleOrDefault();
         }
 
         public List<AppUser> SearchForUser(string usernameSubstring)
@@ -37,7 +37,7 @@ namespace EventsApp.DataAccess
 
         public void RemoveAccount(AppUser user)
         {
-            context.Users.Remove(user);
+            UserManager.Delete(user);
         }
     }
 }
