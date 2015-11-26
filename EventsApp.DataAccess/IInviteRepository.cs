@@ -9,7 +9,15 @@ namespace EventsApp.DataAccess
 {
     public interface IInviteRepository : IRepository<Invite>
     {
+        /// <summary>
+        /// Returns true if the user is invited to the event.
+        /// </summary>
         bool IsInvited(Event e, AppUser user);
+
+        /// <summary>
+        /// Returns an invite entity (no graph) given an event and a user. Returns null if the user is not invited to the event.
+        /// </summary>
+        Invite GetInviteByEventAndUser(Event e, AppUser user);
 
         /// <summary>
         /// Get everyone that is invited to this event. Includes the AppUser node. Does not include the host.
