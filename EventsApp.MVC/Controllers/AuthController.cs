@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
@@ -20,7 +21,7 @@ namespace EventsApp.MVC.Controllers
         public AuthController(IEventUnitOfWork eventUoW)
         {
             UserManager = new UserManager<AppUser>(new UserStore<AppUser>(new EventContext()));
-            this.eventUoW = eventUoW;       
+            this.eventUoW = eventUoW;
 
         }
 
@@ -205,6 +206,15 @@ namespace EventsApp.MVC.Controllers
             return false;
         }
 
+        private bool HasPassword(AppUser user)
+        {
+            if(user != null)
+            {
+                return user.PasswordHash != null;
+            }
+            return false;
+        }
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -220,26 +230,40 @@ namespace EventsApp.MVC.Controllers
             if (loginInfo == null)
             {
                 return RedirectToAction("Login");
-            }            
+            }
 
             var signInManager = new SignInManager<AppUser, string>(UserManager, HttpContext.GetOwinContext().Authentication);
 
-            var result = signInManager.ExternalSignIn(loginInfo, false);           
+            var result = await signInManager.ExternalSignInAsync(loginInfo, false);
 
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToAction("ConnectAccount");                    
+                    {
+                        var user = UserManager.Find(loginInfo.Login);
+                        if (HasPassword(user))
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else
+                        {
+                            return RedirectToAction("ConnectAccount");
+                        }
+                    }
+
                 //case SignInStatus.LockedOut:
                 //    return RedirectToAction("Index","Home");
                 //case SignInStatus.RequiresVerification:
                 //    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
                 case SignInStatus.Failure:
-                    var user = new AppUser { UserName = loginInfo.DefaultUserName };
-                    UserManager.Create(user);
-                    UserManager.AddLogin(user.Id, loginInfo.Login);
-                    signInManager.ExternalSignIn(loginInfo, false);
-                    return RedirectToAction("ConnectAccount");
+                    {
+                        var user = new AppUser { UserName = loginInfo.DefaultUserName };
+                        UserManager.Create(user);
+                        UserManager.AddLogin(user.Id, loginInfo.Login);
+                        signInManager.ExternalSignIn(loginInfo, false);
+                        return RedirectToAction("ConnectAccount");
+                    }
+
                 default:
                     return RedirectToAction("Register", "Auth");
             }
@@ -249,14 +273,36 @@ namespace EventsApp.MVC.Controllers
         [Authorize]
         public ActionResult ConnectAccount()
         {
+            User.Identity.GetUserId();
             return View();
         }
 
         [HttpPost]
         [Authorize]
-        public ActionResult ConnectNewAccount(HellViewModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ConnectNewAccount(HellViewModel model)
         {
-            return View("ConnectAccount", model);
+            if (ModelState.IsValid)
+            {
+                var socialUser = eventUoW.Users.GetUserById(User.Identity.GetUserId());
+                IList<UserLoginInfo> loginInfo = UserManager.GetLogins(socialUser.Id);
+
+                var newUser = new AppUser() { UserName = model.ConnectNewAccountViewModel.UserName };
+                var result = await UserManager.CreateAsync(newUser, model.ConnectNewAccountViewModel.Password);
+                eventUoW.Users.RemoveAccount(socialUser);
+                eventUoW.Save();
+                UserManager.AddLogin(newUser.Id, loginInfo[0]);
+                if (result.Succeeded)
+                {
+                    await SignInAsync(newUser, isPersistent: false);
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    AddErrors(result);
+                }
+            }
+            return View(model);
         }
 
         [HttpPost]
@@ -266,7 +312,7 @@ namespace EventsApp.MVC.Controllers
             return View("ConnectAccount", model);
         }
 
-        
+
         public ActionResult RemoveAccount()
         {
             return View();

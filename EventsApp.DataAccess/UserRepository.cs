@@ -39,5 +39,11 @@ namespace EventsApp.DataAccess
         {
             context.Entry(user).State = EntityState.Deleted;            
         }
+
+        //public AppUser GetUserByProviderId()
+        //{
+        //    context.Entry.
+        //    return null;
+        //}
     }
 }

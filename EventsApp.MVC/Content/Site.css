@@ -46,7 +46,7 @@ button.navbar-toggle {
         color: #C6491A;
         background-color: #E6E3BB;
         /*font-size: 20px;*/
-}
+    }
 
 /*------------- Panels -----------------------*/
 
@@ -166,34 +166,34 @@ div#dataTable_filter.dataTables_filter {
     margin-top: 5px;
 }
 
-.event-list-details a.btn {
-    background-color: #D3741C;
-    border: none;
-    color: #FDFFE3;
-}
-
-.event-list-details a.btn:active {
+    .event-list-details a.btn {
         background-color: #D3741C;
+        border: none;
+        color: #FDFFE3;
     }
 
-.event-list-details .address {
-    font-family: "Courier New";
-    font-size: 0.7em;
-    color: gray;
-    margin-top: 5px;
-}
+        .event-list-details a.btn:active {
+            background-color: #D3741C;
+        }
 
-.event-list-details .datetime {
-    font-family: "Courier New";
-    font-size: 0.7em;
-    font-weight: bolder;
-    color: gray;
-    margin-top: 5px;
-}
+    .event-list-details .address {
+        font-family: "Courier New";
+        font-size: 0.7em;
+        color: gray;
+        margin-top: 5px;
+    }
 
-.event-list-details a {
-    margin: 10px 5px 5px;
-}
+    .event-list-details .datetime {
+        font-family: "Courier New";
+        font-size: 0.7em;
+        font-weight: bolder;
+        color: gray;
+        margin-top: 5px;
+    }
+
+    .event-list-details a {
+        margin: 10px 5px 5px;
+    }
 
 /* ------------- Details Page Styling ------------- */
 .details-page-brief {
@@ -267,4 +267,17 @@ div#dataTable_filter.dataTables_filter {
     -webkit-border-radius: 0px;
     -moz-border-radius: 0px;
     background-image: none;
+}
+
+/* ------------- Login Page Styling ------------- */
+#loginForm {
+    width: 500px;
+}
+
+.vertical-line {
+    border-left: thick solid #ddd;
+    height: 150px;
+    position: relative;
+    right: 170px;
+    text-indent: 170px;
 }

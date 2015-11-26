@@ -46,7 +46,10 @@
                 </p>
             }
         </section>
-        <div>
+    </div>    
+    <div class="col-md-4">
+        <h4> Use a social account to log in.</h4>
+        <section class="vertical-line" id="socialLoginSection">
             @{
                 var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
                 using (Html.BeginForm("ExternalLogin", "Auth", new { ReturnUrl = Url.Action("Index", "Home") }))
@@ -62,9 +65,8 @@
                     </div>
                 }
             }
-        </div>
-
+        </section>
     </div>
-</div> <!--endrow-->
+</div><!--endrow-->
 
 @section Scripts{}
