@@ -37,7 +37,7 @@ namespace EventsApp.DataAccess
 
         public void RemoveAccount(AppUser user)
         {
-            context.Entry(user).State = EntityState.Deleted;            
+            context.Users.Remove(user);
         }
     }
 }

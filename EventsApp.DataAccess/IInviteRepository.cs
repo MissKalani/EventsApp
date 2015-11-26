@@ -39,5 +39,10 @@ namespace EventsApp.DataAccess
         /// Mark all current invites as seen by the user (will influence what is returned by GetUnseenPendingInvitesCount).
         /// </summary>
         void MarkAllInvitesAsSeen(AppUser user);
+
+        /// <summary>
+        /// This will make all invites previousUser has to events belong to newUser.
+        /// </summary>
+        void TransferInviteOwnership(AppUser previousUser, AppUser newUser);
     }
 }

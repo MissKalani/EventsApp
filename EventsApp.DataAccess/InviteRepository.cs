@@ -56,5 +56,10 @@ namespace EventsApp.DataAccess
                 invite.Seen = true;
             }
         }
+
+        public void TransferInviteOwnership(AppUser previousUser, AppUser newUser)
+        {
+            context.Database.ExecuteSqlCommand("UPDATE Invites SET AppUserId = {0} WHERE AppUserId = {1}", newUser.Id, previousUser.Id);
+        }
     }
 }
