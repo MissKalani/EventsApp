@@ -230,7 +230,7 @@ namespace EventsApp.MVC.Controllers
             {
                 case SignInStatus.Success:
                     {
-                        var user = UserManager.Find(loginInfo.Login);
+                        var user = eventUoW.Users.UserManager.Find(loginInfo.Login);
                         if (HasPassword(user))
                         {
                             return RedirectToAction("Index", "Home");
@@ -275,13 +275,13 @@ namespace EventsApp.MVC.Controllers
             if (ModelState.IsValid)
             {
                 var socialUser = eventUoW.Users.GetUserById(User.Identity.GetUserId());
-                IList<UserLoginInfo> loginInfo = UserManager.GetLogins(socialUser.Id);
+                IList<UserLoginInfo> loginInfo = eventUoW.Users.UserManager.GetLogins(socialUser.Id);
 
                 var newUser = new AppUser() { UserName = model.ConnectNewAccountViewModel.UserName };
-                var result = await UserManager.CreateAsync(newUser, model.ConnectNewAccountViewModel.Password);
+                var result = await eventUoW.Users.UserManager.CreateAsync(newUser, model.ConnectNewAccountViewModel.Password);
                 eventUoW.Users.RemoveAccount(socialUser);
                 eventUoW.Save();
-                UserManager.AddLogin(newUser.Id, loginInfo[0]);
+                eventUoW.Users.UserManager.AddLogin(newUser.Id, loginInfo[0]);
                 if (result.Succeeded)
                 {
                     await SignInAsync(newUser, isPersistent: false);
