@@ -41,7 +41,9 @@ namespace EventsApp.DataAccess
         void MarkAllInvitesAsSeen(AppUser user);
 
         /// <summary>
-        /// This will make all invites previousUser has to events belong to newUser.
+        /// This will make all invites previousUser has to events belong to newUser. This creates new
+        /// invites and removes the old ones rather than updating the owner (due to primary key issues).
+        /// This will not transfer invites to events hosted by newUser.
         /// </summary>
         void TransferInviteOwnership(AppUser previousUser, AppUser newUser);
     }

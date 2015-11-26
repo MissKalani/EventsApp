@@ -1,4 +1,5 @@
 ﻿using EventsApp.DataModels;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace EventsApp.DataAccess
     /// </summary>
     public interface IUserRepository
     {
+        UserManager<AppUser, string> UserManager { get; }
+
         AppUser GetUserById(string userId);
 
         AppUser GetUserByUsername(string username);
