@@ -18,6 +18,8 @@ namespace EventsApp.MVC.ViewModels
         public UserDetailsViewModel UserDetailsViewModel { get; set; }
         public ConnectExistingAccountViewModel ConnectExistingAccountViewModel { get; set; }
         public ConnectNewAccountViewModel ConnectNewAccountViewModel { get; set; }
+        public ExternalLoginListViewModel ExternalLoginListViewModel { get; set; }
+        public ManageLoginsViewModel ManageLoginsViewModel { get; set; }
         //public ViewEvent ViewEvent { get; set; }
         //public List<Event> Events { get; set; }
         public Event Event { get; set; }

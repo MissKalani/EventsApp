@@ -10,18 +10,24 @@
 <p class="text-success">@ViewBag.StatusMessage</p>
 
 <p>You're logged in as <strong>@User.Identity.GetUserName()</strong>.</p>
-        <div class="row">
-            <div class="col-md-12">
-                @if (ViewBag.HasLocalPassword)
-                {
-                    @Html.Partial("_ChangePasswordPartial")
-                }
-                else
-                {
-                    <p>
-                        You are currently logged in with your @ViewBag.ExternalProvider account. Consider @Html.ActionLink("connecting", "ConnectAccount", "Auth") this account to a local account
-                        to be able to login using other accounts and choose a user name of your own liking.
-                    </p>
-                }           
-            </div>
+<div class="row">
+    <div class="col-md-12">
+        @if (ViewBag.HasLocalPassword)
+        {
+            @Html.Partial("_ChangePasswordPartial")
+        }
+        else
+        {
+            <p>
+                You are currently logged in with your @ViewBag.ExternalProvider account. Consider @Html.ActionLink("connecting", "ConnectAccount", "Auth") this account to a local account
+                to be able to login using other accounts and choose a user name of your own liking.
+            </p>
+        }
     </div>
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Partial("_ExternalLoginsListPartial")
+        </div>
+
+    </div>
+</div>

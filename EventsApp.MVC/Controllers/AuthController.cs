@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
@@ -105,10 +106,10 @@ namespace EventsApp.MVC.Controllers
         [Authorize]
         public ActionResult Manage(ManageMessageId? message)
         {
+            IList<UserLoginInfo> loginInfo = eventUoW.Users.UserManager.GetLogins(User.Identity.GetUserId());
             bool hasLocalPassword = HasPassword();
             if (!hasLocalPassword)
             {
-                IList<UserLoginInfo> loginInfo = eventUoW.Users.UserManager.GetLogins(User.Identity.GetUserId());
                 if (loginInfo.Count != 1)
                 {
                     throw new InvalidOperationException("Social account with " + loginInfo.Count + " providers.");
@@ -124,8 +125,15 @@ namespace EventsApp.MVC.Controllers
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : "";
             ViewBag.HasLocalPassword = hasLocalPassword;
-            ViewBag.ReturnUrl = Url.Action("Manage");
-            return View();
+
+            return View(new HellViewModel
+            {
+                ManageLoginsViewModel = (new ManageLoginsViewModel
+                {
+                    ActiveLogins = loginInfo
+
+                })
+            });
         }
 
         // POST: /Auth/Manage
@@ -211,7 +219,7 @@ namespace EventsApp.MVC.Controllers
 
         private bool HasPassword(AppUser user)
         {
-            if(user != null)
+            if (user != null)
             {
                 return user.PasswordHash != null;
             }
@@ -233,7 +241,7 @@ namespace EventsApp.MVC.Controllers
             if (loginInfo == null)
             {
                 return RedirectToAction("Login");
-            }            
+            }
 
             var signInManager = new SignInManager<AppUser, string>(eventUoW.Users.UserManager, HttpContext.GetOwinContext().Authentication);
 
@@ -250,7 +258,7 @@ namespace EventsApp.MVC.Controllers
                         }
                         else
                         {
-                    return RedirectToAction("ConnectAccount");                    
+                            return RedirectToAction("ConnectAccount");
                         }
                     }
 
@@ -260,11 +268,11 @@ namespace EventsApp.MVC.Controllers
                 //    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
                 case SignInStatus.Failure:
                     {
-                    var user = new AppUser { UserName = loginInfo.DefaultUserName };
-                    eventUoW.Users.UserManager.Create(user);
-                    eventUoW.Users.UserManager.AddLogin(user.Id, loginInfo.Login);
-                    signInManager.ExternalSignIn(loginInfo, false);
-                    return RedirectToAction("ConnectAccount");
+                        var user = new AppUser { UserName = loginInfo.DefaultUserName };
+                        eventUoW.Users.UserManager.Create(user);
+                        eventUoW.Users.UserManager.AddLogin(user.Id, loginInfo.Login);
+                        signInManager.ExternalSignIn(loginInfo, false);
+                        return RedirectToAction("ConnectAccount");
                     }
 
                 default:
@@ -381,7 +389,7 @@ namespace EventsApp.MVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        
+
         public ActionResult RemoveAccount()
         {
             return View();
