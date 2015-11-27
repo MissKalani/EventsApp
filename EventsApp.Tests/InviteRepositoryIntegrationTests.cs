@@ -527,5 +527,72 @@ namespace EventsApp.Tests
                 context.Invites.Where(t => t.AppUserId == user3.Id).ToList().Should().HaveCount(2);
             }
         }
+
+        [TestMethod]
+        public void TransferInviteOwnershipShouldNotTransferInvitesToTheNewUsersOwnEvents()
+        {
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
+                var user1 = context.Users.Single(t => t.UserName == "TestUser");
+                var user2 = context.Users.Single(t => t.UserName == "TestUser2");
+                var user3 = context.Users.Single(t => t.UserName == "TestUser3");
+
+                Event e1 = new Event();
+                e1.Brief = "User 1 Event 1";
+                e1.Visibility = EventVisibility.Private;
+                e1.ModificationState = ModificationState.Added;
+                e1.AppUser = user1;
+                eventUoW.Events.Attach(e1);
+
+                Event e2 = new Event();
+                e2.Brief = "User 3 Event 1";
+                e2.Visibility = EventVisibility.Private;
+                e2.ModificationState = ModificationState.Added;
+                e2.AppUser = user3;
+                eventUoW.Events.Attach(e2);
+
+                Invite i1 = new Invite();
+                i1.AppUser = user2;
+                i1.Event = e1;
+                i1.Status = InviteStatus.Pending;
+                i1.ModificationState = ModificationState.Added;
+                eventUoW.Invites.Attach(i1);
+
+                Invite i2 = new Invite();
+                i2.AppUser = user2;
+                i2.Event = e2;
+                i2.Status = InviteStatus.Pending;
+                i2.ModificationState = ModificationState.Added;
+                eventUoW.Invites.Attach(i2);
+
+                eventUoW.Save();
+            }
+
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
+                var user1 = context.Users.Single(t => t.UserName == "TestUser");
+                var user2 = context.Users.Single(t => t.UserName == "TestUser2");
+                var user3 = context.Users.Single(t => t.UserName == "TestUser3");
+
+                eventUoW.Invites.TransferInviteOwnership(user2, user3);
+                eventUoW.Save();
+            }
+
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                var userManager = new UserManager<AppUser>(new UserStore<AppUser>(context));
+                var user1 = context.Users.Single(t => t.UserName == "TestUser");
+                var user2 = context.Users.Single(t => t.UserName == "TestUser2");
+                var user3 = context.Users.Single(t => t.UserName == "TestUser3");
+
+                context.Invites.Where(t => t.AppUserId == user2.Id).ToList().Should().HaveCount(1);
+                context.Invites.Where(t => t.AppUserId == user3.Id).ToList().Should().HaveCount(1);
+            }
+        }
     }
 }

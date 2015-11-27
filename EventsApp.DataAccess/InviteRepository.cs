@@ -59,16 +59,15 @@ namespace EventsApp.DataAccess
 
         public void TransferInviteOwnership(AppUser previousUser, AppUser newUser)
         {
-            var invites = context.Invites.Where(t => t.AppUserId == previousUser.Id).ToList();
+            var invites = context.Invites.Include(t => t.Event).Where(t => t.AppUserId == previousUser.Id).ToList();
             foreach (var invite in invites)
             {
-                if (invite.AppUserId == newUser.Id)
+                if (invite.Event.OwnerId != newUser.Id)
                 {
                     context.Invites.Add(new Invite { AppUserId = newUser.Id, EventId = invite.EventId, Status = invite.Status, Seen = invite.Seen, ModificationState = invite.ModificationState });
+                    context.Invites.Remove(invite);
                 }
             }
-
-            context.Invites.RemoveRange(invites);
         }
     }
 }
