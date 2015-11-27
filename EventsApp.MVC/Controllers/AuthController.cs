@@ -326,6 +326,11 @@ namespace EventsApp.MVC.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
 
+            if (!HasPassword(existingUser))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+
             AppUser socialUser = eventUoW.Users.UserManager.FindById(User.Identity.GetUserId());
             if (socialUser == null)
             {
