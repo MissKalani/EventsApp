@@ -263,7 +263,11 @@ namespace EventsApp.MVC.Controllers
         [Authorize]
         public ActionResult ConnectAccount()
         {
-            User.Identity.GetUserId();
+            if (HasPassword())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+
             return View();
         }
 
@@ -272,6 +276,11 @@ namespace EventsApp.MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ConnectNewAccount(HellViewModel model)
         {
+            if (HasPassword())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+
             if (ModelState.IsValid)
             {
                 var socialUser = eventUoW.Users.GetUserById(User.Identity.GetUserId());
@@ -288,10 +297,11 @@ namespace EventsApp.MVC.Controllers
                     return RedirectToAction("Index", "Home");
                 }
                 else
-        {
+                {
                     AddErrors(result);
                 }
             }
+
             return View(model);
         }
 
@@ -299,11 +309,16 @@ namespace EventsApp.MVC.Controllers
         [Authorize]
         public async Task<ActionResult> ConnectExistingAccount(HellViewModel model)
         {
+            if (HasPassword())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Invalid username or password.");
-            return View("ConnectAccount", model);
-        }
+                return View("ConnectAccount", model);
+            }
 
             AppUser existingUser = await eventUoW.Users.UserManager.FindAsync(model.ConnectExistingAccountViewModel.UserName, model.ConnectExistingAccountViewModel.Password);
             if (existingUser == null)
