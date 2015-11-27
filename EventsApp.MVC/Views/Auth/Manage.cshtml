@@ -18,7 +18,10 @@
                 }
                 else
                 {
-                    @Html.Partial("_SetPasswordPartial")
+                    <p>
+                        You are currently logged in with your @ViewBag.ExternalProvider account. Consider @Html.ActionLink("connecting", "ConnectAccount", "Auth") this account to a local account
+                        to be able to login using other accounts and choose a user name of your own liking.
+                    </p>
                 }           
             </div>
     </div>

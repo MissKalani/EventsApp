@@ -102,15 +102,28 @@ namespace EventsApp.MVC.Controllers
 
 
         // GET: /Auth/Manage
+        [Authorize]
         public ActionResult Manage(ManageMessageId? message)
         {
+            bool hasLocalPassword = HasPassword();
+            if (!hasLocalPassword)
+            {
+                IList<UserLoginInfo> loginInfo = eventUoW.Users.UserManager.GetLogins(User.Identity.GetUserId());
+                if (loginInfo.Count != 1)
+                {
+                    throw new InvalidOperationException("Social account with " + loginInfo.Count + " providers.");
+                }
+
+                ViewBag.ExternalProvider = loginInfo[0].LoginProvider;
+            }
+
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
                 : message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : "";
-            ViewBag.HasLocalPassword = HasPassword();
+            ViewBag.HasLocalPassword = hasLocalPassword;
             ViewBag.ReturnUrl = Url.Action("Manage");
             return View();
         }
@@ -324,6 +337,11 @@ namespace EventsApp.MVC.Controllers
             if (existingUser == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            if (!HasPassword(existingUser))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
 
             AppUser socialUser = eventUoW.Users.UserManager.FindById(User.Identity.GetUserId());
