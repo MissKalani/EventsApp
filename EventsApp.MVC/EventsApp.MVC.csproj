@@ -375,7 +375,6 @@
     <Content Include="Views\Auth\_ChangePasswordPartial.cshtml" />
     <Content Include="Views\Auth\RemoveAccount.cshtml" />
     <Content Include="Views\Auth\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Auth\_SetPasswordPartial.cshtml" />
     <Content Include="Views\Auth\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Auth\ExternalLoginFailure.cshtml" />
     <Content Include="Views\Event\Details.cshtml" />
