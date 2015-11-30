@@ -13,6 +13,14 @@ body {
     padding-right: 15px;
 }
 
+.btn-default{
+   background-color: #D3741C;
+}
+
+a:focus, a:hover{
+    color: #D3741C;
+}
+
 
 /*-------------Navbar-----------------------*/
 
@@ -104,7 +112,16 @@ div#dataTable_length.dataTables_length {
 div#dataTable_filter.dataTables_filter {
     position: relative;
     float: right;
-    bottom: 5px;
+    bottom: 5px;   
+}
+
+div#dataTable_filter.dataTables_filter input{
+    margin-left:20px;
+    border-radius: 5px;
+}
+
+a.paginate_button.current{
+    visibility:hidden;
 }
 
 #acceptBtn {
@@ -280,4 +297,8 @@ div#dataTable_filter.dataTables_filter {
     position: relative;
     right: 170px;
     text-indent: 170px;
+}
+/* ------------- Manage Account Styling ------------- */
+#passInput {
+    width: 35%;
 }

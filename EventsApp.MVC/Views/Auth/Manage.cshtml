@@ -5,8 +5,7 @@
 }
 
 <h2>@ViewBag.Title.</h2>
-@Html.ActionLink("Remove Account", "RemoveAccount", null, new { @class = "btn btn-danger" })
-<br />
+
 <p class="text-success">@ViewBag.StatusMessage</p>
 
 <p>You're logged in as <strong>@User.Identity.GetUserName()</strong>.</p>
@@ -26,7 +25,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            @Html.Partial("_ExternalLoginsListPartial")
+           @Html.ActionLink("Remove Account", "RemoveAccount", null, new { @class = "btn btn-danger" })
         </div>
 
     </div>
