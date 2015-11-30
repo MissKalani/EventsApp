@@ -78,16 +78,13 @@
             var addressInput = $('#create-event-address');
             addressInput.focusin(function () {
                 isAddressFocused = true;
-                console.log('focusin address');
             });
 
             addressInput.focusout(function () {
                 isAddressFocused = false;
-                console.log('focusout address');
             });
 
             $('#create-event-form').submit(function (e) {
-                console.log('address focused: ' + isAddressFocused);
                 if (isAddressFocused) {
                     e.preventDefault();
                 }

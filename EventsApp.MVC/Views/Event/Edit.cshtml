@@ -44,7 +44,7 @@
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(t => t.EditViewModel.Address, new { @class = "control-label" })
-                        @Html.TextBoxFor(t => t.EditViewModel.Address, new { @class = "form-control", id = "create-event-address", placeholder = "Search for an address." })
+                        @Html.TextBoxFor(t => t.EditViewModel.Address, new { @class = "form-control", id = "edit-event-address", placeholder = "Search for an address." })
                         @Html.ValidationMessageFor(t => t.EditViewModel.Address, null, new { @class = "text-danger" })
                     </div>
                     <div id="map">
@@ -79,8 +79,23 @@
             $('#create-event-latitude').val(initialCenter.lat);
             $('#create-event-longitude').val(initialCenter.lng);
 
-            var addressInput = $('#create-event-address')[0];
-            var searchBox = new google.maps.places.SearchBox(addressInput);
+            var isAddressFocused = false;
+            var addressInput = $('#edit-event-address');
+            addressInput.focusin(function () {
+                isAddressFocused = true;
+            });
+
+            addressInput.focusout(function () {
+                isAddressFocused = false;
+            });
+
+            $('#edit-event-form').submit(function (e) {
+                if (isAddressFocused) {
+                    e.preventDefault();
+                }
+            });
+
+            var searchBox = new google.maps.places.SearchBox(addressInput[0]);
 
             searchBox.addListener('places_changed', function () {
                 var places = searchBox.getPlaces();
