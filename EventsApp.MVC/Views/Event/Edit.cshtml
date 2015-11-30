@@ -10,7 +10,7 @@
     <div class="panel-body">
         <div class="row">
             <div class="col-md-12">
-                @using (Html.BeginForm())
+                @using (Html.BeginForm("Edit", "Event", new { }, FormMethod.Post, new { role = "form", id = "edit-event-form" }))
                 {
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     @Html.HiddenFor(m => m.EditViewModel.EventId)
@@ -50,9 +50,7 @@
                     <div id="map">
                     </div>
                     <div class="form-group">
-                        <div class="span">
-                            <input   id="btnEditSubmit" type="submit" value="Save" class="btn btn-default" />
-                        </div>
+                        <button type="submit" class="btn btn-default">Edit</button>
                     </div>
                 }
             </div>
