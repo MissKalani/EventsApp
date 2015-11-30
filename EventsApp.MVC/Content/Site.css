@@ -13,6 +13,28 @@ body {
     padding-right: 15px;
 }
 
+a {
+    color: #444;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #C6491A;
+    background-color: #E6E3BB;
+    text-decoration: none;
+}
+/*-------------Home page styling------------*/
+.create-event-icon {
+    color: #00aa00;
+}
+
+.create-event-link {
+    font-size: 1.5em;
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 900;
+}
+
 
 /*-------------Navbar-----------------------*/
 

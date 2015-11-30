@@ -11,7 +11,16 @@
         <div class="row">
            
             <div id="eventList" class="col-md-3">
-                @Html.ActionLink("Create Event", "Create", "Event", new { }, new { @class = "btn btn-block textlink" })
+                <div>
+                    <a href="@Url.Action("Create", "Event")" class="create-event-link">
+                        <p>
+                            <span class="glyphicon glyphicon-plus create-event-icon"></span>
+                            Create Event
+                        </p>
+                    </a>
+                </div>
+                
+                
                 
             </div>
             <div id="mapView" class="col-md-9">
