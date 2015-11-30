@@ -99,9 +99,9 @@ namespace EventsApp.MVC.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
 
-            // Remove the invite.
-            // TODO: Possibly place this in another state, where the user can change their mind?
-            invite.ModificationState = ModificationState.Deleted;
+            // Mark the invite as declined.
+            invite.Status = InviteStatus.Declined;
+            invite.ModificationState = ModificationState.Modified;
             eventUoW.Invites.Attach(invite);
             eventUoW.Save();
 

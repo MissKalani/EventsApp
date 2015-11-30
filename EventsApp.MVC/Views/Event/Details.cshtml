@@ -26,13 +26,17 @@
                             {
                                 <tr>
                                     <td>@invite.AppUser.UserName</td>
-                                    @if (@invite.Status == EventsApp.DataModels.InviteStatus.Accepted)
+                                    @if (invite.Status == EventsApp.DataModels.InviteStatus.Accepted)
                                     {
                                         <td class="text-success">Is coming</td>
                                     }
-                                    else
+                                    else if (invite.Status == EventsApp.DataModels.InviteStatus.Pending)
                                     {
                                         <td class="text-info">Has been invited</td>
+                                    }
+                                    else if (invite.Status == EventsApp.DataModels.InviteStatus.Declined)
+                                    {
+                                        <td class="text-danger">Can't make it</td>
                                     }
                                 </tr>
                             }
