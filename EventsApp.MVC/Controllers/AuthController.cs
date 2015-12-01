@@ -373,6 +373,9 @@ namespace EventsApp.MVC.Controllers
             // Migrate the invites by the social user. Ignore invites to events hosted by the existingUser, let them be destroyed with the socialUser.
             eventUoW.Invites.TransferInviteOwnership(socialUser, existingUser);
 
+            // Remove any invites for the existing user by the social user, since they will soon be invites to theirselves.
+            eventUoW.Invites.RemoveInvitesByHost(existingUser, socialUser);
+
             // Migrate the created events by the social user.
             eventUoW.Events.TransferEventOwnership(socialUser, existingUser);
 

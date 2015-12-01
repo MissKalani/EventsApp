@@ -69,5 +69,11 @@ namespace EventsApp.DataAccess
                 }
             }
         }
+
+        public void RemoveInvitesByHost(AppUser invited, AppUser host)
+        {
+            var invites = context.Invites.Include(t => t.Event).Where(t => t.AppUserId == invited.Id && t.Event.OwnerId == host.Id).ToList();
+            context.Invites.RemoveRange(invites);
+        }
     }
 }
