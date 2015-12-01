@@ -261,15 +261,24 @@ namespace EventsApp.MVC.Controllers
                             return RedirectToAction("ConnectAccount");
                         }
                     }
-
                 //case SignInStatus.LockedOut:
                 //    return RedirectToAction("Index","Home");
                 //case SignInStatus.RequiresVerification:
                 //    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
                 case SignInStatus.Failure:
                     {
-                        var user = new AppUser { UserName = loginInfo.DefaultUserName };
-                        eventUoW.Users.UserManager.Create(user);
+                        // Find a valid username. Creating an external user should never fail.
+                        var username = loginInfo.DefaultUserName;
+                        int usernameSuffix = 1;
+                        while (eventUoW.Users.GetUserByUsername(username) != null)
+                        {
+                            username = loginInfo.DefaultUserName + usernameSuffix.ToString();
+                            usernameSuffix++;
+                        }
+
+                        // Create a user and log in.
+                        var user = new AppUser { UserName = username };
+                        var userCreationResult = eventUoW.Users.UserManager.Create(user);
                         eventUoW.Users.UserManager.AddLogin(user.Id, loginInfo.Login);
                         signInManager.ExternalSignIn(loginInfo, false);
                         return RedirectToAction("ConnectAccount");
