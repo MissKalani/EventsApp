@@ -11,15 +11,12 @@ namespace EventsApp.MVC.Controllers
 {
     public class UserController : Controller
     {
-
         private IEventUnitOfWork eventUoW;
 
         public UserController(IEventUnitOfWork eventUoW)
         {
             this.eventUoW = eventUoW;
         }
-
-        public UserManager<AppUser> UserManager { get; private set; }
 
         // GET: User
         public ActionResult Details(string username)
@@ -28,7 +25,7 @@ namespace EventsApp.MVC.Controllers
             
             if (user != null)
             {
-                // Mark all invites as seen if we are going to view or own page (since we'll be seeing them soon).
+                // Mark all invites as seen if we are going to view our own page (since we'll be seeing them soon).
                 if (User.Identity.GetUserId() == user.Id)
                 {
                     eventUoW.Invites.MarkAllInvitesAsSeen(user);
