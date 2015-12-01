@@ -246,12 +246,11 @@ namespace EventsApp.MVC.Controllers
             var signInManager = new SignInManager<AppUser, string>(eventUoW.Users.UserManager, HttpContext.GetOwinContext().Authentication);
 
             var result = await signInManager.ExternalSignInAsync(loginInfo, false);
-
             switch (result)
             {
                 case SignInStatus.Success:
                     {
-                        var user = eventUoW.Users.UserManager.Find(loginInfo.Login);
+                        var user = await eventUoW.Users.UserManager.FindAsync(loginInfo.Login);
                         if (HasPassword(user))
                         {
                             return RedirectToAction("Index", "Home");
@@ -261,10 +260,6 @@ namespace EventsApp.MVC.Controllers
                             return RedirectToAction("ConnectAccount");
                         }
                     }
-                //case SignInStatus.LockedOut:
-                //    return RedirectToAction("Index","Home");
-                //case SignInStatus.RequiresVerification:
-                //    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
                 case SignInStatus.Failure:
                     {
                         // Find a valid username. Creating an external user should never fail.
@@ -278,12 +273,14 @@ namespace EventsApp.MVC.Controllers
 
                         // Create a user and log in.
                         var user = new AppUser { UserName = username };
-                        var userCreationResult = eventUoW.Users.UserManager.Create(user);
-                        eventUoW.Users.UserManager.AddLogin(user.Id, loginInfo.Login);
-                        signInManager.ExternalSignIn(loginInfo, false);
+                        var userCreationResult = await eventUoW.Users.UserManager.CreateAsync(user);
+                        await eventUoW.Users.UserManager.AddLoginAsync(user.Id, loginInfo.Login);
+                        await signInManager.ExternalSignInAsync(loginInfo, false);
                         return RedirectToAction("ConnectAccount");
                     }
 
+                case SignInStatus.LockedOut:
+                case SignInStatus.RequiresVerification:
                 default:
                     return RedirectToAction("Register", "Auth");
             }
