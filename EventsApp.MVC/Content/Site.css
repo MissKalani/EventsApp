@@ -303,3 +303,12 @@ div#dataTable_filter.dataTables_filter {
     right: 170px;
     text-indent: 170px;
 }
+
+/* ------------- Manage User Styling ------------ */
+table.table-no-border > tbody > tr > td {
+    border: none;
+}
+
+table.table-centered-vertical > tbody > tr > td {
+    vertical-align: middle; 
+}

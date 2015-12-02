@@ -122,6 +122,7 @@ namespace EventsApp.MVC.Controllers
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
                 : message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
+                : message == ManageMessageId.ExternalProviderRemoved ? "The login provider has been removed"
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : "";
             ViewBag.HasLocalPassword = hasLocalPassword;
@@ -398,6 +399,36 @@ namespace EventsApp.MVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [Authorize]
+        public ActionResult DisconnectExternalProvider(string provider)
+        {
+            if (!HasPassword())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+
+            AppUser user = eventUoW.Users.GetUserById(User.Identity.GetUserId());
+            if (user == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            var logins = eventUoW.Users.UserManager.GetLogins(user.Id);
+            var login = logins.Where(t => t.LoginProvider == provider).SingleOrDefault();
+            if (login == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            var result = eventUoW.Users.UserManager.RemoveLogin(user.Id, login);
+            if (!result.Succeeded)
+            {
+                throw new Exception("Failed to remove " + login.LoginProvider + " login from user.");
+            }
+
+            return RedirectToAction("Manage", "Auth", new { message = ManageMessageId.ExternalProviderRemoved });
+        }
+
 
         public ActionResult RemoveAccount()
         {
@@ -448,6 +479,7 @@ namespace EventsApp.MVC.Controllers
             ChangePasswordSuccess,
             SetPasswordSuccess,
             RemoveLoginSuccess,
+            ExternalProviderRemoved,
             Error
         }
 
