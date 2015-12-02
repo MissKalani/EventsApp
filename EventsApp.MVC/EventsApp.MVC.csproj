@@ -324,6 +324,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Scripts\event.js" />
     <Content Include="Content\images\Sorting icons.psd" />
+    <None Include="Properties\PublishProfiles\EventsApp.pubxml" />
     <None Include="Scripts\jquery-1.11.3.intellisense.js" />
     <Content Include="Scripts\jquery-1.11.3.js" />
     <Content Include="Scripts\jquery-ui-1.11.4.js" />
