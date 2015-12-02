@@ -46,5 +46,10 @@ namespace EventsApp.DataAccess
         /// This will not transfer invites to events hosted by newUser.
         /// </summary>
         void TransferInviteOwnership(AppUser previousUser, AppUser newUser);
+
+        /// <summary>
+        /// Remove all invites belonging to invited to events hosted by host.
+        /// </summary>
+        void RemoveInvitesByHost(AppUser invited, AppUser host);
     }
 }

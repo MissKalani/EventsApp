@@ -9,7 +9,8 @@ namespace EventsApp.DataModels
     public enum InviteStatus
     {
         Pending,
-        Accepted
+        Accepted,
+        Declined
     }
 
     public class Invite : IModificationState

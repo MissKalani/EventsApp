@@ -122,6 +122,7 @@ namespace EventsApp.MVC.Controllers
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
                 : message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
+                : message == ManageMessageId.ExternalProviderRemoved ? "The login provider has been removed"
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : "";
             ViewBag.HasLocalPassword = hasLocalPassword;
@@ -246,12 +247,11 @@ namespace EventsApp.MVC.Controllers
             var signInManager = new SignInManager<AppUser, string>(eventUoW.Users.UserManager, HttpContext.GetOwinContext().Authentication);
 
             var result = await signInManager.ExternalSignInAsync(loginInfo, false);
-
             switch (result)
             {
                 case SignInStatus.Success:
                     {
-                        var user = eventUoW.Users.UserManager.Find(loginInfo.Login);
+                        var user = await eventUoW.Users.UserManager.FindAsync(loginInfo.Login);
                         if (HasPassword(user))
                         {
                             return RedirectToAction("Index", "Home");
@@ -261,20 +261,27 @@ namespace EventsApp.MVC.Controllers
                             return RedirectToAction("ConnectAccount");
                         }
                     }
-
-                //case SignInStatus.LockedOut:
-                //    return RedirectToAction("Index","Home");
-                //case SignInStatus.RequiresVerification:
-                //    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
                 case SignInStatus.Failure:
                     {
-                        var user = new AppUser { UserName = loginInfo.DefaultUserName };
-                        eventUoW.Users.UserManager.Create(user);
-                        eventUoW.Users.UserManager.AddLogin(user.Id, loginInfo.Login);
-                        signInManager.ExternalSignIn(loginInfo, false);
+                        // Find a valid username. Creating an external user should never fail.
+                        var username = loginInfo.DefaultUserName;
+                        int usernameSuffix = 1;
+                        while (eventUoW.Users.GetUserByUsername(username) != null)
+                        {
+                            username = loginInfo.DefaultUserName + usernameSuffix.ToString();
+                            usernameSuffix++;
+                        }
+
+                        // Create a user and log in.
+                        var user = new AppUser { UserName = username };
+                        var userCreationResult = await eventUoW.Users.UserManager.CreateAsync(user);
+                        await eventUoW.Users.UserManager.AddLoginAsync(user.Id, loginInfo.Login);
+                        await signInManager.ExternalSignInAsync(loginInfo, false);
                         return RedirectToAction("ConnectAccount");
                     }
 
+                case SignInStatus.LockedOut:
+                case SignInStatus.RequiresVerification:
                 default:
                     return RedirectToAction("Register", "Auth");
             }
@@ -367,6 +374,9 @@ namespace EventsApp.MVC.Controllers
             // Migrate the invites by the social user. Ignore invites to events hosted by the existingUser, let them be destroyed with the socialUser.
             eventUoW.Invites.TransferInviteOwnership(socialUser, existingUser);
 
+            // Remove any invites for the existing user by the social user, since they will soon be invites to theirselves.
+            eventUoW.Invites.RemoveInvitesByHost(existingUser, socialUser);
+
             // Migrate the created events by the social user.
             eventUoW.Events.TransferEventOwnership(socialUser, existingUser);
 
@@ -387,6 +397,36 @@ namespace EventsApp.MVC.Controllers
 
             // Return to the homepage.
             return RedirectToAction("Index", "Home");
+        }
+
+        [Authorize]
+        public ActionResult DisconnectExternalProvider(string provider)
+        {
+            if (!HasPassword())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+
+            AppUser user = eventUoW.Users.GetUserById(User.Identity.GetUserId());
+            if (user == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            var logins = eventUoW.Users.UserManager.GetLogins(user.Id);
+            var login = logins.Where(t => t.LoginProvider == provider).SingleOrDefault();
+            if (login == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            var result = eventUoW.Users.UserManager.RemoveLogin(user.Id, login);
+            if (!result.Succeeded)
+            {
+                throw new Exception("Failed to remove " + login.LoginProvider + " login from user.");
+            }
+
+            return RedirectToAction("Manage", "Auth", new { message = ManageMessageId.ExternalProviderRemoved });
         }
 
 
@@ -439,6 +479,7 @@ namespace EventsApp.MVC.Controllers
             ChangePasswordSuccess,
             SetPasswordSuccess,
             RemoveLoginSuccess,
+            ExternalProviderRemoved,
             Error
         }
 

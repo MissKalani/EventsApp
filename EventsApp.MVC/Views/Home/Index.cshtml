@@ -9,22 +9,25 @@
     </div>
     <div class="panel-body">
         <div class="row">
-           
             <div id="eventList" class="col-md-3">
-                @Html.ActionLink("Create Event", "Create", "Event", new { }, new { @class = "btn btn-block textlink" })
-                
+                <div>
+                    <a href="@Url.Action("Create", "Event")" class="create-event-link">
+                        <p>
+                            <span class="glyphicon glyphicon-plus create-event-icon"></span>
+                            Create Event
+                        </p>
+                    </a>
+                </div>
             </div>
             <div id="mapView" class="col-md-9">
                 @if (Context.User.Identity.IsAuthenticated)
                 {
-                    
-                        <div id="filterButtons" class="btn-group btn-group-lg btn-group-justified">
-                            <button id="filterButtonHosted" type="button" class="btn btn-default col-lg-3">Hosted</button>
-                            <button id="filterButtonInvited" type="button" class="btn btn-default col-lg-3">Invited</button>
-                            <button id="filterButtonPublic" type="button" class="btn btn-default col-lg-3">Public</button>
-                            <button id="filterButtonAll" type="button" class="btn btn-default col-lg-3 active">All</button>
+                    <div id="filterButtons" class="btn-group btn-group-lg btn-group-justified">
+                        <button id="filterButtonHosted" type="button" class="btn btn-default col-lg-3">Hosted</button>
+                        <button id="filterButtonInvited" type="button" class="btn btn-default col-lg-3">Invited</button>
+                        <button id="filterButtonPublic" type="button" class="btn btn-default col-lg-3">Public</button>
+                        <button id="filterButtonAll" type="button" class="btn btn-default col-lg-3 active">All</button>
                     </div>
-               
                 }
                 <div id="map">
 

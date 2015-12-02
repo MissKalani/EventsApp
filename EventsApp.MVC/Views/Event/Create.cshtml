@@ -7,7 +7,7 @@
     <div class="panel-body">
         <div class="row">
             <div class="col-md-12">
-                @using (Html.BeginForm("Create", "Event", new { }, FormMethod.Post, new { role = "form" }))
+                @using (Html.BeginForm("Create", "Event", new { }, FormMethod.Post, new { role = "form", id = "create-event-form" }))
                 {
                     @Html.ValidationSummary(true, null, new { @class = "text-danger" })
 
@@ -75,9 +75,23 @@
             $('#create-event-latitude').val(initialCenter.lat);
             $('#create-event-longitude').val(initialCenter.lng);
 
-            var addressInput = $('#create-event-address')[0];
-            var searchBox = new google.maps.places.SearchBox(addressInput);
+            var isAddressFocused = false;
+            var addressInput = $('#create-event-address');
+            addressInput.focusin(function () {
+                isAddressFocused = true;
+            });
 
+            addressInput.focusout(function () {
+                isAddressFocused = false;
+            });
+
+            $('#create-event-form').submit(function (e) {
+                if (isAddressFocused) {
+                    e.preventDefault();
+                }
+            });
+
+            var searchBox = new google.maps.places.SearchBox(addressInput[0]);
             searchBox.addListener('places_changed', function () {
                 var places = searchBox.getPlaces();
 

@@ -7,23 +7,35 @@
     var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
     if (loginProviders.Count() == 0)
     {
-        <div>
-            <p>
-                There are no external authentication services configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
-                for details on setting up this ASP.NET application to support logging in via external services.
-            </p>
-        </div>
+        <p>
+            There are no external authentication services configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
+            for details on setting up this ASP.NET application to support logging in via external services.
+        </p>
     }
     else
     {
-    
         if (Model.ManageLoginsViewModel.ActiveLogins.Count > 0)
         {
-            foreach (var account in Model.ManageLoginsViewModel.ActiveLogins)
-            {
-                <p>@account.LoginProvider</p>
-            }
-        }       
+            Dictionary<string, string> providerImageUrls = new Dictionary<string, string>();
+            providerImageUrls["Facebook"] = "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/facebook_circle_color-64.png";
+            providerImageUrls["Google"] = "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/google_circle_color-64.png";
+            providerImageUrls["Twitter"] = "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/twitter_circle_color-64.png";
+
+            <p>You currently have the following providers connected to your account:</p>
+            <div class="row">
+                <div class="col-md-4">
+                    <table class="table table-condensed table-no-border table-centered-vertical">
+                        @foreach (var account in Model.ManageLoginsViewModel.ActiveLogins)
+                        {
+                            <tr>
+                                <td><img src="@providerImageUrls[account.LoginProvider]" /> @account.LoginProvider</td>
+                                <td><a href="@Url.Action("DisconnectExternalProvider", "Auth", new { provider = account.LoginProvider })" class="btn btn-danger">Disconnect</a></td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        }
     }
 
 }

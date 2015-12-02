@@ -45,7 +45,10 @@
                     {
                         <tr>
                             <td>@invite.Event.Brief</td>
-                            <td>@Html.ActionLink("Accept", "AcceptInvite", "User", new { eventId = invite.Event.Id }, new { @class="btn btn-primary" }) @Html.ActionLink("Decline", "DeclineInvite", "User", new { eventId = invite.Event.Id }, new { @class = "btn btn-danger" })</td>
+                            <td>
+                                @Html.ActionLink("Accept", "AcceptInvite", "User", new { eventId = invite.Event.Id }, new { @class="btn btn-primary" }) 
+                                @Html.ActionLink("Decline", "DeclineInvite", "User", new { eventId = invite.Event.Id }, new { @class = "btn btn-danger" })
+                            </td>
                             <!--<td><a id="acceptBtn" class="btn btn-primary">Accept</a> <a id="declineBtn" class="btn btn-danger">Decline</a></td>-->
                         </tr>
                     }

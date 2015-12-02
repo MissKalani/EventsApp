@@ -16,9 +16,26 @@ body {
 .btn-default{
    background-color: #D3741C;
 }
+a {
+    color: #444;
+    text-decoration: none;
+}
 
-a:focus, a:hover{
-    color: #D3741C;
+a:hover {
+    color: #C6491A;
+    background-color: #E6E3BB;
+    text-decoration: none;
+}
+/*-------------Home page styling------------*/
+.create-event-icon {
+    color: #00aa00;
+}
+
+.create-event-link {
+    font-size: 1.5em;
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 900;
 }
 
 
@@ -112,7 +129,7 @@ div#dataTable_length.dataTables_length {
 div#dataTable_filter.dataTables_filter {
     position: relative;
     float: right;
-    bottom: 5px;   
+    bottom: 5px;
 }
 
 div#dataTable_filter.dataTables_filter input{
@@ -297,6 +314,15 @@ a.paginate_button.current{
     position: relative;
     right: 170px;
     text-indent: 170px;
+}
+
+/* ------------- Manage User Styling ------------ */
+table.table-no-border > tbody > tr > td {
+    border: none;
+}
+
+table.table-centered-vertical > tbody > tr > td {
+    vertical-align: middle; 
 }
 /* ------------- Manage Account Styling ------------- */
 #passInput {
