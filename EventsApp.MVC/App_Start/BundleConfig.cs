@@ -15,7 +15,7 @@ namespace EventsApp.MVC
             //bundles.Add(new ScriptBundle("~/bundles/js/modernizr").Include("~/Scripts/modernizr-{version}.js"));
             //bundles.Add(new ScriptBundle("~/bundles/js/jquery").Include("~/Scripts/jquery-{version}.min.js"));
             bundles.Add(new ScriptBundle("~/bundles/js/modernizr").Include("~/Scripts/modernizr-2.6.2.js"));
-            bundles.Add(new ScriptBundle("~/bundles/js/jquery").Include("~/Scripts/jquery-1.11.3.min.js"));
+            bundles.Add(new ScriptBundle("~/bundles/js/jquery").Include("~/Scripts/jquery-1.11.3.js"));
             bundles.Add(new ScriptBundle("~/bundles/js/bootstrap").Include("~/Scripts/bootstrap.min.js"));
             bundles.Add(new ScriptBundle("~/bundles/js/bootstrap-datetimepicker").Include("~/Scripts/moment.min.js", "~/Scripts/bootstrap-datetimepicker.min.js"));
             bundles.Add(new ScriptBundle("~/bundles/js/event").Include("~/Scripts/event.js"));
