@@ -26,7 +26,7 @@
             @foreach (var _event in Model.UserDetailsViewModel.User.Events)
             {
                 <tr>
-                    <td>@_event.Brief</td>
+                    <td>@Html.ActionLink(_event.Brief, "Details", "Event", new { id = _event.Id }, new { })</td>
                     <td>@_event.Address</td>
                     <td>@_event.StartTime</td>
                 </tr>
