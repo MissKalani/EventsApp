@@ -1,4 +1,7 @@
 ﻿@model EventsApp.MVC.ViewModels.HellViewModel
+@using Microsoft.Owin.Security
+
+<!-- Login -->
 @using (Html.BeginForm("LogIn", "Auth", new { }, FormMethod.Post, new { @class = "navbar-form navbar-left" }))
 {
     @Html.AntiForgeryToken()
@@ -10,7 +13,32 @@
     </div>
 
     <button type="submit" class="btn btn-default" value="LogIn">Log In!</button>
+
+    <!-- Register -->
     @Html.ActionLink("Register", "Register", "Auth", new { }, new { @class = "btn btn-default" })
 }
 
 
+
+<!-- Social logins -->
+@{
+    var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+
+    Dictionary<string, string> providerImageUrls = new Dictionary<string, string>();
+    providerImageUrls["Facebook"] = "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/facebook_circle_color-64.png";
+    providerImageUrls["Google"] = "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/google_circle_color-64.png";
+    providerImageUrls["Twitter"] = "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/twitter_circle_color-64.png";
+}
+
+@using (Html.BeginForm("ExternalLogin", "Auth", new { ReturnUrl = Url.Action("Index", "Home") }, FormMethod.Post, new { @class = "navbar-form navbar-left" }))
+{
+    @Html.AntiForgeryToken()
+    <span id="social-login-inline-list">
+        @foreach (var provider in loginProviders)
+        {
+            <button type="submit" class="btn btn-link" id="@provider.AuthenticationType" name="provider" value="@provider.AuthenticationType" title="Log in using your @provider.Caption account">
+                <img src="@providerImageUrls[provider.AuthenticationType]" />
+            </button>
+        }
+    </span>
+}
