@@ -52,16 +52,17 @@ namespace EventsApp.MVC.Controllers
                     ModelState.AddModelError("", "Invalid username or password.");
                 }
             }
+
+            ViewBag.ReturnUrl = returnUrl;
             return View(model);
-            //return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult LogOut()
+        public ActionResult LogOut(string returnUrl)
         {
             AuthenticationManager.SignOut();
-            return RedirectToAction("Index", "Home");
+            return RedirectToLocal(returnUrl);
         }
 
         //POST: Auth/Register
@@ -74,7 +75,7 @@ namespace EventsApp.MVC.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(HellViewModel model)
+        public async Task<ActionResult> Register(HellViewModel model, string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -83,15 +84,16 @@ namespace EventsApp.MVC.Controllers
                 if (result.Succeeded)
                 {
                     await SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToLocal(returnUrl);
                 }
                 else
                 {
                     AddErrors(result);
                 }
             }
-            return View(model);
 
+            ViewBag.ReturnUrl = returnUrl;
+            return View(model);
         }
 
         private async Task SignInAsync(AppUser user, bool isPersistent)
@@ -241,7 +243,7 @@ namespace EventsApp.MVC.Controllers
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
             if (loginInfo == null)
             {
-                return RedirectToAction("Login");
+                return RedirectToAction("Login", new { returnUrl = returnUrl });
             }
 
             var signInManager = new SignInManager<AppUser, string>(eventUoW.Users.UserManager, HttpContext.GetOwinContext().Authentication);
@@ -254,11 +256,11 @@ namespace EventsApp.MVC.Controllers
                         var user = await eventUoW.Users.UserManager.FindAsync(loginInfo.Login);
                         if (HasPassword(user))
                         {
-                            return RedirectToAction("Index", "Home");
+                            return RedirectToLocal(returnUrl);
                         }
                         else
                         {
-                            return RedirectToAction("ConnectAccount");
+                            return RedirectToAction("ConnectAccount", new { returnUrl = returnUrl });
                         }
                     }
                 case SignInStatus.Failure:
@@ -277,32 +279,34 @@ namespace EventsApp.MVC.Controllers
                         var userCreationResult = await eventUoW.Users.UserManager.CreateAsync(user);
                         await eventUoW.Users.UserManager.AddLoginAsync(user.Id, loginInfo.Login);
                         await signInManager.ExternalSignInAsync(loginInfo, false);
-                        return RedirectToAction("ConnectAccount");
+
+                        return RedirectToAction("ConnectAccount", new { returnUrl = returnUrl });
                     }
 
                 case SignInStatus.LockedOut:
                 case SignInStatus.RequiresVerification:
                 default:
-                    return RedirectToAction("Register", "Auth");
+                    return RedirectToAction("Register", new { returnUrl = returnUrl });
             }
 
         }
 
         [Authorize]
-        public ActionResult ConnectAccount()
+        public ActionResult ConnectAccount(string returnUrl)
         {
             if (HasPassword())
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
 
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ConnectNewAccount(HellViewModel model)
+        public async Task<ActionResult> ConnectNewAccount(HellViewModel model, string returnUrl)
         {
             if (HasPassword())
             {
@@ -322,7 +326,7 @@ namespace EventsApp.MVC.Controllers
                 if (result.Succeeded)
                 {
                     await SignInAsync(newUser, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToLocal(returnUrl);
                 }
                 else
                 {
@@ -330,12 +334,13 @@ namespace EventsApp.MVC.Controllers
                 }
             }
 
+            ViewBag.ReturnUrl = returnUrl;
             return View(model);
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult> ConnectExistingAccount(HellViewModel model)
+        public async Task<ActionResult> ConnectExistingAccount(HellViewModel model, string returnUrl)
         {
             if (HasPassword())
             {
@@ -345,6 +350,7 @@ namespace EventsApp.MVC.Controllers
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Invalid username or password.");
+                ViewBag.ReturnUrl = returnUrl;
                 return View("ConnectAccount", model);
             }
 
@@ -396,7 +402,7 @@ namespace EventsApp.MVC.Controllers
             await SignInAsync(existingUser, false);
 
             // Return to the homepage.
-            return RedirectToAction("Index", "Home");
+            return RedirectToLocal(returnUrl);
         }
 
         [Authorize]
@@ -445,7 +451,7 @@ namespace EventsApp.MVC.Controllers
                 var user = eventUoW.Users.GetUserById(User.Identity.GetUserId());
                 eventUoW.Users.RemoveAccount(user);
                 eventUoW.Save();
-                LogOut();
+                AuthenticationManager.SignOut();
             }
             return RedirectToAction("Index", "Home");
         }

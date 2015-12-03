@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNet.Identity
-@using (Html.BeginForm("LogOut", "Auth", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+@using (Html.BeginForm("LogOut", "Auth", new { returnUrl = Request.Url.PathAndQuery }, FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
 {
     @Html.AntiForgeryToken()
 

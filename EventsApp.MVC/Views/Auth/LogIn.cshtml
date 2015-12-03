@@ -9,7 +9,7 @@
 <div class="row">
     <div class="col-md-8">
         <section id="loginForm">
-            @using (Html.BeginForm("Login", "Auth", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            @using (Html.BeginForm("Login", "Auth", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
                 @Html.AntiForgeryToken()
                 <h4>Use a local account to log in.</h4>
@@ -61,7 +61,7 @@
                         providerImageUrls["Twitter"] = "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/twitter_circle_color-64.png";
 
 
-                        using (Html.BeginForm("ExternalLogin", "Auth", new { ReturnUrl = Url.Action("Index", "Home") }))
+                using (Html.BeginForm("ExternalLogin", "Auth", new { returnUrl = ViewBag.ReturnUrl }))
                         {
                             @Html.AntiForgeryToken()
                             <div id="socialLoginList">

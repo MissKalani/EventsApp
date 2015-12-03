@@ -67,12 +67,24 @@ button.navbar-toggle {
     padding-bottom: 3px;
 }
 
-    .navbar-nav > li > a:hover {
-        /*border-bottom: 2px solid #444;*/
-        color: #C6491A;
-        background-color: #E6E3BB;
-        /*font-size: 20px;*/
-    }
+.navbar-nav > li > a:hover {
+    /*border-bottom: 2px solid #444;*/
+    color: #C6491A;
+    background-color: #E6E3BB;
+    /*font-size: 20px;*/
+}
+
+#social-login-inline-list > button {
+    padding: 0px;
+}
+
+#social-login-inline-list > button > img {
+    height: 35px;
+}
+
+.navbar-form.navbar-left {
+    padding: 5px 5px;
+}
 
 /*------------- Panels -----------------------*/
 

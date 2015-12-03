@@ -5,7 +5,7 @@
 
 <h2>Do you have an existing account?</h2>
 
-@using (Html.BeginForm("ConnectExistingAccount", "Auth", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("ConnectExistingAccount", "Auth", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()  
     <hr />
@@ -24,10 +24,14 @@
             @Html.ValidationMessageFor(m => m.ConnectExistingAccountViewModel.Password)
         </div>
     </div>
-    <button type="submit" class="btn btn-default">Login</button>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-default">Login</button>
+        </div>
+    </div>
 }
 
-@using (Html.BeginForm("ConnectNewAccount", "Auth", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("ConnectNewAccount", "Auth", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
     <h4>Create a new account.</h4>
