@@ -2,7 +2,7 @@
 @using Microsoft.Owin.Security
 
 <!-- Login -->
-@using (Html.BeginForm("LogIn", "Auth", new { }, FormMethod.Post, new { @class = "navbar-form navbar-left" }))
+@using (Html.BeginForm("LogIn", "Auth", new { returnUrl = Request.Url.PathAndQuery }, FormMethod.Post, new { @class = "navbar-form navbar-left" }))
 {
     @Html.AntiForgeryToken()
     <div class="form-group">
@@ -30,7 +30,7 @@
     providerImageUrls["Twitter"] = "https://cdn3.iconfinder.com/data/icons/free-social-icons/67/twitter_circle_color-64.png";
 }
 
-@using (Html.BeginForm("ExternalLogin", "Auth", new { ReturnUrl = Url.Action("Index", "Home") }, FormMethod.Post, new { @class = "navbar-form navbar-left" }))
+@using (Html.BeginForm("ExternalLogin", "Auth", new { returnUrl = Request.Url.PathAndQuery }, FormMethod.Post, new { @class = "navbar-form navbar-left" }))
 {
     @Html.AntiForgeryToken()
     <span id="social-login-inline-list">
