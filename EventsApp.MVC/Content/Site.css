@@ -13,6 +13,9 @@ body {
     padding-right: 15px;
 }
 
+.btn-default{
+   background-color: #D3741C;
+}
 a {
     color: #444;
     text-decoration: none;
@@ -127,6 +130,15 @@ div#dataTable_filter.dataTables_filter {
     position: relative;
     float: right;
     bottom: 5px;
+}
+
+div#dataTable_filter.dataTables_filter input{
+    margin-left:20px;
+    border-radius: 5px;
+}
+
+a.paginate_button.current{
+    visibility:hidden;
 }
 
 #acceptBtn {
@@ -311,4 +323,8 @@ table.table-no-border > tbody > tr > td {
 
 table.table-centered-vertical > tbody > tr > td {
     vertical-align: middle; 
+}
+/* ------------- Manage Account Styling ------------- */
+#passInput {
+    width: 35%;
 }

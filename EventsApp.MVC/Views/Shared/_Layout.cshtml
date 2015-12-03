@@ -1,13 +1,30 @@
 ﻿<!DOCTYPE html>
 <html>
-<head>
+<head prefix="og: http://ogp.me/ns#">
     <meta charset="utf-8" />
+    <meta property="og:url" content="@ViewBag.ogUrl" />
+    <meta property="og:title" content="@ViewBag.ogTitle" />
+    <meta property="og.description" content="@ViewBag.ogDescription" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://s-media-cache-ak0.pinimg.com/736x/6b/c5/37/6bc537a241ffc746acb7d2180d2253d8.jpg" />
+    <meta property="og:site_name" content="EventsApp" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Events App</title>
     @Styles.Render("~/bundles/css/style")
     @Scripts.Render("~/bundles/js/modernizr")
 </head>
 <body>
+    <div id="fb-root"></div>
+    <script>
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=1483775658597403";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+    </script>
+
     <div class="navbar navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">

@@ -2,7 +2,13 @@
 
 @{
     ViewBag.Title = "EventDetails";
+    ViewBag.ogUrl = HttpContext.Current.Request.Url.AbsoluteUri;
+    ViewBag.ogTitle = Model.DetailsViewModel.Event.Brief;
+    ViewBag.ogDescription = Model.DetailsViewModel.Event.Detailed;
+    ViewBag.ogsite_name = "EventsApp";
 }
+
+
 
 <div class="container-fluid">
     <div class="row">
@@ -13,6 +19,8 @@
             <p>@Model.DetailsViewModel.Event.Detailed</p>
             <p>@Model.DetailsViewModel.Event.Address</p>
             <p>@Model.DetailsViewModel.Event.StartTime</p>
+
+            <div class="fb-share-button" data-href="@Url.Action("Details", "Event", new { id = Model.DetailsViewModel.Event.Id})" data-layout="button_count"></div>
 
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -224,4 +232,6 @@
         });
     </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD41720sN_6eizUy9C-_xg9l7CdNrb7iiE&callback=initMap"></script>
+
+
 }
