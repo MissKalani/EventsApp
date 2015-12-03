@@ -322,6 +322,10 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <None Include="Properties\PublishProfiles\events-app - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\events-app - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\EventsApp.pubxml" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\event.js" />
     <Content Include="Content\images\Sorting icons.psd" />
     <None Include="Properties\PublishProfiles\events-app - FTP.pubxml" />
