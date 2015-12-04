@@ -1,4 +1,5 @@
 ﻿@model EventsApp.MVC.ViewModels.HellViewModel
+@using EventsApp.DataModels;
 
 @{
     ViewBag.Title = "EventDetails";
@@ -20,6 +21,47 @@
             <p>@Model.DetailsViewModel.Event.Address</p>
             <p>@Model.DetailsViewModel.Event.StartTime</p>
 
+            @if (Model.DetailsViewModel.IsInvited)
+            {
+                <div id="you-are-invited">
+                    @if (Model.DetailsViewModel.UserInvite != null)
+                    {
+                        if (Model.DetailsViewModel.UserInvite.Status == InviteStatus.Accepted)
+                        {
+                            <p class="text-success">You have accepted an invite to this event.</p>
+                            <!-- TODO: Add button to say you can't make it. -->
+                        }
+                        else if (Model.DetailsViewModel.UserInvite.Status == InviteStatus.Declined)
+                        {
+                            <p class="text-danger">You have declined an invite to this event.</p>
+                            <!-- TODO: Add button to say you're coming. -->
+                        }
+                        else if (Model.DetailsViewModel.UserInvite.Status == InviteStatus.Pending)
+                        {
+                            <p class="text-info">You are invited to this event.</p>
+                            <!--TODO: Add buttons to accept / decline the invitation -->
+                        }
+                    }
+                    else if (Model.DetailsViewModel.Link != null)
+                    {
+                        if (User.Identity.IsAuthenticated)
+                        {
+                            <p class="text-info">You are invited to this event.</p>
+                            using (Html.BeginForm("Accept", "Link", FormMethod.Post, new { role = "form", name = "accept" }))
+                            {
+                                @Html.HiddenFor(t => t.DetailsViewModel.Link.LinkGUID)
+                                <button type="submit" class="btn btn-success">I'll be there</button>
+                            }
+                        }
+                        else
+                        {
+                            <p class="text-info">You are invited to this event. Log in to accept!</p>
+                            <button class="btn btn-success disabled">I'll be there</button>
+                        }
+                    }
+                </div>
+            }
+
             <div class="fb-share-button" data-href="@Url.Action("Details", "Event", new { id = Model.DetailsViewModel.Event.Id})" data-layout="button_count"></div>
 
             <div class="panel panel-default">
@@ -34,15 +76,15 @@
                             {
                                 <tr>
                                     <td>@invite.AppUser.UserName</td>
-                                    @if (invite.Status == EventsApp.DataModels.InviteStatus.Accepted)
+                                    @if (invite.Status == InviteStatus.Accepted)
                                     {
                                         <td class="text-success">Is coming</td>
                                     }
-                                    else if (invite.Status == EventsApp.DataModels.InviteStatus.Pending)
+                                    else if (invite.Status == InviteStatus.Pending)
                                     {
                                         <td class="text-info">Has been invited</td>
                                     }
-                                    else if (invite.Status == EventsApp.DataModels.InviteStatus.Declined)
+                                    else if (invite.Status == InviteStatus.Declined)
                                     {
                                         <td class="text-danger">Can't make it</td>
                                     }
@@ -52,7 +94,7 @@
                     }
                     else
                     {
-                        if (Model.DetailsViewModel.Event.Visibility == EventsApp.DataModels.EventVisibility.Public)
+                        if (Model.DetailsViewModel.Event.Visibility == EventVisibility.Public)
                         {
                             <span>This event is public and anyone can view it. People can still be invited though!</span>
                         }
@@ -69,10 +111,10 @@
         </div>
         <div class="col-md-6">
             <div id="details-map">
-                
+
             </div>
         </div>
-    </div>    
+    </div>
     @if (Model.DetailsViewModel.IsOwner)
     {
         <div class="row">
@@ -84,7 +126,7 @@
                     </div>
                     <div id="" class="panel-body">
                         <!--<p>Invitation functionality has been temporarily disabled. We are working on it!</p>-->
-                        @if (Model.DetailsViewModel.Event.Visibility == EventsApp.DataModels.EventVisibility.Public)
+                        @if (Model.DetailsViewModel.Event.Visibility == EventVisibility.Public)
                         {
                             <p>This event is public, so anyone can find it. You can still invite people though!</p>
                         }

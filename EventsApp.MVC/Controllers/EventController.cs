@@ -105,7 +105,7 @@ namespace EventsApp.MVC.Controllers
             return View(events);
         }
 
-        public ActionResult Details(int id)
+        public ActionResult Details(int id, string guid)
         {
             var vm = new DetailsViewModel();
             vm.Event = eventUoW.Events.GetEventByID(id);
@@ -118,6 +118,70 @@ namespace EventsApp.MVC.Controllers
             vm.Event.AppUser = eventUoW.Users.GetUserById(vm.Event.OwnerId);
             vm.Invites = eventUoW.Invites.GetInvitedToEvent(vm.Event);
             vm.IsOwner = User.Identity.IsAuthenticated && User.Identity.GetUserId() == vm.Event.OwnerId;
+            
+            if (!vm.IsOwner)
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    var user = eventUoW.Users.GetUserById(User.Identity.GetUserId());
+                    if (user == null)
+                    {
+                        return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                    }
+
+                    if (eventUoW.Invites.IsInvited(vm.Event, user))
+                    {
+                        vm.IsInvited = true;
+                        vm.UserInvite = eventUoW.Invites.GetInviteByEventAndUser(vm.Event, user);
+                    }
+                }
+
+                if (!vm.IsInvited)
+                {
+                    if (guid != null)
+                    {
+                        InviteLink link = eventUoW.InviteLinks.GetLinkGraphByGuid(guid);
+                        if (link == null)
+                        {
+                            return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                        }
+
+                        vm.IsInvited = true;
+                        vm.Link = link;
+                    }
+                }
+            }
+            
+            /*
+            vm.InvitationType = InvitationType.NotInvited;
+
+            if (guid != null)
+            {
+                vm.Link = eventUoW.InviteLinks.GetLinkGraphByGuid(guid);
+                if (vm.Link.EventId != vm.Event.Id)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                }
+
+                vm.InvitationType = InvitationType.HasInvitationLink;
+            }
+            else
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    var user = eventUoW.Users.GetUserById(User.Identity.GetUserId());
+                    if (user == null)
+                    {
+                        return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                    }
+
+                    if (eventUoW.Invites.IsInvited(vm.Event, user))
+                    {
+                        vm.InvitationType = InvitationType.IsInvited;
+                    }
+                }
+            }
+            */
 
             return View(new HellViewModel { DetailsViewModel = vm });
         }

@@ -41,37 +41,9 @@ namespace EventsApp.MVC.Controllers
             eventUoW.Save();
 
             UrlHelper urlHelper = new UrlHelper(HttpContext.Request.RequestContext);
-            string url = urlHelper.Action("Confirm", "Link", new { guid = guid.ToString() }, urlHelper.RequestContext.HttpContext.Request.Url.Scheme);
+            string url = urlHelper.Action("Details", "Event", new { id = eventId, guid = guid.ToString() }, urlHelper.RequestContext.HttpContext.Request.Url.Scheme);
 
             return Json(new { url = url });
-        }
-
-        [HttpGet]
-        public ActionResult Confirm(string guid)
-        {
-            InviteLink link = eventUoW.InviteLinks.GetLinkGraphByGuid(guid);
-            if (link == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-            }
-
-            if (User.Identity.IsAuthenticated)
-            {
-                // Show a management page for the owner.
-                if (link.Event.OwnerId == User.Identity.GetUserId())
-                {
-                    return View("Owner", new HellViewModel { LinkConfirmViewModel = new LinkConfirmViewModel { Link = link, LinkGUID = link.LinkGUID } });
-                }
-
-                // Show a different page if the user is already invited to this event.
-                AppUser user = eventUoW.Users.GetUserById(User.Identity.GetUserId());
-                if (eventUoW.Invites.IsInvited(link.Event, user))
-                {
-                    return View("Invited", new HellViewModel { LinkConfirmViewModel = new LinkConfirmViewModel { Link = link, LinkGUID = link.LinkGUID } });
-                }
-            }
-
-            return View("Confirm", new HellViewModel { LinkConfirmViewModel = new LinkConfirmViewModel { Link = link, LinkGUID = link.LinkGUID } });
         }
 
         [Authorize]
