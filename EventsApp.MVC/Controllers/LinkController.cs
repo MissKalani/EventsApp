@@ -47,10 +47,10 @@ namespace EventsApp.MVC.Controllers
         }
 
         [Authorize]
-        [HttpPost]
-        public ActionResult Accept(HellViewModel model)
+        [HttpGet]
+        public ActionResult Accept(string guid)
         {
-            InviteLink link = eventUoW.InviteLinks.GetLinkGraphByGuid(model.LinkConfirmViewModel.LinkGUID);
+            InviteLink link = eventUoW.InviteLinks.GetLinkGraphByGuid(guid);
             if (link == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
@@ -59,38 +59,79 @@ namespace EventsApp.MVC.Controllers
             // Make sure the user is not the owner.
             if (link.Event.OwnerId == User.Identity.GetUserId())
             {
-                return View("Owner", new HellViewModel { LinkConfirmViewModel = new LinkConfirmViewModel { Link = link, LinkGUID = link.LinkGUID } });
+                return RedirectToAction("Details", "Event", new { id = link.EventId });
             }
 
             // Make sure the user is not already invited.
             AppUser user = eventUoW.Users.GetUserById(User.Identity.GetUserId());
             if (eventUoW.Invites.IsInvited(link.Event, user))
             {
-                return View("Invited", new HellViewModel { LinkConfirmViewModel = new LinkConfirmViewModel { Link = link, LinkGUID = link.LinkGUID } });
+                return RedirectToAction("Details", "Event", new { id = link.EventId });
             }
 
-            // Create an invite and remove this link.
+            // Create an invite.
             eventUoW.Invites.Attach(new Invite { Event = link.Event, AppUser = user, Status = InviteStatus.Accepted, Seen = true, ModificationState = ModificationState.Added });
+
+            // TODO: Remove the invite if it is one time use.
             eventUoW.InviteLinks.Remove(link);
             eventUoW.Save();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Details", "Event", new { id = link.EventId });
         }
 
-        [HttpPost]
-        public ActionResult Delete(HellViewModel model)
+        [Authorize]
+        [HttpGet]
+        public ActionResult Decline(string guid)
         {
-            InviteLink link = eventUoW.InviteLinks.GetLinkGraphByGuid(model.LinkConfirmViewModel.LinkGUID);
+            InviteLink link = eventUoW.InviteLinks.GetLinkGraphByGuid(guid);
             if (link == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            // Make sure the user is not the owner.
+            if (link.Event.OwnerId == User.Identity.GetUserId())
+            {
+                return RedirectToAction("Details", "Event", new { id = link.EventId });
+            }
+
+            // Make sure the user is not already invited.
+            AppUser user = eventUoW.Users.GetUserById(User.Identity.GetUserId());
+            if (eventUoW.Invites.IsInvited(link.Event, user))
+            {
+                return RedirectToAction("Details", "Event", new { id = link.EventId });
+            }
+
+            // Create an invite.
+            eventUoW.Invites.Attach(new Invite { Event = link.Event, AppUser = user, Status = InviteStatus.Declined, Seen = true, ModificationState = ModificationState.Added });
+
+            // TODO: Remove the invite if it is one time use.
+            eventUoW.InviteLinks.Remove(link);
+            eventUoW.Save();
+
+            return RedirectToAction("Details", "Event", new { id = link.EventId });
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult Delete(string guid)
+        {
+            InviteLink link = eventUoW.InviteLinks.GetLinkGraphByGuid(guid);
+            if (link == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            if (User.Identity.GetUserId() != link.Event.OwnerId)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
 
             // Simply remove the link.
             eventUoW.InviteLinks.Remove(link);
             eventUoW.Save();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Details", "Event", new { id = link.EventId });
         }
     }
 }

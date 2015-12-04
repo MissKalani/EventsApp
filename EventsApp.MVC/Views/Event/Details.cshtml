@@ -15,7 +15,7 @@
     <div class="row">
         <div id ="details-info" class="col-md-6">
             <h2 class="details-page-brief">@Model.DetailsViewModel.Event.Brief</h2>
-            <p>Hosted by: </p>@Html.ActionLink(Model.DetailsViewModel.Event.AppUser.UserName, "Details", "User",new { username = Model.DetailsViewModel.Event.AppUser.UserName}, new { })
+            <p>Hosted by: </p>@Html.ActionLink(Model.DetailsViewModel.Event.AppUser.UserName, "Details", "User", new { username = Model.DetailsViewModel.Event.AppUser.UserName}, new { })
 
             <p>@Model.DetailsViewModel.Event.Detailed</p>
             <p>@Model.DetailsViewModel.Event.Address</p>
@@ -23,42 +23,55 @@
 
             @if (Model.DetailsViewModel.IsInvited)
             {
-                <div id="you-are-invited">
-                    @if (Model.DetailsViewModel.UserInvite != null)
-                    {
-                        if (Model.DetailsViewModel.UserInvite.Status == InviteStatus.Accepted)
+                <div id="you-are-invited" class="panel panel-default">
+                    <div class="panel-heading">
+                        
+                    </div>
+                    <div class="panel-body">
+                        @if (Model.DetailsViewModel.UserInvite != null)
                         {
-                            <p class="text-success">You have accepted an invite to this event.</p>
-                            <!-- TODO: Add button to say you can't make it. -->
-                        }
-                        else if (Model.DetailsViewModel.UserInvite.Status == InviteStatus.Declined)
-                        {
-                            <p class="text-danger">You have declined an invite to this event.</p>
-                            <!-- TODO: Add button to say you're coming. -->
-                        }
-                        else if (Model.DetailsViewModel.UserInvite.Status == InviteStatus.Pending)
-                        {
-                            <p class="text-info">You are invited to this event.</p>
-                            <!--TODO: Add buttons to accept / decline the invitation -->
-                        }
-                    }
-                    else if (Model.DetailsViewModel.Link != null)
-                    {
-                        if (User.Identity.IsAuthenticated)
-                        {
-                            <p class="text-info">You are invited to this event.</p>
-                            using (Html.BeginForm("Accept", "Link", FormMethod.Post, new { role = "form", name = "accept" }))
+                            if (Model.DetailsViewModel.UserInvite.Status == InviteStatus.Accepted)
                             {
-                                @Html.HiddenFor(t => t.DetailsViewModel.Link.LinkGUID)
-                                <button type="submit" class="btn btn-success">I'll be there</button>
+                                <p class="text-success">You have accepted an invite to this event.</p>
+                                <div class="form-inline">
+                                    <!-- TODO: Assign actions -->
+                                    <a href="#" class="btn btn-danger">I can't make it</a>
+                                </div>
+                            }
+                            else if (Model.DetailsViewModel.UserInvite.Status == InviteStatus.Declined)
+                            {
+                                <p class="text-danger">You have declined an invite to this event.</p>
+                                <div class="form-inline">
+                                    <!-- TODO: Assign actions -->
+                                    <a href="#" class="btn btn-success">I'll be able to come</a>
+                                </div>
+                            }
+                            else if (Model.DetailsViewModel.UserInvite.Status == InviteStatus.Pending)
+                            {
+                                <p class="text-info">You are invited to this event.</p>
+                                <div class="form-inline">
+                                    <!-- TODO: Assign actions -->
+                                    <a href="#" class="btn btn-success">I'll be there</a>
+                                    <a href="#" class="btn btn-danger">I can't make it</a>
+                                </div>
                             }
                         }
-                        else
+                        else if (Model.DetailsViewModel.Link != null)
                         {
-                            <p class="text-info">You are invited to this event. Log in to accept!</p>
-                            <button class="btn btn-success disabled">I'll be there</button>
+                            if (User.Identity.IsAuthenticated)
+                            {
+                                <p class="text-info">You are invited to this event.</p>
+                                <div class="form-inline">
+                                    @Html.ActionLink("I'll be there", "Accept", "Link", new { guid = Model.DetailsViewModel.Link.LinkGUID }, new { @class = "btn btn-success" })
+                                    @Html.ActionLink("I can't make it", "Decline", "Link", new { guid = Model.DetailsViewModel.Link.LinkGUID }, new { @class = "btn btn-danger" })
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="text-info">You are invited to this event. Log in to respond!</p>
+                            }
                         }
-                    }
+                    </div>
                 </div>
             }
 
