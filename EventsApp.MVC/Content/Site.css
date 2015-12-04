@@ -365,3 +365,11 @@ table.table-centered-vertical > tbody > tr > td {
 #profile{
     display:none;   
 }
+
+#HCB_comment_box blockquote{
+    font-size: 12px;
+}
+
+#feedbackPanel{
+    margin-top: 20px;
+}
