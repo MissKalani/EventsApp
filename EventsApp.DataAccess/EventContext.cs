@@ -36,6 +36,7 @@ namespace EventsApp.DataAccess
             modelBuilder.Entity<Invite>().HasRequired(t => t.AppUser).WithMany().WillCascadeOnDelete(false);
 
             modelBuilder.Entity<InviteLink>().HasKey(t => t.LinkGUID);
+            modelBuilder.Entity<InviteLink>().Property(t => t.OneTimeUse).IsRequired();
             modelBuilder.Entity<InviteLink>().Ignore(t => t.ModificationState);
             modelBuilder.Entity<InviteLink>().HasRequired(t => t.Event).WithMany().WillCascadeOnDelete(false);
 
