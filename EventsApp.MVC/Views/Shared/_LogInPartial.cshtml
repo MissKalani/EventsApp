@@ -15,7 +15,7 @@
     <button type="submit" class="btn btn-default" value="LogIn">Log In!</button>
 
     <!-- Register -->
-            @Html.ActionLink("Register", "Register", "Auth", new { }, new { @class = "btn btn-default" })
+            @Html.ActionLink("Register", "Register", "Auth", new { returnUrl = ViewBag.ReturnUrl ?? Request.Url.PathAndQuery }, new { @class = "btn btn-default" })
 }
 
 
