@@ -178,7 +178,7 @@ namespace EventsApp.MVC.Controllers
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpGet]
         public ActionResult JoinEvent(int eventId)
         {
             var _event = eventUoW.Events.GetEventByID(eventId);
@@ -203,6 +203,8 @@ namespace EventsApp.MVC.Controllers
             invite.EventId = eventId;
             invite.AppUserId = user.Id;
             invite.ModificationState = ModificationState.Added;
+            invite.Seen = true;
+            invite.Status = InviteStatus.Accepted;
             eventUoW.Invites.Attach(invite);
             eventUoW.Save();
          
