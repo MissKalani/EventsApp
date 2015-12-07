@@ -79,7 +79,8 @@ button.navbar-toggle {
     }
 
 #social-login-inline-list > button {
-    padding: 0px;
+    padding-top:0px;
+    padding-left: 0px;
 }
 
     #social-login-inline-list > button > img {
@@ -358,4 +359,17 @@ table.table-centered-vertical > tbody > tr > td {
     #passInput {
         width: 100%;
     }
+}
+
+/*--------------Feedback Page------------------------*/
+#profile{
+    display:none;   
+}
+
+#HCB_comment_box blockquote{
+    font-size: 12px;
+}
+
+#feedbackPanel{
+    margin-top: 20px;
 }
