@@ -36,7 +36,33 @@ namespace EventsApp.MVC.Controllers
             }
 
             Guid guid = Guid.NewGuid();
-            InviteLink link = new InviteLink { EventId = eventId, LinkGUID = guid.ToString(), ModificationState = ModificationState.Added };
+            InviteLink link = new InviteLink { EventId = eventId, LinkGUID = guid.ToString(), OneTimeUse = true, ModificationState = ModificationState.Added };
+            eventUoW.InviteLinks.Attach(link);
+            eventUoW.Save();
+
+            UrlHelper urlHelper = new UrlHelper(HttpContext.Request.RequestContext);
+            string url = urlHelper.Action("Details", "Event", new { id = eventId, guid = guid.ToString() }, urlHelper.RequestContext.HttpContext.Request.Url.Scheme);
+
+            return Json(new { url = url });
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult GenerateMultiuse(int eventId)
+        {
+            Event e = eventUoW.Events.GetEventByID(eventId);
+            if (e == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            if (User.Identity.GetUserId() != e.OwnerId)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+
+            Guid guid = Guid.NewGuid();
+            InviteLink link = new InviteLink { EventId = eventId, LinkGUID = guid.ToString(), OneTimeUse = false, ModificationState = ModificationState.Added };
             eventUoW.InviteLinks.Attach(link);
             eventUoW.Save();
 
@@ -72,8 +98,12 @@ namespace EventsApp.MVC.Controllers
             // Create an invite.
             eventUoW.Invites.Attach(new Invite { Event = link.Event, AppUser = user, Status = InviteStatus.Accepted, Seen = true, ModificationState = ModificationState.Added });
 
-            // TODO: Remove the invite if it is one time use.
-            eventUoW.InviteLinks.Remove(link);
+            // Remove the invite if it is one time use.
+            if (link.OneTimeUse)
+            {
+                eventUoW.InviteLinks.Remove(link);
+            }
+            
             eventUoW.Save();
 
             return RedirectToAction("Details", "Event", new { id = link.EventId });
@@ -105,8 +135,12 @@ namespace EventsApp.MVC.Controllers
             // Create an invite.
             eventUoW.Invites.Attach(new Invite { Event = link.Event, AppUser = user, Status = InviteStatus.Declined, Seen = true, ModificationState = ModificationState.Added });
 
-            // TODO: Remove the invite if it is one time use.
-            eventUoW.InviteLinks.Remove(link);
+            // Remove the invite if it is one time use.
+            if (link.OneTimeUse)
+            {
+                eventUoW.InviteLinks.Remove(link);
+            }
+            
             eventUoW.Save();
 
             return RedirectToAction("Details", "Event", new { id = link.EventId });

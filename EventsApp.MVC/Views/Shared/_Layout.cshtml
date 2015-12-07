@@ -25,15 +25,6 @@
 </head>
 <body>
     <div id="fb-root"></div>
-    <script>
-        (function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=1483775658597403";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-    </script>
 
     <div class="navbar navbar-fixed-top">
         <div class="container">
@@ -71,6 +62,37 @@
     </div>
 
     @Scripts.Render("~/bundles/js/jquery")
+
+    <script>
+        $(document).ready(function () {
+            $.ajaxSetup({
+                cache: true
+            });
+
+            $.getScript('//connect.facebook.net/en_US/sdk.js', function () {
+                FB.init({
+                    appId: '1483775658597403',
+                    version: 'v2.5'
+                });
+            });
+        });
+
+        (function () {
+            var e = document.createElement('script');
+            e.async = true;
+            e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+            document.getElementById('fb-root').appendChild(e);
+        }());
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=1483775658597403";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+
     @Scripts.Render("~/bundles/js/bootstrap")
     @Scripts.Render("~/bundles/js/bootstrap-datetimepicker")
     @Scripts.Render("~/bundles/js/event")
