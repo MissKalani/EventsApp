@@ -67,8 +67,9 @@ namespace EventsApp.MVC.Controllers
 
         //POST: Auth/Register
         [AllowAnonymous]
-        public ActionResult Register()
+        public ActionResult Register(string returnUrl)
         {
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
