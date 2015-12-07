@@ -13,7 +13,7 @@
 <div class="container-fluid">
     <div class="row">
         <div id ="details-info" class="col-md-6">
-            <h2 class="details-page-brief">@Model.DetailsViewModel.Event.Brief</h2>
+            <h2 class="details-page-brief">@Model.DetailsViewModel.Event.Brief</h2>@Html.ActionLink("Join Event", "JoinEvent", "User", new { eventId = Model.DetailsViewModel.Event.Id}, new { @class ="btn btn-default"})
             <p>Hosted by: </p>@Html.ActionLink(Model.DetailsViewModel.Event.AppUser.UserName, "Details", "User",new { username = Model.DetailsViewModel.Event.AppUser.UserName}, new { })
 
             <p>@Model.DetailsViewModel.Event.Detailed</p>

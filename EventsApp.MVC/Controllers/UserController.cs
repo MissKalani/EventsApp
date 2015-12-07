@@ -176,5 +176,40 @@ namespace EventsApp.MVC.Controllers
             int count = eventUoW.Invites.GetUnseenPendingInvitesCount(user);
             return Json(new { count = count });
         }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult JoinEvent(int eventId)
+        {
+            var _event = eventUoW.Events.GetEventByID(eventId);
+            if(_event == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            if (_event.Visibility == EventVisibility.Private)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }           
+
+            var user = eventUoW.Users.GetUserById(User.Identity.GetUserId());
+            if(user == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+            
+      
+            Invite invite = new Invite();
+            invite.EventId = eventId;
+            invite.AppUserId = user.Id;
+            invite.ModificationState = ModificationState.Added;
+            eventUoW.Invites.Attach(invite);
+            eventUoW.Save();
+         
+
+            return RedirectToAction("Details", "Event", new { id = eventId});
+        
+
+        }
     }
 }
