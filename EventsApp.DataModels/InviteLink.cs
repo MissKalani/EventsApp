@@ -11,6 +11,7 @@ namespace EventsApp.DataModels
         public string LinkGUID { get; set; }
         public int EventId { get; set; }
         public ModificationState ModificationState { get; set; }
+        public bool OneTimeUse { get; set; }
 
         public Event Event { get; set; }
     }
