@@ -197,7 +197,12 @@ namespace EventsApp.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
+
             
+            if(eventUoW.Invites.IsInvited(_event, user))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }            
       
             Invite invite = new Invite();
             invite.EventId = eventId;

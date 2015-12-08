@@ -13,9 +13,9 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div id ="details-info" class="col-md-6">
-            <h2 class="details-page-brief">@Model.DetailsViewModel.Event.Brief</h2>@Html.ActionLink("Join Event", "JoinEvent", "User", new { eventId = Model.DetailsViewModel.Event.Id}, new { @class ="btn btn-default", id="btnJoinEvent"})
-            <p>Hosted by: </p>@Html.ActionLink(Model.DetailsViewModel.Event.AppUser.UserName, "Details", "User",new { username = Model.DetailsViewModel.Event.AppUser.UserName}, new { })
+        <div id="details-info" class="col-md-6">
+            <h2 class="details-page-brief">@Model.DetailsViewModel.Event.Brief</h2>@Html.ActionLink("Join Event", "JoinEvent", "User", new { eventId = Model.DetailsViewModel.Event.Id }, new { @class = "btn btn-default", id = "btnJoinEvent" })
+            <p>Hosted by: </p>@Html.ActionLink(Model.DetailsViewModel.Event.AppUser.UserName, "Details", "User", new { username = Model.DetailsViewModel.Event.AppUser.UserName }, new { })
 
             <p>@Model.DetailsViewModel.Event.Detailed</p>
             <p>@Model.DetailsViewModel.Event.Address</p>
@@ -25,7 +25,7 @@
             {
                 <div id="you-are-invited" class="panel panel-default">
                     <div class="panel-heading">
-                        
+
                     </div>
                     <div class="panel-body">
                         @if (Model.DetailsViewModel.UserInvite != null)
@@ -119,15 +119,15 @@
                     }
                 </div>
             </div>
-            
-            
+
+
         </div>
         <div class="col-md-6">
             <div id="details-map">
-                
+
             </div>
         </div>
-    </div>    
+    </div>
     @if (Model.DetailsViewModel.IsOwner)
     {
         <div class="row">
@@ -151,6 +151,11 @@
                                 <div class="input-group">
                                     <span id="link-button" class="input-group-addon btn btn-default">Create Invitation Link</span>
                                     <input id="link-text" type="text" class="form-control" readonly aria-describedby="link-button" />
+                                </div>
+                                <div class="input-group">
+                                    <span id="send-email-message"></span>
+                                    <span id="send-email-button" class="input-group-addon btn btn-default">Send Email</span>
+                                    <input id="email-text" type="text" class="form-control" name="Email" />
                                 </div>
                             </div>
                         </div>
@@ -218,18 +223,44 @@
             }
         });
 
+        $('#send-email-button').click(function(){
+            $.ajax({
+                url: '@Url.Action("SendToEmail", "Link")',
+                data: { email: $('#email-text').val(), guid: $('#link-text').val()},
+                method: "GET",
+                success: mailSentSuccess,
+                error: mailSentError
+            });
+
+            function mailSentSuccess(data, status){
+                var sendEmail = $('#send-email-message')
+                sendEmail.html("Email sent!");
+                sendEmail.addClass("text-success");
+                sendEmail.removeClass("text-danger");
+            }
+            function mailSentError(xhr, status, exception){
+                var sendEmail = $('#send-email-message');
+                sendEmail.html("Email not sent!");
+                sendEmail.addClass("text-danger");
+                sendEmail.removeClass("text-success");
+            }
+        });
+
+
+
+
         $('#username-invite-form').on('submit', function(e) {
             e.preventDefault();
             console.log("Form submitted");
-		
-		    $.ajax({
-			    url: '@Url.Action("InviteByUsername", "User")',
-			    data: { eventId: @Model.DetailsViewModel.Event.Id, username: $('#input-username').val() },
-			    method: "POST",
-			    success: usernameInviteSuccess,
-			    error: usernameInviteError
-		    });
-		
+
+            $.ajax({
+                url: '@Url.Action("InviteByUsername", "User")',
+                data: { eventId: @Model.DetailsViewModel.Event.Id, username: $('#input-username').val() },
+                method: "POST",
+                success: usernameInviteSuccess,
+                error: usernameInviteError
+            });
+
             function usernameInviteSuccess(data, status) {
                 if (data.InviteResult == 0)
                 {
@@ -249,13 +280,13 @@
                         case 5: errorElement.text("You cannot invite the owner of the event."); break;
                     }
                 }
-		    }
-		
-		    function usernameInviteError(xhr, status, exception) {
-		        console.log("Failed to send invite user AJAX request");
-		        var errorElement = $('#input-username-error');
-		        errorElement.text("No response from the server. Try again later.");
-		    }
+            }
+
+            function usernameInviteError(xhr, status, exception) {
+                console.log("Failed to send invite user AJAX request");
+                var errorElement = $('#input-username-error');
+                errorElement.text("No response from the server. Try again later.");
+            }
         });
 
         $('#input-username').on('input', function(e) {
@@ -269,7 +300,7 @@
                 error: fetchUserError
             });
 
-            function fetchUserSuccess(data, status) {          
+            function fetchUserSuccess(data, status) {
                 var usernameArray = [];
                 for (var i = 0; i < data.length; ++i)
                 {
