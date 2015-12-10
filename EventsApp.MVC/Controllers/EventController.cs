@@ -162,37 +162,6 @@ namespace EventsApp.MVC.Controllers
                     }
                 }
             }
-            
-            /*
-            vm.InvitationType = InvitationType.NotInvited;
-
-            if (guid != null)
-            {
-                vm.Link = eventUoW.InviteLinks.GetLinkGraphByGuid(guid);
-                if (vm.Link.EventId != vm.Event.Id)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-                }
-
-                vm.InvitationType = InvitationType.HasInvitationLink;
-            }
-            else
-            {
-                if (User.Identity.IsAuthenticated)
-                {
-                    var user = eventUoW.Users.GetUserById(User.Identity.GetUserId());
-                    if (user == null)
-                    {
-                        return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-                    }
-
-                    if (eventUoW.Invites.IsInvited(vm.Event, user))
-                    {
-                        vm.InvitationType = InvitationType.IsInvited;
-                    }
-                }
-            }
-            */
 
             return View(new HellViewModel { DetailsViewModel = vm });
         }
