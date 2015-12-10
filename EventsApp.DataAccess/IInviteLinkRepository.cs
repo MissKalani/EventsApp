@@ -15,6 +15,12 @@ namespace EventsApp.DataAccess
         InviteLink GetLinkGraphByGuid(string guid);
 
         /// <summary>
+        /// Get the share link (i.e. the first multi-use link) for a given event. The share link
+        /// is used to share an event on social networks.
+        /// </summary>
+        InviteLink GetShareLink(Event e);
+
+        /// <summary>
         /// Remove a link.
         /// </summary>
         void Remove(InviteLink link);

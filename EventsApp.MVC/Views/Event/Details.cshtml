@@ -77,12 +77,12 @@
 
             @if (Model.DetailsViewModel.Event.Visibility == EventVisibility.Public)
             {
-                <div id="event-fb-share-button" class="fb-share-button" data-href="" data-layout="button_count"></div>
+                <div id="event-fb-share-button" class="fb-share-button" data-href="@Url.Action("Details", "Event", new { id = Model.DetailsViewModel.Event.Id })" data-layout="button_count"></div>
             }
 
-            @if (Model.DetailsViewModel.Event.Visibility == EventVisibility.Private && Model.DetailsViewModel.IsOwner)
+            @if (Model.DetailsViewModel.Event.Visibility == EventVisibility.Private && Model.DetailsViewModel.IsOwner && Model.DetailsViewModel.ShareLink != null)
             {
-                <div id="event-fb-share-button" class="fb-share-button" data-href="" data-layout="button_count"></div>
+                <div id="event-fb-share-button" class="fb-share-button" data-href="@Url.Action("Details", "Event", new { id = Model.DetailsViewModel.Event.Id, guid = Model.DetailsViewModel.ShareLink.LinkGUID })" data-layout="button_count"></div>
             }
 
             <div class="panel panel-default">

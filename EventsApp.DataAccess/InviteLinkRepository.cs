@@ -28,6 +28,11 @@ namespace EventsApp.DataAccess
             return context.InviteLinks.Include(t => t.Event.AppUser).SingleOrDefault(t => t.LinkGUID == guid);
         }
 
+        public InviteLink GetShareLink(Event e)
+        {
+            return context.InviteLinks.Where(t => t.OneTimeUse == false).FirstOrDefault();
+        }
+
         public void Remove(InviteLink link)
         {
             context.InviteLinks.Remove(link);

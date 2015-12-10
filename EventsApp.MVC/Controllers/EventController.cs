@@ -127,6 +127,7 @@ namespace EventsApp.MVC.Controllers
 
             vm.Event.AppUser = eventUoW.Users.GetUserById(vm.Event.OwnerId);
             vm.Invites = eventUoW.Invites.GetInvitedToEvent(vm.Event);
+            vm.ShareLink = eventUoW.InviteLinks.GetShareLink(vm.Event);
             vm.IsOwner = User.Identity.IsAuthenticated && User.Identity.GetUserId() == vm.Event.OwnerId;
             
             if (!vm.IsOwner)
