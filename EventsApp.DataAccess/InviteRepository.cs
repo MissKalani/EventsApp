@@ -64,8 +64,11 @@ namespace EventsApp.DataAccess
             {
                 if (invite.Event.OwnerId != newUser.Id)
                 {
-                    context.Invites.Add(new Invite { AppUserId = newUser.Id, EventId = invite.EventId, Status = invite.Status, Seen = invite.Seen, ModificationState = invite.ModificationState });
-                    context.Invites.Remove(invite);
+                    if (!IsInvited(invite.Event, newUser))
+                    {
+                        context.Invites.Add(new Invite { AppUserId = newUser.Id, EventId = invite.EventId, Status = invite.Status, Seen = invite.Seen, ModificationState = invite.ModificationState });
+                        context.Invites.Remove(invite);
+                    }
                 }
             }
         }
