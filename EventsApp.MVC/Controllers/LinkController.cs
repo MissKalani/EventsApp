@@ -47,32 +47,6 @@ namespace EventsApp.MVC.Controllers
         }
 
         [Authorize]
-        [HttpPost]
-        public ActionResult GenerateMultiuse(int eventId)
-        {
-            Event e = eventUoW.Events.GetEventByID(eventId);
-            if (e == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-            }
-
-            if (User.Identity.GetUserId() != e.OwnerId)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
-            }
-
-            Guid guid = Guid.NewGuid();
-            InviteLink link = new InviteLink { EventId = eventId, LinkGUID = guid.ToString(), OneTimeUse = false, ModificationState = ModificationState.Added };
-            eventUoW.InviteLinks.Attach(link);
-            eventUoW.Save();
-
-            UrlHelper urlHelper = new UrlHelper(HttpContext.Request.RequestContext);
-            string url = urlHelper.Action("Details", "Event", new { id = eventId, guid = guid.ToString() }, urlHelper.RequestContext.HttpContext.Request.Url.Scheme);
-
-            return Json(new { url = url });
-        }
-
-        [Authorize]
         [HttpGet]
         public ActionResult Accept(string guid)
         {

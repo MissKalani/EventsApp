@@ -75,7 +75,6 @@
                 </div>
             }
 
-            @*<div id="fb-share-container"></div>*@
             @if (Model.DetailsViewModel.Event.Visibility == EventVisibility.Public)
             {
                 <div id="event-fb-share-button" class="fb-share-button" data-href="" data-layout="button_count"></div>
@@ -85,7 +84,6 @@
             {
                 <div id="event-fb-share-button" class="fb-share-button" data-href="" data-layout="button_count"></div>
             }
-            @*<div class="fb-share-button" data-href="@Url.Action("Details", "Event", new { id = Model.DetailsViewModel.Event.Id })" data-layout="button_count"></div>*@
 
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -297,44 +295,6 @@
                 console.log("Failed to search for usernames");
             }
         });
-
-        $('#event-fb-share-button').click(function(e) {
-            e.preventDefault();
-
-            console.log('clicked');
-        });
-
-        @*// Add a facebook button with the correct URL.
-        $(document).ready(function() {
-            @if (Model.DetailsViewModel.IsOwner)
-            {
-                // Generate a new link using AJAX.
-                $.ajax({
-                    url: '@Url.Action("GenerateMultiuse", "Link")',
-                    data: { eventId: @Model.DetailsViewModel.Event.Id },
-                    method: "POST",
-                    success: fetchLinkSuccess,
-                    error: fetchLinkError
-                });
-
-                function fetchLinkSuccess(data, status) {
-                    // Add the facebook button.
-                    var div = document.createElement('div');
-                    div.className = 'fb-share-button';
-                    div.setAttribute('data-href', data.url);
-                    div.setAttribute('data-layout', 'button_count');
-                    $('fb-share-container').append(div);
-                }
-
-                function fetchLinkError(xhr, status, exception) {
-
-                }
-            }
-        });*@
     </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD41720sN_6eizUy9C-_xg9l7CdNrb7iiE&callback=initMap"></script>
-
-    @* Add a facebook button. Generate a link if the event is private and we are the owner. Just a plain URL if the event is public. *@
-
-
 }
