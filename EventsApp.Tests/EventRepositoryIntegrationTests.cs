@@ -272,6 +272,53 @@ namespace Tests
         }
 
         [TestMethod]
+        public void GetAllPublicEventsOfUserReturnsCorrect()
+        {
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                var user = context.Users.SingleOrDefault(t => t.UserName == "TestUser");
+                var user2 = context.Users.SingleOrDefault(t => t.UserName == "TestUser2");
+
+                Event e1 = new Event();
+                e1.Brief = "User 1 Event";
+                e1.Visibility = EventVisibility.Private;
+                e1.ModificationState = ModificationState.Added;
+                e1.AppUser = user;
+
+                Event e2 = new Event();
+                e2.Brief = "User 1 Event";
+                e2.Visibility = EventVisibility.Public;
+                e2.ModificationState = ModificationState.Added;
+                e2.AppUser = user;
+
+                Event e3 = new Event();
+                e3.Brief = "User 2 Event";
+                e3.Visibility = EventVisibility.Public;
+                e3.ModificationState = ModificationState.Added;
+                e3.AppUser = user2;
+
+                eventUoW.Events.Attach(e1);
+                eventUoW.Events.Attach(e2);
+                eventUoW.Events.Attach(e3);
+                eventUoW.Save();
+
+              
+            }
+            using (var context = new EventContext())
+            {
+                var eventUoW = new EventUnitOfWork(context);
+                var user = context.Users.SingleOrDefault(t => t.UserName == "TestUser");
+                var e = eventUoW.Events.GetAllPublicEventsOfUser(user);
+
+                e.Should().HaveCount(1);
+                e[0].Visibility.Should().Be(EventVisibility.Public);
+                e[0].OwnerId.Should().Be(user.Id);
+            }
+
+        }
+
+        [TestMethod]
         public void GetEventByIdReturnsCorrectEvent()
         {
             int id1 = 0;

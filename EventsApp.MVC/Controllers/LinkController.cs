@@ -6,8 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
+using SendGrid;
 using System.Web;
 using System.Web.Mvc;
+using System.Threading.Tasks;
 
 namespace EventsApp.MVC.Controllers
 {
@@ -140,6 +143,29 @@ namespace EventsApp.MVC.Controllers
             eventUoW.Save();
 
             return RedirectToAction("Details", "Event", new { id = link.EventId });
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult> SendToEmail(string email, string guid)
+        {
+            try
+            {
+                var message = new SendGridMessage();
+                message.From = new MailAddress("azure_e483716451544fb40bbe354bfe9c0988@azure.com", "Events App");
+                message.AddTo(email);
+                message.Subject = "You got an event invite!";
+                message.Text = "Please click on link to go to your invite. \n" + guid;
+
+                var transportWeb = new Web(new NetworkCredential(message.From.Address, "cookie24"));
+                await transportWeb.DeliverAsync(message);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
+
         }
     }
 }
