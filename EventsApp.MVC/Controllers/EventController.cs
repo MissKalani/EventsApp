@@ -34,6 +34,7 @@ namespace EventsApp.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Create a new event.
                 Event e = new Event();
                 e.Brief = model.CreateViewModel.Brief;
                 e.Detailed = model.CreateViewModel.Detailed;
@@ -44,8 +45,17 @@ namespace EventsApp.MVC.Controllers
                 e.StartTime = model.CreateViewModel.StartTime;
                 e.ModificationState = ModificationState.Added;
                 e.OwnerId = User.Identity.GetUserId();
-
                 eventUoW.Events.Attach(e);
+
+                // Create a share link for this event.
+                InviteLink link = new InviteLink();
+                link.Event = e;
+                link.LinkGUID = Guid.NewGuid().ToString();
+                link.OneTimeUse = false;
+                link.ModificationState = ModificationState.Added;
+                eventUoW.InviteLinks.Attach(link);
+
+                // Save the changes.
                 eventUoW.Save();
 
                 return RedirectToAction("Details", "Event", new { id = e.Id });
