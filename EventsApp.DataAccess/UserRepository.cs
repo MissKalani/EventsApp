@@ -27,7 +27,7 @@ namespace EventsApp.DataAccess
         
         public AppUser GetUserByUsername(string username)
         {
-            return context.Users.Include(e => e.Events).Where(u => u.UserName == username).SingleOrDefault();
+            return context.Users.Where(u => u.UserName == username).SingleOrDefault();
         }
 
         public List<AppUser> SearchForUser(string usernameSubstring)

@@ -13,6 +13,12 @@ namespace EventsApp.DataAccess
         /// Get all public events.
         /// </summary>
         List<Event> GetAllPublicEvents();
+        
+        /// <summary>
+        /// Get all public events created by the user 
+        /// </summary>
+        List<Event> GetAllPublicEventsOfUser(AppUser user);
+
 
         /// <summary>
         /// Get all events that a user is invited to.

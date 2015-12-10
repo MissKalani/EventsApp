@@ -22,6 +22,14 @@ namespace EventsApp.MVC.Controllers
         public ActionResult Details(string username)
         {           
             var user = eventUoW.Users.GetUserByUsername(username);
+            if(User.Identity.IsAuthenticated)
+            {
+                eventUoW.Events.GetAllCreatedEvents(user);
+            }
+            else
+            {
+                eventUoW.Events.GetAllPublicEventsOfUser(user);
+            }           
             
             if (user != null)
             {

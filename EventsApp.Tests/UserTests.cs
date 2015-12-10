@@ -54,6 +54,7 @@ namespace EventsApp.Tests
 
         [TestMethod]
         public void should_return_username()
+
         {
             using( var context = new EventContext())
             {

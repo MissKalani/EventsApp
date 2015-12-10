@@ -27,6 +27,11 @@ namespace EventsApp.DataAccess
             return context.Events.Where(t => t.Visibility == EventVisibility.Public).ToList();
         }
 
+        public List<Event> GetAllPublicEventsOfUser(AppUser user)
+        {
+            return context.Events.Where(e => e.OwnerId == user.Id).Where(t => t.Visibility == EventVisibility.Public).ToList();
+        }
+
         public List<Event> GetAllInvitedEvents(AppUser user)
         {
             var query = from e in context.Events
