@@ -43,7 +43,7 @@ namespace EventsApp.MVC.Controllers
                 // Return the page.
                 var vm = new UserDetailsViewModel();
                 vm.User = user;
-                vm.PendingInvites = eventUoW.Invites.GetPendingInvitesWithEventGraph(user);
+                vm.Invites = eventUoW.Invites.GetAllInvitedEvents(user);
                 return View(new HellViewModel { UserDetailsViewModel = vm });
             }
             else

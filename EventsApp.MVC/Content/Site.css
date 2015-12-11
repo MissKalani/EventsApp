@@ -139,18 +139,18 @@ a.btn.textlink:hover, a.btn.textlink:focus {
     margin-top: 20px;
 }
 
-div#dataTable_length.dataTables_length {
+.dataTables_length.dataTables_length {
     position: relative;
     float: left;
 }
 
-div#dataTable_filter.dataTables_filter {
+.dataTables_filter.dataTables_filter {
     position: relative;
     float: right;
     bottom: 5px;
 }
 
-    div#dataTable_filter.dataTables_filter input {
+ .dataTables_filter.dataTables_filter input {
         margin-left: 20px;
         border-radius: 5px;
     }

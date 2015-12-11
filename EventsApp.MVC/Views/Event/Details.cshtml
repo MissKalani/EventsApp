@@ -19,7 +19,7 @@
 
             <p>@Model.DetailsViewModel.Event.Detailed</p>
             <p>@Model.DetailsViewModel.Event.Address</p>
-            <p>@Model.DetailsViewModel.Event.StartTime</p>
+            <p>@Model.DetailsViewModel.Event.StartTime.ToString("yyyy-mm-dd HH:mm")</p>
 
             @if (Model.DetailsViewModel.IsInvited)
             {

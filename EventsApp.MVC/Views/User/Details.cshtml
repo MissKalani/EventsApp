@@ -15,7 +15,7 @@
         }
         <br />
         <br />
-        <table id="dataTable" class="table table-striped table-bordered cellspacing='0'">
+        <table id="dataTableHosted" class="datatable table table-striped table-bordered cellspacing='0'">
             <thead>
                 <tr>
                     <th>Events</th>
@@ -28,7 +28,7 @@
                 <tr>
                     <td>@Html.ActionLink(_event.Brief, "Details", "Event", new { id = _event.Id }, new { })</td>
                     <td>@_event.Address</td>
-                    <td>@_event.StartTime</td>
+                    <td>@_event.StartTime.ToString("yyyy-MM-dd HH:mm")</td>
                 </tr>
             }
 
@@ -36,18 +36,28 @@
         <br />
         @if (User.Identity.GetUserId() == Model.UserDetailsViewModel.User.Id)
         {
-            <table class="table table-striped table-bordered">
+            <table id="dataTableInvitedEvents" class="datatable table table-striped table-bordered">
                 <thead>
-                    <strong>Invitations</strong>
+                    <th>Events</th>
+                    <th>Event Host</th>
+                    <th>Status</th>
+                    <th>Action</th>
                 </thead>
-                <tbody>
-                    @foreach (var invite in Model.UserDetailsViewModel.PendingInvites)
+                <tbody>            
+                    @foreach (var invite in Model.UserDetailsViewModel.Invites.OrderBy(t => t.Status))
                     {
                         <tr>
                             <td>@invite.Event.Brief</td>
+
+                            <td>@invite.Event.AppUser.UserName</td>
+                            <td>@invite.Status</td>
                             <td>
-                                @Html.ActionLink("Accept", "AcceptInvite", "User", new { eventId = invite.Event.Id }, new { @class="btn btn-primary" }) 
-                                @Html.ActionLink("Decline", "DeclineInvite", "User", new { eventId = invite.Event.Id }, new { @class = "btn btn-danger" })
+                                @if (invite.Status == EventsApp.DataModels.InviteStatus.Pending)
+                                {
+                                    @Html.ActionLink("Accept", "AcceptInvite", "User", new { eventId = invite.Event.Id }, new { @class = "btn btn-primary" })
+                                    @Html.ActionLink("Decline", "DeclineInvite", "User", new { eventId = invite.Event.Id }, new { @class = "btn btn-danger" })
+                                }
+                             
                             </td>
                             <!--<td><a id="acceptBtn" class="btn btn-primary">Accept</a> <a id="declineBtn" class="btn btn-danger">Decline</a></td>-->
                         </tr>
@@ -62,7 +72,7 @@
     @Scripts.Render("~/bundles/js/dataTables")
     <script>
         $(document).ready(function () {
-            $('#dataTable').DataTable({
+            $('.datatable').DataTable({
             });
         });
     </script>
