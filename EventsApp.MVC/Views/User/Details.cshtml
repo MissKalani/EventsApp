@@ -23,15 +23,17 @@
                     <th>Date</th>
                 </tr>
             </thead>
-            @foreach (var _event in Model.UserDetailsViewModel.User.Events)
+            @if (Model.UserDetailsViewModel.User.Events != null)
             {
-                <tr>
-                    <td>@Html.ActionLink(_event.Brief, "Details", "Event", new { id = _event.Id }, new { })</td>
-                    <td>@_event.Address</td>
-                    <td>@_event.StartTime.ToString("yyyy-MM-dd HH:mm")</td>
-                </tr>
+                foreach (var _event in Model.UserDetailsViewModel.User.Events)
+                {
+                    <tr>
+                        <td>@Html.ActionLink(_event.Brief, "Details", "Event", new { id = _event.Id }, new { })</td>
+                        <td>@_event.Address</td>
+                        <td>@_event.StartTime.ToString("yyyy-MM-dd HH:mm")</td>
+                    </tr>
+                }
             }
-
         </table>
         <br />
         @if (User.Identity.GetUserId() == Model.UserDetailsViewModel.User.Id)
