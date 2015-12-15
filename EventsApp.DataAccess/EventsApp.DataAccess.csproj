@@ -121,6 +121,10 @@
     <Compile Include="Migrations\201512070906253_AddedOneTimeUseToInviteLinks.Designer.cs">
       <DependentUpon>201512070906253_AddedOneTimeUseToInviteLinks.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201512151318030_CascadeDeleteForInviteLinks.cs" />
+    <Compile Include="Migrations\201512151318030_CascadeDeleteForInviteLinks.Designer.cs">
+      <DependentUpon>201512151318030_CascadeDeleteForInviteLinks.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserRepository.cs" />
@@ -140,6 +144,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201512070906253_AddedOneTimeUseToInviteLinks.resx">
       <DependentUpon>201512070906253_AddedOneTimeUseToInviteLinks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512151318030_CascadeDeleteForInviteLinks.resx">
+      <DependentUpon>201512151318030_CascadeDeleteForInviteLinks.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
