@@ -28,6 +28,11 @@ namespace EventsApp.DataAccess
             return context.Invites.Include(t => t.AppUser).Where(t => t.EventId == e.Id).ToList();
         }
 
+        public List<Invite> GetAllInvitedEvents(AppUser user)
+        {
+            return context.Invites.Include(i => i.Event.AppUser).Where(i => i.AppUserId == user.Id).ToList();
+        }
+
         public bool IsInvited(Event e, AppUser user)
         {
             return context.Invites.Any(t => t.EventId == e.Id && t.AppUserId == user.Id);

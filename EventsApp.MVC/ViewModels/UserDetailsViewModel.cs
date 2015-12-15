@@ -9,6 +9,7 @@ namespace EventsApp.MVC.ViewModels
     public class UserDetailsViewModel
     {
         public AppUser User { get; set; }
-        public List<Invite> PendingInvites { get; set; }
+   
+        public List<Invite> Invites { get; set; }
     }
 }

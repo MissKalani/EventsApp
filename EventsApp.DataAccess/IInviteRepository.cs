@@ -25,6 +25,11 @@ namespace EventsApp.DataAccess
         List<Invite> GetInvitedToEvent(Event e);
 
         /// <summary>
+        /// Get all the events this user is invited
+        /// </summary>   
+        List<Invite> GetAllInvitedEvents(AppUser user);
+
+        /// <summary>
         /// Get the invites this user has not accepted or declined yet. Also includes the event graph node
         /// for all returned invites.
         /// </summary>
