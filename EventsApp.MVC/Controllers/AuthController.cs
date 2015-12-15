@@ -389,7 +389,7 @@ namespace EventsApp.MVC.Controllers
 
             // Remove the dedicated social account.
             AuthenticationManager.SignOut();
-            eventUoW.Users.UserManager.Delete(socialUser);
+            eventUoW.Users.RemoveAccount(socialUser);
             eventUoW.Save();
 
             // Add this social login to the existing user.

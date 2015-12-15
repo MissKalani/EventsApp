@@ -10,6 +10,11 @@ namespace EventsApp.DataAccess
     public interface IEventRepository : IRepository<Event>
     {
         /// <summary>
+        /// Deletes an event.
+        /// </summary>
+        void DeleteEvent(Event entity);
+
+        /// <summary>
         /// Get all public events.
         /// </summary>
         List<Event> GetAllPublicEvents();

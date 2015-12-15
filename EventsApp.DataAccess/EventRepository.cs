@@ -22,6 +22,20 @@ namespace EventsApp.DataAccess
             ContextStateHelper.ApplyStateChanges(context);
         }
 
+        public void DeleteEvent(Event entity)
+        {
+            // Delete all invites to this event.
+            var invites = context.Invites.Where(i => i.EventId == entity.Id).ToList();
+            foreach (var invite in invites)
+            {
+                context.Invites.Remove(invite);
+            }
+
+            // Delete the event.
+            entity.ModificationState = ModificationState.Deleted;
+            Attach(entity);
+        }
+
         public List<Event> GetAllPublicEvents()
         {
             return context.Events.Where(t => t.Visibility == EventVisibility.Public).ToList();

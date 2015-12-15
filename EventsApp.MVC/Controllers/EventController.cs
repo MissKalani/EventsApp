@@ -253,8 +253,7 @@ namespace EventsApp.MVC.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
 
-            e.ModificationState = ModificationState.Deleted;
-            eventUoW.Events.Attach(e);
+            eventUoW.Events.DeleteEvent(e);
             eventUoW.Save();
 
             return RedirectToAction("Index", "Home");

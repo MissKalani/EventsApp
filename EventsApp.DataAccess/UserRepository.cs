@@ -37,6 +37,13 @@ namespace EventsApp.DataAccess
 
         public void RemoveAccount(AppUser user)
         {
+            // Delete all invites for this user.
+            var invites = context.Invites.Where(i => i.AppUserId == user.Id).ToList();
+            foreach (var invite in invites)
+            {
+                context.Invites.Remove(invite);
+            }
+
             UserManager.Delete(user);
         }
 
